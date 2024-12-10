@@ -13,15 +13,15 @@ import {
     SiDocker,
     SiKubernetes,
     SiTerraform,
-    SiGithubactions,
+    SiGitlab,
     SiJenkins,
     SiGrafana,
     SiPrometheus,
-    SiMongodb,
-    SiPostgresql,
     SiRedis,
     SiPython,
     SiGo,
+    SiRust,
+    SiLinux,
     SiTypescript,
 } from 'react-icons/si'
 
@@ -33,6 +33,7 @@ const SECTION_TYPED_KEYWORDS = [
     'Infrastructure as Code',
     'CI/CD Pipelines',
     'Cloud Native Apps',
+    'Open Source Platforms',
 ]
 
 const sfxClick = '/assets/sound_fx/click.mp3'
@@ -86,13 +87,6 @@ const TECHNOLOGIES: { [key: string]: JSX.Element } = {
             style={TECH_ICON_SHADOW}
         />
     ),
-    'GitHub Actions': (
-        <SiGithubactions
-            color='#2088FF'
-            className={TECH_ICON_CLASSES}
-            style={TECH_ICON_SHADOW}
-        />
-    ),
     'Jenkins': (
         <SiJenkins
             color='#D24939'
@@ -110,20 +104,6 @@ const TECHNOLOGIES: { [key: string]: JSX.Element } = {
     'Prometheus': (
         <SiPrometheus
             color='#E6522C'
-            className={TECH_ICON_CLASSES}
-            style={TECH_ICON_SHADOW}
-        />
-    ),
-    'MongoDB': (
-        <SiMongodb
-            color='#47A248'
-            className={TECH_ICON_CLASSES}
-            style={TECH_ICON_SHADOW}
-        />
-    ),
-    'PostgreSQL': (
-        <SiPostgresql
-            color='#336791'
             className={TECH_ICON_CLASSES}
             style={TECH_ICON_SHADOW}
         />
@@ -166,8 +146,8 @@ export default function Technologies(): React.ReactNode {
             <Element name='tech' />
 
             <motion.img
-                width={180}
-                height={180}
+                width={420}
+                height={420}
                 src={cloudIcon}
                 alt="Cloud icon"
                 className='mx-auto my-4 md:my-10 hover:!scale-105 transition duration-300 ease-out'

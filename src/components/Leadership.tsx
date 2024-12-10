@@ -97,7 +97,7 @@ export default function Leadership(): React.ReactNode {
                     </h1>
                     <h1 className='title-main w-full text-center text-lg font-semibold text-[#FCD690] drop-shadow-[0_0_20px_rgba(255,205,60,0.9)]'>
                         <ReactTyped
-                            strings={['Coming Soon', 'Join Our Team', 'Lead With Us']}
+                            strings={['Lead With Us']}
                             typeSpeed={40}
                             backSpeed={50}
                             backDelay={1000}

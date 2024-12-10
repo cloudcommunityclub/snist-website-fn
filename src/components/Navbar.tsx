@@ -12,7 +12,7 @@ import { FiBook } from 'react-icons/fi'
 
 import { motion } from 'framer-motion'
 
-const logo = '/assets/ccc_logo.png'  // Replace with your club logo
+const logo = '/assets/Designer.png'  
 
 export default function Navbar(): React.ReactNode {
     const [nav, setNav] = useState(false)

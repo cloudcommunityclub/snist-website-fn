@@ -27,6 +27,8 @@ const TYPED_KEYWORDS = [
     'Collaborate',
     'Deploy',
     'Scale',
+    'Python',
+    'Linux',
     '$ terraform apply',
     '$ docker build',
 ]
@@ -93,9 +95,9 @@ export default function Hero(): React.ReactNode {
                 </h1>
 
                 <div className='z-20 title-main w-full text-white text-center text-shadow shadow-black text-lg sm:text-xl'>
-                    <p>#Development2Deployment</p>
+                    <p>#Development2Deployment🚀</p>
                     <h1 className='title-main font-bold sm:text-[24px] text-2xl sm:pt-[10px]'>
-                        {'>'} We{' '}
+                        {'>'} Let's{' '}
                         <ReactTyped
                             className='text-[#00A0DC] drop-shadow-[0_0_12px_rgba(0,160,220,0.5)]'
                             strings={TYPED_KEYWORDS}

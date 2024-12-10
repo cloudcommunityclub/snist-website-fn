@@ -38,7 +38,7 @@ export default function Overview(): React.ReactNode {
             <div className='border-t-[1px] py-8 px-4 text-center border-neutral-600'>
                 <p className='text-lg'>🤝</p>
                 <p className='title-main font-semibold text-xl'>Connect with C³</p>
-                <p className='title-main text-neutral-500 font-semibold'>Join our cloud computing community</p>
+                <p className='title-main text-neutral-500 font-semibold'>Join our Cloud Community Club</p>
 
                 <div className='flex flex-row flex-wrap gap-3 justify-center py-4'>
                     <Link href='https://discord.com/invite/z5P9kccwRh' target='_blank'>

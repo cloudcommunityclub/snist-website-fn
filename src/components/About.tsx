@@ -2,23 +2,16 @@
 
 import { useRef, useState } from 'react'
 import { Element } from 'react-scroll'
-
 import { motion, useInView } from 'framer-motion'
 import { useSound } from 'use-sound'
-
 import Image from 'next/image'
 import { ReactTyped } from 'react-typed'
-
 import { FcCollaboration, FcElectronics, FcIdea } from 'react-icons/fc'
 
 const cardBaseClasses = 'hover:z-10 z-0 w-[350px] hover:w-[420px] h-[430px] active:!scale-100 hover:outline-[8px] outline-[3px] outline hover:outline-double transition-all duration-300 ease-out bg-gradient-to-t rounded-3xl'
 
 const sfxClunk = '/assets/sound_fx/clunk.mp3'
 const kitty = '/assets/ccc_logo.png'
-
-// Update Google Maps constants
-const GOOGLE_MAPS_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
-const COLLEGE_COORDINATES = '17.455556,78.666667'
 
 export default function About(): React.ReactNode {
     const [playSfx_clunk] = useSound(sfxClunk)
@@ -36,19 +29,21 @@ export default function About(): React.ReactNode {
 
             <div className='w-full py-24 flex flex-col lg:flex-row justify-center items-center gap-x-20 gap-y-8 bg-[#030303]'>
                 <div className='relative w-[85%] lg:w-[45%]'>
-                    <div className='absolute top-0 w-full h-[18%] bg-gradient-to-b from-[#030303] to-transparent' />
+                    <div className='absolute top-0 w-full h-[18%] bg-gradient-to-b from-[#030303] to-transparent z-10' />
                     <div className='z-0 absolute bottom-[24px] w-full h-[18%] bg-gradient-to-t from-[#030303] to-transparent' />
                     <div className='absolute w-full h-full bg-[radial-gradient(50%_90%_at_50%_50%,rgba(255,255,255,0)_40%,rgba(03,03,03,1)_100%)]' />
                     
-                    {/* Replace video with Google Maps Static Image */}
-                    <Image
-                        src={`https://maps.googleapis.com/maps/api/staticmap?center=${COLLEGE_COORDINATES}&zoom=17&size=1200x800&maptype=satellite&key=${GOOGLE_MAPS_API_KEY}`}
-                        alt="Aerial view of SNIST"
-                        width={1200}
-                        height={800}
-                        className='outline-[#030303] outline outline-4'
-                        priority
-                    />
+                    {/* Aerial view video */}
+                    <video
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                        className='outline-[#030303] outline outline-4 rounded-lg'
+                    >
+                        <source src="/assets/aerial/snist_aerial.mp4" type="video/mp4" />
+                        Your browser does not support the video tag.
+                    </video>
                 </div>
 
                 <div className='w-[80%] lg:w-[35%] text-sm xl:text-base'>
