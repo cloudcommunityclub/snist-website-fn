@@ -16,6 +16,7 @@ import Technologies from '../components/Technologies'
 import About from '../components/About'
 
 import Leadership from '../components/Leadership'
+
 import Socials from '../components/Socials'
 
 import Recruitment from '../components/Recruitment'
