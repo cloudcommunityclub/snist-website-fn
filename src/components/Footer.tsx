@@ -1,5 +1,7 @@
 import Link from 'next/link'
+
 import Image from 'next/image'
+
 import { SiDiscord, SiLinkedin, SiGithub, SiInstagram } from 'react-icons/si'
 import { FaXTwitter } from 'react-icons/fa6'
 

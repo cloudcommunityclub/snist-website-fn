@@ -12,14 +12,62 @@ import { FiBook } from 'react-icons/fi'
 
 import { motion } from 'framer-motion'
 
+import { ANNOUNCEMENT_TEXT, ANNOUNCEMENT_GRAD_COLOR } from '@/dispositions/general'
+
+const diagonalGlideOverlay = '/assets/home/diagonal_slowglide_overlay.gif'
 const logo = '/assets/bits/sreenidhi-logo.png'  
 
 export default function Navbar(): React.ReactNode {
     const [nav, setNav] = useState(false)
     const handleClick = () => setNav(!nav)
 
+    
+    const [announceDismissed, setAnnounceDismissed] = useState(false)
+
     return (
         <div className='z-50 flex flex-col fixed w-full'>
+            {/* Announcement Banner */}
+            {ANNOUNCEMENT_TEXT ? (
+                <motion.div
+                    onMouseDown={() => {
+                        setAnnounceDismissed(true)
+                    }}
+                    className={`flex w-full px-6 h-[58px] sm:h-[40px] bg-gradient-to-b ${ANNOUNCEMENT_GRAD_COLOR} to-[#000000] justify-between items-center overflow-hidden`}
+                    initial={{
+                        opacity: 0,
+                        translateY: '-100%',
+                        position: 'static',
+                    }}
+                    animate={
+                        !announceDismissed
+                            ? { opacity: 1, translateY: '0%' }
+                            : {
+                                opacity: 0,
+                                translateY: '-100%',
+                                position: 'absolute',
+                            }
+                    }
+                    transition={{ duration: 1, ease: 'easeOut' }}
+                >
+                    <p className='w-full font-semibold text-xs sm:text-sm text-center text-orange-200'>
+                        {ANNOUNCEMENT_TEXT}
+                    </p>
+                    <Image
+                        width={600}
+                        height={600}
+                        src={diagonalGlideOverlay}
+                        alt=''
+                        className='absolute w-full opacity-5'
+                        unoptimized
+                    />
+                    <p className='absolute text-neutral-600 bottom-2 text-xs lg:text-base font-semibold right-4 animate-pulse'>
+                        press to dismiss
+                    </p>
+                </motion.div>
+            ) : (
+                <></>
+            )}
+        
             {/* Top Bar */}
             <motion.div
                 className='z-20 flex relative h-[64px] px-4 justify-between items-center text-gray-300 bg-gradient-to-b from-[#000] to-transparent'
@@ -40,19 +88,25 @@ export default function Navbar(): React.ReactNode {
                 <ul className='hidden md:flex text-[15px]'>
                     <li className='text-white font-semibold flex active:scale-90 hover:scale-105 transition duration-300 ease-out'>
                         <GoHome className='my-auto mr-2' />
-                        <Link href='/' onClick={() => animateScroll.scrollToTop()}>
+                        <Link 
+                            href='/'
+                            onMouseUp={() => {
+                                animateScroll.scrollToTop()
+                            }}
+                        >
                             Home
                         </Link>
                     </li>
 
                     <li className='text-white font-semibold flex active:scale-90 hover:scale-105 transition duration-300 ease-out'>
                         <HiOutlineCloud className='my-auto mr-2' />
-                        <Link href='/projects'>Projects</Link>
+                        <Link href='/'>Projects</Link>
                     </li>
 
                     <li className='text-white font-semibold flex active:scale-90 hover:scale-105 transition duration-300 ease-out'>
                         <FiBook className='my-auto mr-2' />
-                        <Link href='/research'>Research</Link>
+                        <Link href='/'>
+                        Research</Link>
                     </li>
 
                     <li className='text-white font-semibold flex active:scale-90 hover:scale-105 transition duration-300 ease-out'>
@@ -78,8 +132,8 @@ export default function Navbar(): React.ReactNode {
                         <div className='text-2xl text-white font-semibold flex active:scale-90 hover:scale-105 transition duration-300 ease-out'>
                             <GoHome className='my-auto mr-2' />
                             <Link
-                                href='/'
-                                onClick={() => {
+                                href='.'
+                                onMouseUp={() => {
                                     animateScroll.scrollToTop()
                                     handleClick()
                                 }}
@@ -90,29 +144,26 @@ export default function Navbar(): React.ReactNode {
 
                         <div className='text-2xl text-white font-semibold flex active:scale-90 hover:scale-105 transition duration-300 ease-out'>
                             <HiOutlineCloud className='my-auto mr-2' />
-                            <Link href='/projects' onClick={handleClick}>
+                            <Link href='.' onClick={handleClick}>
                                 Projects
                             </Link>
                         </div>
 
-                        <div className='text-2xl text-white font-semibold flex active:scale-90 hover:scale-105 transition duration-300 ease-out'>
+                        <div className='text-2xl text-yellow-300 font-semibold flex active:scale-90 hover:scale-105 transition duration-300 ease-out'>
                             <FiBook className='my-auto mr-2' />
-                            <Link href='/research' onClick={handleClick}>
+                            <Link href='.' onClick={handleClick}>
                                 Research
                             </Link>
                         </div>
 
                         <div className='text-2xl text-white font-semibold flex active:scale-90 hover:scale-105 transition duration-300 ease-out'>
-                            <GoCodeOfConduct className='my-auto mr-2' />
-                            <ScrollLink
-                                to='recruitment'
-                                offset={-120}
-                                smooth={true}
-                                duration={1500}
-                                onClick={handleClick}
+                        <GoCodeOfConduct className='my-auto mr-2' />
+                            <a
+                                href='https://discord.gg/kx9VH9pu'
+                                onMouseUp={handleClick}
                             >
                                 Join Us!
-                            </ScrollLink>
+                            </a>
                         </div>
                     </div>
                 </div>

@@ -41,6 +41,7 @@ const pfp_rdhead = dir_leaderPortraits + 'christseport.png'
 const pfp_organizing = dir_leaderPortraits + 'denisehumport.png'
 const pfp_designing = dir_leaderPortraits + 'bryanswartoutport.png'
 const pfp_marketing = dir_leaderPortraits + 'bryanswartoutport.png'
+const pfp_document = dir_leaderPortraits + 'bhargavi.png'
 const pfp_none = dir_leaderPortraits + 'noprofile.webp'
 
 export const FALLBACK_QUOTE = (
@@ -51,7 +52,7 @@ export const FALLBACK_QUOTE = (
 
 export const leadership = {
     major: {
-        'Tyler Kuwada': {
+        'Nandhan Rao': {
             role: 'President',
             imgSrc: pfp_president,
             quote: (
@@ -61,11 +62,14 @@ export const leadership = {
                 </p>
             ),
             linktree: '',
-            instagram: 'https://www.instagram.com/tyler_kuwada/',
-            discord: 'https://discordapp.com/users/227633077545992192',
+            instagram: '',
+            discord: '',
+            github: '',
+            linkedin: '',
+            website: '',
             icon: <BiCrown />,
         },
-        'Jonas Quiballo': {
+        'Nikhil Anand': {
             role: 'Vice President',
             imgSrc: pfp_vicepresident,
             quote: <p>The future is digital.</p>,
@@ -74,7 +78,7 @@ export const leadership = {
             instagram: 'https://www.instagram.com/_.waffly._/',
             icon: <CgCrown />,
         },
-        'Vasala Harshitha': {
+        'Harshitha V': {
             role: 'General Secretary',
             imgSrc: pfp_secretary,
             quote: (
@@ -86,7 +90,7 @@ export const leadership = {
             linkedin: 'https://www.linkedin.com/in/vasala-harshitha-bb15952a3/',
             icon: <PiFeatherDuotone />,
         },
-        'Jayan Pintor': {
+        'Vaman Akhil': {
             role: 'Community Manager',
             imgSrc: pfp_community,
             quote: (
@@ -96,13 +100,14 @@ export const leadership = {
                 </p>
             ),
             linktree: '',
-            github: 'https://github.com/CoderLearnerTime',
-            linkedin: 'https://www.linkedin.com/in/jayanthony-pintor/',
-            instagram: 'https://www.instagram.com/0p_photos/',
-            website: 'https://www.jayanthonypintor.study',
+            instagram: '',
+            discord: '',
+            github: '',
+            linkedin: '',
+            website: '',
             icon: <GrMoney />,
         },
-        'Srinivas Gogula': {
+        'Srinivas G': {
             role: 'Technical Head',
             imgSrc: pfp_technical,
             quote: (
@@ -110,15 +115,15 @@ export const leadership = {
                    First, solve the problem. Then, write the code.
                 </p>
             ),
-            linktree: 'https://www.linktr.ee/devalto',
+            linktree: '',
             instagram: '',
-            discord: 'https://discordapp.com/users/168406210687533056',
-            github: 'https://www.github.com/dev-alto',
-            linkedin: 'https://www.linkedin.com/in/lance-ruiz',
-            website: 'https://the-devalto-experiments.000webhostapp.com/',
+            discord: '',
+            github: '',
+            linkedin: '',
+            website: '',
             icon: <LuConstruction />,
         },
-        'Chris Tse': {
+        'Harshan Varma': {
             role: 'Research & Development Head',
             imgSrc: pfp_rdhead,
             quote: ( 
@@ -126,20 +131,24 @@ export const leadership = {
                     A true Isaiah Rashad fan.
                 </p>
             ),
-            linktree: 'https://linktr.ee/isaiahrashadfan',
-            instagram: 'https://www.instagram.com/cchristse',
-            discord: 'https://discordapp.com/users/85194740890337280',
-            linkedin: 'https://www.linkedin.com/in/chris-tse-irf/',
+            linktree: '',
+            instagram: '',
+            discord: '',
+            github: '',
+            linkedin: '',
+            website: '',
             icon: <FaRegHandPeace />,
         },
-        'Denise Hum': {
+        'Santhosh': {
             role: 'Organizing Head',
             imgSrc: pfp_organizing,
             quote: 'Data are summaries of thousands of stories. Tell a few of those stories to help make the data meaningful.',
             linktree: '',
-            discord: 'https://discordapp.com/users/735277805662765066',
+            instagram: '',
+            discord: '',
             github: '',
-            linkedin: 'https://www.linkedin.com/in/denisehum/',
+            linkedin: '',
+            website: '',
             icon: <PiHandshakeBold />,
         },
         'T Siva Maruthi Ganesh': {
@@ -161,6 +170,17 @@ export const leadership = {
              linkedin: 'https://www.linkedin.com/in/b-vasundara-678b86253?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app',
              icon: <PiHandshakeBold />,
          },
+         
+         'Bhargavi': {
+            role: 'Documentation Head',
+            imgSrc: pfp_document,
+            quote: 'I’m not a psychopath, I’m a high-functioning sociopath ',
+            linktree: '',
+            instagram: 'https://www.instagram.com/bv_894?igsh=MXJvY2poMW9mcG53Nw==',
+            github: '',
+            linkedin: 'https://www.linkedin.com/in/b-vasundara-678b86253?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app',
+            icon: <PiHandshakeBold />,
+        },
     },
     minor: {
         'Web Master': {

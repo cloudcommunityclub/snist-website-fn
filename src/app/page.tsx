@@ -17,8 +17,6 @@ import About from '../components/About'
 
 import Leadership from '../components/Leadership'
 
-import Socials from '../components/Socials'
-
 import Recruitment from '../components/Recruitment'
 
 import Footer from '../components/Footer'
@@ -64,13 +62,11 @@ export default function App() {
                     ></ReactTyped>
                 </h1>
 
-                <Element name='gallery' />
             </div>
 
             <div className='w-full h-30' />
 
             <Recruitment />
-            {/* <Socials/> */}
 
             <Footer />
         </>

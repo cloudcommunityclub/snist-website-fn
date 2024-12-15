@@ -2,7 +2,8 @@
 
 import { Element } from 'react-scroll'
 import Image from 'next/image'
-import { Cloud } from 'lucide-react'
+
+const logo = '/assets/designer.png'
 import { FaWhatsapp } from 'react-icons/fa'
 import { SiGoogleforms } from 'react-icons/si'
 
@@ -18,13 +19,21 @@ export default function Recruitment(): React.ReactNode {
                 src='/assets/home/spaces.jpg'
                 width={1600}
                 height={1600}
-                alt='Cloud community background'
+                alt='space background'
                 className='-z-10 object-cover aspect-auto absolute w-full h-full opacity-[50%]'
                 priority
             />
 
             <div className='w-full h-[110vh] flex absolute bottom-[12rem] flex-col gap-4 justify-center items-center'>
-                <Cloud className="w-24 h-24 text-blue-400 animate-bounce" />
+
+            <Image
+            src={logo}
+            width={200}
+            height={200}
+            alt=''
+            className='z-10 hover:!scale-105 transition duration-300 ease-out'
+            unoptimized
+/>
 
                 <div className='pt-4 pb-10'>
                     <h1 className='title-main w-full text-center text-4xl font-semibold'>

@@ -146,8 +146,8 @@ export default function Technologies(): React.ReactNode {
             <Element name='tech' />
 
             <motion.img
-                width={420}
-                height={420}
+                width={250}
+                height={250}
                 src={cloudIcon}
                 alt="Cloud icon"
                 className='mx-auto my-4 md:my-10 hover:!scale-105 transition duration-300 ease-out'

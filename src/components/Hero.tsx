@@ -3,9 +3,12 @@
 import React from 'react'
 import { ReactTyped } from 'react-typed'
 import { Element } from 'react-scroll'
+
 import Image from 'next/image'
+
 import { IoMdArrowRoundDown } from 'react-icons/io'
 import { Link } from 'react-scroll'
+
 import { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
 
@@ -30,9 +33,10 @@ const TYPED_KEYWORDS = [
     '$ docker build',
 ]
 
-const mascotAnimated = '/assets/ccc_logo.png'
+const logo = '/assets/ccc_logo.png'
 const backdrop = '/assets/home/snist_backdrop.jpeg'
 const heroOverlay = '/assets/home/hero_overlay_gray.gif'
+
 export default function Hero(): React.ReactNode {
     const ref = useRef(null)
     const isInView = useInView(ref)
@@ -81,9 +85,9 @@ export default function Hero(): React.ReactNode {
                 <div className='relative mb-4'>
                     <div className='absolute inset-0 bg-black bg-opacity-30 rounded-full blur-2xl transform scale-110' />
                     <Image
-                        width={380}
-                        height={380}
-                        src={mascotAnimated}
+                        width={250}
+                        height={250}
+                        src={logo}
                         alt=''
                         unoptimized
                         className='relative z-20 animate-heartbeat drop-shadow-[0_0_30px_rgba(255,255,255,0.6)]'
