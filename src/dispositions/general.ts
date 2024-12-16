@@ -1,5 +1,5 @@
 // Announcements are top-bar website notifications.
-export const ANNOUNCEMENT_TEXT = '🚧 Welcome! Our cloud computing community is growing. Join us in building the future! 👷'
+export const ANNOUNCEMENT_TEXT = '🚧 Welcome! Our cloud community is growing. Join us in building the future! 👷'
 export const ANNOUNCEMENT_GRAD_COLOR = 'from-[#33200d]'
 
 

@@ -13,7 +13,7 @@ import { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
 
 const TYPED_KEYWORDS = [
-    'Cloud Computing',
+    'Cloud Compute',
     'Research',
     'Innovate',
     'AWS',

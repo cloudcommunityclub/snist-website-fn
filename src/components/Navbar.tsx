@@ -12,7 +12,6 @@ import { FiBook } from 'react-icons/fi'
 
 import { motion } from 'framer-motion'
 
-import { ANNOUNCEMENT_TEXT, ANNOUNCEMENT_GRAD_COLOR } from '@/dispositions/general'
 
 const diagonalGlideOverlay = '/assets/home/diagonal_slowglide_overlay.gif'
 const logo = '/assets/bits/sreenidhi-logo.png'  
@@ -26,48 +25,7 @@ export default function Navbar(): React.ReactNode {
 
     return (
         <div className='z-50 flex flex-col fixed w-full'>
-            {/* Announcement Banner */}
-            {ANNOUNCEMENT_TEXT ? (
-                <motion.div
-                    onMouseDown={() => {
-                        setAnnounceDismissed(true)
-                    }}
-                    className={`flex w-full px-6 h-[58px] sm:h-[40px] bg-gradient-to-b ${ANNOUNCEMENT_GRAD_COLOR} to-[#000000] justify-between items-center overflow-hidden`}
-                    initial={{
-                        opacity: 0,
-                        translateY: '-100%',
-                        position: 'static',
-                    }}
-                    animate={
-                        !announceDismissed
-                            ? { opacity: 1, translateY: '0%' }
-                            : {
-                                opacity: 0,
-                                translateY: '-100%',
-                                position: 'absolute',
-                            }
-                    }
-                    transition={{ duration: 1, ease: 'easeOut' }}
-                >
-                    <p className='w-full font-semibold text-xs sm:text-sm text-center text-orange-200'>
-                        {ANNOUNCEMENT_TEXT}
-                    </p>
-                    <Image
-                        width={600}
-                        height={600}
-                        src={diagonalGlideOverlay}
-                        alt=''
-                        className='absolute w-full opacity-5'
-                        unoptimized
-                    />
-                    <p className='absolute text-neutral-600 bottom-2 text-xs lg:text-base font-semibold right-4 animate-pulse'>
-                        press to dismiss
-                    </p>
-                </motion.div>
-            ) : (
-                <></>
-            )}
-        
+            
             {/* Top Bar */}
             <motion.div
                 className='z-20 flex relative h-[64px] px-4 justify-between items-center text-gray-300 bg-gradient-to-b from-[#000] to-transparent'
