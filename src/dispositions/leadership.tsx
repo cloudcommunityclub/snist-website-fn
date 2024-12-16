@@ -167,7 +167,7 @@ export const leadership = {
     minor: {
         'Web Master': {
             label: 'Prem Sai K',
-            color_complex: 'from-[#e63946] shadow-[#e63946]', // A rich red color
+            color_complex: 'from-[#f28d8d] shadow-[#f28d8d]', // A soft, warm red
             icon: <AiOutlineGlobal />,
         },
     },
