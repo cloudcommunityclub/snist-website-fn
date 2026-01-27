@@ -1,6 +1,7 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* Combine font imports */
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400&family=Oswald:wght@500&family=Signika:wght@500&family=Source+Code+Pro&family=Ubuntu:wght@500&family=Kurale&display=swap');
+
+@import "tailwindcss";
 
 :root {
     --foreground-rgb: 255, 255, 255;
@@ -26,8 +27,14 @@ body {
         rgb(var(--background-start-rgb));
 }
 
-/* Combine font imports */
-
+/* From Public Directory */
+@font-face {
+    font-family: 'Kurale';
+    src: url('/fonts/Kurale.ttf');
+    font-style: medium;
+    font-weight: normal;
+    font-display: swap;
+}
 
 @layer utilities {
     /* Chrome, Safari and Opera */
