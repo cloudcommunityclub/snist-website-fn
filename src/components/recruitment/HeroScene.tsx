@@ -5,7 +5,7 @@ import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 
 export default function Scene({ ...props }) {
-    const { nodes, materials } = useSpline('https://prod.spline.design/hYRgOh8XmMGipkv9/scene.splinecode')
+    const { nodes, materials } = useSpline('/assets/recruitment/hero_scene.splinecode')
     const clonesRef = useRef<THREE.Group>(null)
     const [hovered, setHover] = useState(false)
 
