@@ -28,6 +28,8 @@ module.exports = {
                 lightpall: '#fcd690',
                 medpall: '#c9aa72',
                 darkpall: '#493d29',
+                'cyan-orb': '#2dd4bf',
+                'void-black': '#020617',
             },
             screens: {
                 '3xl': '1600px',
@@ -42,6 +44,7 @@ module.exports = {
             sans: ['var(--font-inter)', ...defaultTheme.fontFamily.sans],
             display: ['var(--font-poppins)', ...defaultTheme.fontFamily.sans],
             mono: ['var(--font-jetbrains)', ...defaultTheme.fontFamily.mono],
+            cursive: ['var(--font-cursive)', 'cursive'],
         },
     },
 
