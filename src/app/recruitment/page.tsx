@@ -59,7 +59,7 @@ export default function RecruitmentPage() {
     };
 
     return (
-        <div>
+        <div className="min-h-screen overflow-x-hidden bg-black text-slate-300">
             {/* Hero Section */}
             <Hero />
 
