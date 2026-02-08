@@ -158,6 +158,24 @@ const terminalTextareaClass = `
     focus:ring-0 focus:outline-none font-mono leading-6 p-0
 `
 
+// Reuseable Cursor Component
+interface BlinkingCursorProps {
+    cursorPosition: { line: number; col: number }
+    colOffset?: number
+    style?: React.CSSProperties
+}
+
+const BlinkingCursor = ({ cursorPosition, colOffset = 0, style = {} }: BlinkingCursorProps) => (
+    <span
+        className="absolute w-2 h-5 bg-gray-400 pointer-events-none animate-[pulse_1s_ease-in-out_infinite] z-20"
+        style={{
+            left: `calc(${cursorPosition.col - 1 + colOffset} * 1ch)`,
+            top: '2px', // vertically center in h-6 (24px - 20px / 2 = 2px)
+            ...style
+        }}
+    />
+)
+
 export default function TerminalJoinForm() {
     const [submissionLogs, setSubmissionLogs] = useState<string[]>([])
     const [currentStep, setCurrentStep] = useState(0)
@@ -356,18 +374,6 @@ export default function TerminalJoinForm() {
         handleInputEvents(e)
     }
 
-    // Reuseable Cursor Component
-    const BlinkingCursor = ({ colOffset = 0, style = {} }) => (
-        <span
-            className="absolute w-2 h-5 bg-gray-400 pointer-events-none animate-[pulse_1s_ease-in-out_infinite] z-20"
-            style={{
-                left: `calc(${(cursorPosition.col - 1 + colOffset)} * 1ch)`,
-                top: '2px', // vertically center in h-6 (24px - 20px / 2 = 2px)
-                ...style
-            }}
-        />
-    )
-
     const renderField = (fieldName: FieldName) => {
         const error = errors[fieldName]
 
@@ -419,7 +425,7 @@ export default function TerminalJoinForm() {
                                     onFocus={(e) => handleFocus(2, 'fullName', e)}
                                     autoFocus
                                 />
-                                {focusedField === 'fullName' && <BlinkingCursor />}
+                                {focusedField === 'fullName' && <BlinkingCursor cursorPosition={cursorPosition} />}
                             </div>
                             <span className="text-[#f1fa8c]">"</span>
                             <span className="text-[#6272a4] ml-1">;</span>
@@ -453,7 +459,7 @@ export default function TerminalJoinForm() {
                                     }}
                                     onFocus={(e) => handleFocus(5, 'rollNumber', e)}
                                 />
-                                {focusedField === 'rollNumber' && <BlinkingCursor />}
+                                {focusedField === 'rollNumber' && <BlinkingCursor cursorPosition={cursorPosition} />}
                             </div>
                             <span className="text-[#f1fa8c]">"</span>
                             <span className="text-[#6272a4] ml-1">;</span>
@@ -488,7 +494,7 @@ export default function TerminalJoinForm() {
                                     onFocus={(e) => handleFocus(5, 'email', e)}
                                     autoFocus
                                 />
-                                {focusedField === 'email' && <BlinkingCursor />}
+                                {focusedField === 'email' && <BlinkingCursor cursorPosition={cursorPosition} />}
                             </div>
                             <span className="text-[#f1fa8c]">"</span>
                             <span className="text-[#6272a4] ml-1">;</span>
@@ -522,7 +528,7 @@ export default function TerminalJoinForm() {
                                     }}
                                     onFocus={(e) => handleFocus(5, 'phone', e)}
                                 />
-                                {focusedField === 'phone' && <BlinkingCursor />}
+                                {focusedField === 'phone' && <BlinkingCursor cursorPosition={cursorPosition} />}
                             </div>
                             <span className="text-[#f1fa8c]">"</span>
                             <span className="text-[#6272a4] ml-1">;</span>
@@ -648,6 +654,7 @@ export default function TerminalJoinForm() {
                                     />
                                     {focusedField === 'motivation' && (
                                         <BlinkingCursor
+                                            cursorPosition={cursorPosition}
                                             style={{
                                                 left: `calc(3rem + ${(cursorPosition.col - 1)} * 1ch)`, // 3rem accounts for pl-12 (which is 3rem)
                                                 top: `calc(${(cursorPosition.line - 1)} * 24px + 2px)`
