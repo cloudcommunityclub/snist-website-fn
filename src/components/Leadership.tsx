@@ -78,7 +78,7 @@ const MajorLeaderCard: React.FC<props_MajorLeaderCard> = ({
                 isInView ? { opacity: 1, transform: 'translateZ(0px) translateX(0%)' } : ''
             }
             transition={{ duration: 1.25, delay: index * 0.15, ease: 'easeOut' }}
-            className={`${isAnimating && 'pointer-events-none'} hover:z-20 sm:hover:mx-4 w-[160px] sm:w-[200px] ring-2 ring-green-950 relative group/majorcard hover:rounded-b-none sm:hover:!scale-[115%] transition-all duration-500 select-none rounded-t-xl rounded-b-lg bg-gradient-to-t from-[#040404] via-green-950 to-green-950 shadow-md hover:shadow-2xl shadow-neutral-600 hover:shadow-green-300`}
+            className={`${isAnimating && 'pointer-events-none'} hover:z-20 sm:hover:mx-4 w-[160px] sm:w-[200px] ring-2 ring-gold-deep relative group/majorcard hover:rounded-b-none sm:hover:!scale-[115%] transition-all duration-500 select-none rounded-t-xl rounded-b-lg bg-gradient-to-t from-[#040404] via-gold-deep to-gold-deep shadow-md hover:shadow-2xl shadow-neutral-600 hover:shadow-gold`}
             key={leaderName}
         >
             {/* Leader Portrait + Leader Quote Overlay */}
@@ -110,7 +110,7 @@ const MajorLeaderCard: React.FC<props_MajorLeaderCard> = ({
 
                     <div className='aspect-square w-full flex items-center px-1 sm:px-6 font-semibold text-shadow-lg shadow-black'>
                         {/* whitespace-pre-line enables usage of \n below */}
-                        <div className='text-center text-white whitespace-pre-line leading-[14px] sm:leading-5 text-sm'>
+                        <div className='text-center text-primary whitespace-pre-line leading-[14px] sm:leading-5 text-sm'>
                             {majorLeaderDetails.quote
                                 ? majorLeaderDetails.quote
                                 : FALLBACK_QUOTE}
@@ -142,7 +142,7 @@ const MajorLeaderCard: React.FC<props_MajorLeaderCard> = ({
             <div
                 onMouseDown={() => playSfx_clunk()}
                 onMouseUp={() => playSfx_clunk()}
-                className='z-10 absolute hidden group-hover/majorcard:flex border-b-4 border-green-700 justify-center w-full rounded-b-lg bg-gradient-to-b from-[#040a04] to-black gap-2 px-2 pb-2'
+                className='z-10 absolute hidden group-hover/majorcard:flex border-b-4 border-gold-muted justify-center w-full rounded-b-lg bg-gradient-to-b from-[#040a04] to-black gap-2 px-2 pb-2'
             >
                 {majorLeaderDetails.linktree ? (
                     <a
@@ -307,7 +307,7 @@ const MinorLeaderCard: React.FC<props_MinorLeaderCard> = ({
                         </motion.div>
 
                         <div className='aspect-square w-full flex items-center px-1 sm:px-6 font-semibold text-shadow-lg shadow-black'>
-                            <div className='text-center text-white whitespace-pre-line leading-[14px] sm:leading-5 text-sm'>
+                            <div className='text-center text-primary whitespace-pre-line leading-[14px] sm:leading-5 text-sm'>
                                 {minorLeaderDetails.quote}
                             </div>
                         </div>
@@ -392,7 +392,7 @@ const MinorLeaderCard: React.FC<props_MinorLeaderCard> = ({
 export default function Leadership(): React.ReactNode {
     return (
         // bg-[radial-gradient(#000_1px,transparent_1px)]
-        <div className='w-full h-full pb-40 text-gray-300 bg-gradient-to-b from-black via-[#031302] to-black'>
+        <div className='w-full h-full pb-40 text-secondary bg-gradient-to-b from-void via-gold-deep/20 to-void'>
             <Element name='leadership' />
 
             <div className='flex flex-col justify-center items-center w-full h-full py-[44px] px-[10px] sm:px-[7.5vw] lg:px-[14.2vw] gap-4 overflow-x-hidden'>
@@ -400,7 +400,7 @@ export default function Leadership(): React.ReactNode {
                     <h1 className='title-main w-full text-center text-3xl font-semibold leading-7 drop-shadow-[0_0_14px_rgba(255,255,255,0.5)]'>
                         Our Club Leadership
                     </h1>
-                    <h1 className='title-main w-full text-center text-lg font-semibold text-[#FCD690] drop-shadow-[0_0_20px_rgba(255,205,60,0.9)]'>
+                    <h1 className='title-main w-full text-center text-lg font-semibold text-gold drop-shadow-[0_0_20px_rgba(230,199,122,0.7)]'>
                         Join with Us
                     </h1>
                 </div>
@@ -434,7 +434,7 @@ export default function Leadership(): React.ReactNode {
                     )}
                 </div>
 
-                <div className='w-full text-4xl font-semibold border-b-2 border-[#345222] drop-shadow-[0_0_30px_rgba(50,255,50,1)]'></div>
+                <div className='w-full text-4xl font-semibold border-b-2 border-gold-deep drop-shadow-[0_0_30px_rgba(230,199,122,0.5)]'></div>
             </div>
         </div>
     )
