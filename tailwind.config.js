@@ -28,7 +28,7 @@ module.exports = {
                 lightpall: '#fcd690',
                 medpall: '#c9aa72',
                 darkpall: '#493d29',
-                'cyan-orb': '#2dd4bf',
+
                 'void-black': '#020617',
             },
             screens: {
