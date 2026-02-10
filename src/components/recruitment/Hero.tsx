@@ -1,8 +1,11 @@
 'use client';
 
-import { Suspense } from 'react';
-import { Canvas } from '@react-three/fiber';
-import HeroScene from './HeroScene';
+import dynamic from 'next/dynamic';
+
+const ParticleSphere = dynamic(
+    () => import('@/components/recruitment/ParticleSphere'),
+    { ssr: false },
+);
 
 export default function Hero() {
     return (
@@ -14,17 +17,8 @@ export default function Hero() {
                 <div className="absolute inset-0 bg-[url('/assets/grid.svg')] opacity-10 bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]" />
             </div>
 
-            {/* 3D Spline Background - Subtle & Atmospheric */}
-            <div className="absolute top-0 right-[-10%] md:right-0 w-full md:w-[70%] h-full z-10 pointer-events-auto opacity-90 transition-opacity duration-1000">
-                <Canvas className="w-full h-full" flat linear>
-                    <Suspense fallback={null}>
-                        <HeroScene />
-                    </Suspense>
-                </Canvas>
-            </div>
-
             {/* Content Container */}
-            <div className="relative z-20 w-full max-w-7xl mx-auto px-6 md:px-12 lg:px-20 grid grid-cols-1 md:grid-cols-2 items-center h-full pointer-events-none">
+            <div className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-12 lg:px-20 grid grid-cols-1 md:grid-cols-2 items-center h-full">
                 <div className="flex flex-col items-start justify-center space-y-8 md:pointer-events-auto">
                     {/* Badge */}
                     <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm">
@@ -57,6 +51,13 @@ export default function Hero() {
                             </svg>
                         </div>
                     </a>
+                </div>
+
+                {/* Right Column — Interactive Particle Sphere */}
+                <div className="hidden md:flex items-center justify-center relative">
+                    <div className="w-[500px] h-[500px] relative">
+                        <ParticleSphere />
+                    </div>
                 </div>
             </div>
 

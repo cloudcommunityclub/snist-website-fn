@@ -8,114 +8,132 @@ const steps = [
     {
         id: '01',
         title: 'Target Lock',
-        desc: 'Identify your role within the ecosystem',
-        icon: '/assets/recruitment/target.png',
-        color: 'from-blue-500 to-cyan-400'
+        desc: 'Identify your role within the ecosystem.',
+        icon: '/assets/recruitment/icon-target.png',
     },
     {
         id: '02',
         title: 'Deploy Skills',
-        desc: 'Showcase your capability through challenges',
-        icon: '/assets/recruitment/zap.png',
-        color: 'from-cyan-400 to-emerald-400'
+        desc: 'Showcase your capability through challenges.',
+        icon: '/assets/recruitment/icon-zap.png',
     },
     {
         id: '03',
         title: 'Push Origin',
-        desc: 'Submit your solution for code review',
-        icon: '/assets/recruitment/rocket.png',
-        color: 'from-emerald-400 to-purple-500'
+        desc: 'Submit your solution for code review.',
+        icon: '/assets/recruitment/icon-rocket.png',
     },
     {
         id: '04',
         title: 'System Upgrade',
-        desc: 'Join the core team & access classifieds',
-        icon: '/assets/recruitment/core.png',
-        color: 'from-purple-500 to-pink-500'
-    }
+        desc: 'Join the core team & access classifieds.',
+        icon: '/assets/recruitment/icon-core.png',
+    },
 ];
 
 export default function Roadmap() {
     return (
-        <section className="relative w-full py-32 bg-black overflow-hidden" id="roadmap">
-            {/* Ambient Background - Subtle & Deep */}
+        <section className="relative w-full py-28 md:py-36 bg-black overflow-hidden" id="roadmap">
+            {/* Ambient glow */}
             <div className="absolute inset-0 pointer-events-none">
-                <div className="absolute top-[20%] left-[20%] w-[40%] h-[40%] bg-blue-900/5 blur-[120px] rounded-full" />
-                <div className="absolute bottom-[20%] right-[20%] w-[40%] h-[40%] bg-purple-900/5 blur-[120px] rounded-full" />
+                <div className="absolute top-1/4 left-1/4 w-[40%] h-[40%] bg-cyan-900/5 blur-[140px] rounded-full" />
+                <div className="absolute bottom-1/4 right-1/4 w-[40%] h-[40%] bg-purple-900/5 blur-[140px] rounded-full" />
             </div>
 
             <div className="relative max-w-7xl mx-auto px-6 md:px-12 lg:px-20">
-                {/* Header */}
-                <div className="mb-24 text-center">
+                {/* ── Header ──────────────────────────────────── */}
+                <div className="mb-20 md:mb-28 text-center">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.6 }}
                     >
-                        <h2 className="text-xs font-mono text-cyan-400/80 tracking-[0.3em] uppercase mb-4 border border-cyan-900/30 inline-block px-4 py-1 rounded-full bg-cyan-950/10">
-                            Recruitment Pipeline
-                        </h2>
+                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm mb-6">
+                            <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
+                            <span className="text-xs font-mono text-cyan-400 tracking-widest uppercase">
+                                Recruitment Pipeline
+                            </span>
+                        </div>
                         <h3 className="text-4xl md:text-6xl font-bold text-white title-main tracking-tight">
-                            Path to the <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">Core</span>
+                            Path to the{' '}
+                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
+                                Core
+                            </span>
                         </h3>
+                        <p className="mt-5 max-w-lg mx-auto text-gray-500 text-base md:text-lg font-light leading-relaxed">
+                            Four stages between you and the inner circle. No shortcuts.
+                        </p>
                     </motion.div>
                 </div>
 
-                {/* Steps Container */}
-                <div className="relative grid grid-cols-1 md:grid-cols-4 gap-8">
-                    {/* Connecting Line (Desktop) - Technical Dashed Line */}
-                    <div className="hidden md:block absolute top-[3.5rem] left-0 w-full h-px border-t border-dashed border-gray-800 -z-10" />
+                {/* ── Timeline ────────────────────────────────── */}
+                <div className="relative">
+                    {/* Desktop connecting line */}
+                    <div className="hidden md:block absolute top-1/2 left-0 right-0 h-px -translate-y-1/2">
+                        <div className="w-full h-full border-t border-dashed border-white/[0.06]" />
+                        {/* Animated gradient overlay on the line */}
+                        <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/0 via-cyan-500/20 to-purple-500/0 h-px opacity-40" />
+                    </div>
 
-                    {steps.map((step, index) => {
-                        return (
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-6 md:gap-5">
+                        {steps.map((step, index) => (
                             <motion.div
                                 key={step.id}
-                                initial={{ opacity: 0, y: 30 }}
+                                initial={{ opacity: 0, y: 40 }}
                                 whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
-                                transition={{ duration: 0.5, delay: index * 0.15 }}
+                                viewport={{ once: true, margin: '-50px' }}
+                                transition={{ duration: 0.5, delay: index * 0.12, ease: [0.25, 0.1, 0.25, 1] }}
                                 className="group relative"
                             >
-                                {/* Card Content */}
-                                <div className="relative h-full flex flex-col items-center text-center p-8 rounded-3xl bg-[#0a0a0a] border border-white/5 hover:border-cyan-500/30 transition-all duration-500 group-hover:shadow-[0_0_30px_-10px_rgba(6,182,212,0.15)] group-hover:-translate-y-1">
+                                {/* Timeline node dot (desktop) */}
+                                <div className="hidden md:flex absolute -top-3 left-1/2 -translate-x-1/2 z-10 items-center justify-center">
+                                    <span className="w-2.5 h-2.5 rounded-full bg-black border border-white/10 group-hover:border-cyan-400 group-hover:bg-cyan-400/20 transition-all duration-500 shadow-[0_0_0_4px_rgba(0,0,0,1)]" />
+                                </div>
 
-                                    {/* Step Number Badge */}
-                                    <div className="absolute top-6 right-6 text-[10px] font-mono text-gray-700 group-hover:text-cyan-400 transition-colors">
+                                {/* Card */}
+                                <div className="relative h-full flex flex-col items-center text-center px-6 py-10 rounded-2xl bg-white/[0.02] border border-white/[0.04] backdrop-blur-sm transition-all duration-500 group-hover:border-cyan-500/20 group-hover:bg-white/[0.04] group-hover:-translate-y-1.5 group-hover:shadow-[0_8px_40px_-12px_rgba(6,182,212,0.12)]">
+                                    {/* Step number — top-right */}
+                                    <span className="absolute top-4 right-5 font-mono text-[11px] text-white/10 group-hover:text-cyan-400/60 transition-colors duration-500">
                                         {step.id}
+                                    </span>
+
+                                    {/* Icon */}
+                                    <div className="relative mb-7">
+                                        {/* Glow ring on hover */}
+                                        <div className="absolute -inset-3 rounded-2xl bg-cyan-500/0 group-hover:bg-cyan-500/[0.06] blur-xl transition-all duration-700" />
+                                        <div className="relative bg-black/60 border border-white/[0.06] rounded-xl p-3.5 group-hover:border-cyan-500/20 transition-all duration-500 group-hover:scale-105">
+                                            <Image
+                                                src={step.icon}
+                                                alt={step.title}
+                                                width={52}
+                                                height={52}
+                                                className="relative z-10 drop-shadow-[0_0_12px_rgba(6,182,212,0.3)]"
+                                            />
+                                        </div>
                                     </div>
 
-                                    {/* Icon Container - Clean & Sharp */}
-                                    <div className="relative mb-8 bg-black p-4 rounded-2xl border border-white/10 group-hover:border-cyan-500/30 transition-colors shadow-2xl overflow-hidden group-hover:scale-105 duration-300">
-                                        <div className="absolute inset-0 bg-cyan-500/5 blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
-                                        <Image
-                                            src={step.icon}
-                                            alt={step.title}
-                                            width={64}
-                                            height={64}
-                                            className="relative z-10 drop-shadow-[0_0_15px_rgba(45,212,191,0.5)]"
-                                        />
-                                    </div>
-
-                                    {/* Text */}
-                                    <h4 className="text-lg font-bold text-white mb-3 uppercase tracking-wider title-main">
+                                    {/* Title */}
+                                    <h4 className="text-sm font-bold text-white uppercase tracking-[0.15em] title-main mb-2.5 group-hover:text-cyan-300 transition-colors duration-500">
                                         {step.title}
                                     </h4>
-                                    <p className="text-sm text-gray-500 leading-relaxed font-light">
+
+                                    {/* Description */}
+                                    <p className="text-[13px] text-gray-600 leading-relaxed font-light max-w-[200px]">
                                         {step.desc}
                                     </p>
                                 </div>
 
-                                {/* Custom Connector Dot for Dashed Line */}
-                                <div className="hidden md:block absolute top-[3.5rem] left-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-black border border-gray-800 group-hover:border-cyan-400 group-hover:bg-cyan-950 transition-colors z-0" />
-
-                                {/* Mobile Connector */}
+                                {/* Mobile connector */}
                                 {index !== steps.length - 1 && (
-                                    <div className="md:hidden absolute left-1/2 -translate-x-1/2 -bottom-8 w-px h-8 border-l border-dashed border-gray-800" />
+                                    <div className="md:hidden flex flex-col items-center py-3">
+                                        <div className="w-px h-8 border-l border-dashed border-white/[0.08]" />
+                                        <span className="w-1.5 h-1.5 rounded-full border border-white/10 bg-black" />
+                                    </div>
                                 )}
                             </motion.div>
-                        );
-                    })}
+                        ))}
+                    </div>
                 </div>
             </div>
         </section>
