@@ -1,4 +1,3 @@
-
 import { NextResponse } from 'next/server'
 import { z } from 'zod'
 
@@ -38,38 +37,50 @@ export async function POST(request: Request) {
             rollNumber: validatedData.rollNumber,
             department: validatedData.department,
             year: validatedData.year,
-            interests: ["Cloud Computing"], // Default interest
+            interests: ['Cloud Computing'], // Default interest
             experience: validatedData.motivation, // Mapping motivation to experience
-            expectations: "Join C3",
-            referral: "Website"
+            expectations: 'Join C3',
+            referral: 'Website',
         }
 
         try {
-            const backendResponse = await fetch('http://localhost:5000/api/register', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(backendPayload)
-            })
+            const backendResponse = await fetch(
+                'http://localhost:5000/api/register',
+                {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(backendPayload),
+                }
+            )
 
             const backendData = await backendResponse.json()
 
             if (!backendResponse.ok) {
                 return NextResponse.json(
-                    { success: false, message: backendData.error || 'Backend registration failed' },
+                    {
+                        success: false,
+                        message: 'Registration failed. Please try again later.',
+                    },
                     { status: backendResponse.status }
                 )
             }
 
-            return NextResponse.json({ success: true, message: 'Registration successful', data: backendData })
-
+            return NextResponse.json({
+                success: true,
+                message: 'Registration successful',
+                data: backendData,
+            })
         } catch (fetchError) {
             console.error('Backend connection error:', fetchError)
             return NextResponse.json(
-                { success: false, message: 'Could not connect to registration server. Please try again later.' },
+                {
+                    success: false,
+                    message:
+                        'Could not connect to registration server. Please try again later.',
+                },
                 { status: 503 }
             )
         }
-
     } catch (error) {
         if (error instanceof z.ZodError) {
             return NextResponse.json(
