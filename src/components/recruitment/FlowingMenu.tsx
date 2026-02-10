@@ -154,10 +154,10 @@ const MenuItem: React.FC<MenuItemProps> = ({
         <div
             className="flex-1 relative overflow-hidden text-center"
             ref={itemRef}
-            style={{ borderTop: isFirst ? 'none' : `1px solid ${borderColor}` }}
+            style={{ borderBottom: `1px solid ${borderColor}`, borderTop: isFirst ? `1px solid ${borderColor}` : 'none' }}
         >
             <a
-                className="flex items-center justify-center h-full relative cursor-pointer uppercase no-underline font-semibold text-[4vh]"
+                className="flex items-center justify-center h-full relative cursor-pointer uppercase no-underline font-bold tracking-wider text-[4vh]"
                 href={link}
                 onClick={(e) => {
                     if (onClick) {

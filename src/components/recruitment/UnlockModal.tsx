@@ -42,21 +42,25 @@ export default function UnlockModal({ isOpen, onUnlock, onClose }: UnlockModalPr
                     className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
                     onClick={onClose}
                 >
-                    {/* Holographic Card */}
+                    {/* Modal Card */}
                     <motion.div
                         initial={{ scale: 0.9, opacity: 0 }}
                         animate={{ scale: 1, opacity: 1 }}
                         exit={{ scale: 0.9, opacity: 0 }}
                         transition={{ type: 'spring', damping: 25 }}
                         onClick={(e) => e.stopPropagation()}
-                        className="w-full max-w-md bg-neutral-900/95 border border-gray-800 rounded-2xl shadow-2xl p-8 backdrop-blur-md"
+                        className="w-full max-w-md bg-[#0a0a0a] border border-white/[0.06] rounded-2xl shadow-2xl p-8 backdrop-blur-md relative"
                     >
                         {/* Header */}
                         <div className="text-center mb-8">
-                            <h2 className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-600 text-sm tracking-widest uppercase mb-2 title-main">
-                                Identity Verification Required
+                            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 mb-4">
+                                <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
+                                <span className="text-[10px] font-mono text-cyan-400 tracking-widest uppercase">Identity Verification</span>
+                            </div>
+                            <h2 className="font-bold text-white text-lg tracking-tight title-main mb-2">
+                                Verify to Continue
                             </h2>
-                            <p className="text-gray-400 text-sm">
+                            <p className="text-gray-500 text-sm font-light">
                                 Complete verification to access classified challenges
                             </p>
                         </div>
@@ -64,7 +68,7 @@ export default function UnlockModal({ isOpen, onUnlock, onClose }: UnlockModalPr
                         {/* Form */}
                         <form onSubmit={handleSubmit} className="space-y-6">
                             <div>
-                                <label htmlFor="name" className="block text-gray-500 text-xs uppercase tracking-wider mb-2 font-semibold">
+                                <label htmlFor="name" className="block text-white/30 text-xs uppercase tracking-widest mb-2 font-mono">
                                     Full Name
                                 </label>
                                 <input
@@ -74,13 +78,13 @@ export default function UnlockModal({ isOpen, onUnlock, onClose }: UnlockModalPr
                                     value={formData.name}
                                     onChange={handleChange}
                                     required
-                                    className="w-full border-b border-gray-700 bg-transparent text-white py-3 focus:border-blue-500 outline-none transition-colors placeholder:text-gray-700"
+                                    className="w-full border-b border-white/[0.06] bg-transparent text-white py-3 focus:border-cyan-400/50 outline-none transition-colors duration-300 placeholder:text-white/15"
                                     placeholder="Enter your name"
                                 />
                             </div>
 
                             <div>
-                                <label htmlFor="email" className="block text-gray-500 text-xs uppercase tracking-wider mb-2 font-semibold">
+                                <label htmlFor="email" className="block text-white/30 text-xs uppercase tracking-widest mb-2 font-mono">
                                     College Email
                                 </label>
                                 <input
@@ -90,13 +94,13 @@ export default function UnlockModal({ isOpen, onUnlock, onClose }: UnlockModalPr
                                     value={formData.email}
                                     onChange={handleChange}
                                     required
-                                    className="w-full border-b border-gray-700 bg-transparent text-white py-3 focus:border-blue-500 outline-none transition-colors placeholder:text-gray-700"
+                                    className="w-full border-b border-white/[0.06] bg-transparent text-white py-3 focus:border-cyan-400/50 outline-none transition-colors duration-300 placeholder:text-white/15"
                                     placeholder="you@college.edu"
                                 />
                             </div>
 
                             <div>
-                                <label htmlFor="mobile" className="block text-gray-500 text-xs uppercase tracking-wider mb-2 font-semibold">
+                                <label htmlFor="mobile" className="block text-white/30 text-xs uppercase tracking-widest mb-2 font-mono">
                                     Mobile Number
                                 </label>
                                 <input
@@ -106,7 +110,7 @@ export default function UnlockModal({ isOpen, onUnlock, onClose }: UnlockModalPr
                                     value={formData.mobile}
                                     onChange={handleChange}
                                     required
-                                    className="w-full border-b border-gray-700 bg-transparent text-white py-3 focus:border-blue-500 outline-none transition-colors placeholder:text-gray-700"
+                                    className="w-full border-b border-white/[0.06] bg-transparent text-white py-3 focus:border-cyan-400/50 outline-none transition-colors duration-300 placeholder:text-white/15"
                                     placeholder="+91 XXXXX XXXXX"
                                 />
                             </div>
@@ -114,7 +118,7 @@ export default function UnlockModal({ isOpen, onUnlock, onClose }: UnlockModalPr
                             {/* Submit Button */}
                             <button
                                 type="submit"
-                                className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold uppercase tracking-widest py-4 rounded-lg hover:from-blue-500 hover:to-purple-500 transition-all shadow-lg shadow-blue-900/20 mt-8"
+                                className="w-full bg-white/5 border border-white/10 text-white font-bold uppercase tracking-widest text-sm py-4 rounded-xl hover:bg-cyan-400/10 hover:border-cyan-500/30 hover:text-cyan-400 hover:shadow-[0_0_20px_-6px_rgba(6,182,212,0.2)] transition-all duration-300 mt-8"
                             >
                                 Unlock Challenge
                             </button>
@@ -123,7 +127,7 @@ export default function UnlockModal({ isOpen, onUnlock, onClose }: UnlockModalPr
                         {/* Close Button */}
                         <button
                             onClick={onClose}
-                            className="absolute top-4 right-4 text-gray-500 hover:text-white transition-colors"
+                            className="absolute top-5 right-5 text-white/20 hover:text-cyan-400 transition-colors duration-300 text-sm"
                         >
                             ✕
                         </button>
