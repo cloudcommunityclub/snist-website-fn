@@ -19,12 +19,9 @@
 
 body {
     color: rgb(var(--foreground-rgb));
-    background: linear-gradient(
-            to bottom,
+    background: linear-gradient(to bottom,
             transparent,
-            rgb(var(--background-end-rgb))
-        )
-        rgb(var(--background-start-rgb));
+            rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb));
 }
 
 /* From Public Directory */
@@ -37,18 +34,22 @@ body {
 }
 
 @layer utilities {
+
     /* Chrome, Safari and Opera */
     .no-scrollbar::-webkit-scrollbar {
         display: none;
     }
 
     .no-scrollbar {
-        -ms-overflow-style: none; /* IE and Edge */
-        scrollbar-width: none; /* Firefox */
+        -ms-overflow-style: none;
+        /* IE and Edge */
+        scrollbar-width: none;
+        /* Firefox */
     }
 }
 
 @layer base {
+
     /* scrollbar css */
     ::-webkit-scrollbar {
         width: 10px;
