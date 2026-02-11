@@ -20,14 +20,14 @@ const SuccessAnimation: React.FC = () => {
       }
 
       const particleCount = 50 * (timeLeft / duration);
-      
+
       // Launch confetti from both sides
       confetti({
         ...defaults,
         particleCount,
         origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 }
       });
-      
+
       confetti({
         ...defaults,
         particleCount,
