@@ -44,11 +44,22 @@ export async function POST(request: Request) {
         }
 
         try {
+            const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000';
+            const apiKey = process.env.NEXT_PUBLIC_API_KEY;
+
+            if (!apiKey) {
+                console.error('NEXT_PUBLIC_API_KEY not configured');
+                throw new Error('API configuration error');
+            }
+
             const backendResponse = await fetch(
-                'http://localhost:5000/api/register',
+                `${backendUrl}/api/register`,
                 {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'x-api-key': apiKey
+                    },
                     body: JSON.stringify(backendPayload),
                 }
             )

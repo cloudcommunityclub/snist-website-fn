@@ -15,14 +15,53 @@ export default function UnlockModal({ isOpen, onUnlock, onClose }: UnlockModalPr
         name: '',
         email: '',
         mobile: '',
+        passingOutYear: '',
     });
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [error, setError] = useState('');
+
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        onUnlock({
-            ...formData,
-            isVerified: false,
-        });
+        setIsSubmitting(true);
+        setError('');
+
+        try {
+            // Call backend API to save candidate data
+            const response = await fetch('/api/recruitment/unlock', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData),
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                // Handle validation errors with specific messages
+                if (data.errors && Array.isArray(data.errors)) {
+                    // Zod validation errors
+                    const errorMessages = data.errors.map((err: any) => err.message).join(', ');
+                    throw new Error(errorMessages);
+                } else if (data.message) {
+                    // Backend error message
+                    throw new Error(data.message);
+                } else {
+                    throw new Error('Failed to unlock challenges');
+                }
+            }
+
+            // Success - call parent onUnlock handler
+            onUnlock({
+                ...formData,
+                isVerified: true,
+            });
+        } catch (err) {
+            const errorMessage = err instanceof Error ? err.message : 'An error occurred';
+            setError(errorMessage);
+            console.error('Unlock error:', err);
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -103,24 +142,55 @@ export default function UnlockModal({ isOpen, onUnlock, onClose }: UnlockModalPr
                                 <label htmlFor="mobile" className="block text-white/30 text-xs uppercase tracking-widest mb-2 font-mono">
                                     Mobile Number
                                 </label>
+                                <div className="flex items-center border-b border-white/[0.06]">
+                                    <span className="text-white/40 py-3 pr-2">+91</span>
+                                    <input
+                                        type="tel"
+                                        id="mobile"
+                                        name="mobile"
+                                        value={formData.mobile}
+                                        onChange={handleChange}
+                                        required
+                                        pattern="[0-9]{10}"
+                                        maxLength={10}
+                                        className="flex-1 bg-transparent text-white py-3 focus:outline-none placeholder:text-white/15"
+                                        placeholder="XXXXX XXXXX"
+                                    />
+                                </div>
+                            </div>
+
+                            <div>
+                                <label htmlFor="passingOutYear" className="block text-white/30 text-xs uppercase tracking-widest mb-2 font-mono">
+                                    Passing Out Year
+                                </label>
                                 <input
-                                    type="tel"
-                                    id="mobile"
-                                    name="mobile"
-                                    value={formData.mobile}
+                                    type="text"
+                                    id="passingOutYear"
+                                    name="passingOutYear"
+                                    value={formData.passingOutYear}
                                     onChange={handleChange}
                                     required
+                                    maxLength={4}
+                                    pattern="[0-9]{4}"
                                     className="w-full border-b border-white/[0.06] bg-transparent text-white py-3 focus:border-cyan-400/50 outline-none transition-colors duration-300 placeholder:text-white/15"
-                                    placeholder="+91 XXXXX XXXXX"
+                                    placeholder="2026"
                                 />
                             </div>
+
+                            {/* Error Message */}
+                            {error && (
+                                <div className="mt-4 p-3 bg-red-500/10 border border-red-500/30 rounded-lg">
+                                    <p className="text-red-400 text-sm">{error}</p>
+                                </div>
+                            )}
 
                             {/* Submit Button */}
                             <button
                                 type="submit"
-                                className="w-full bg-white/5 border border-white/10 text-white font-bold uppercase tracking-widest text-sm py-4 rounded-xl hover:bg-cyan-400/10 hover:border-cyan-500/30 hover:text-cyan-400 hover:shadow-[0_0_20px_-6px_rgba(6,182,212,0.2)] transition-all duration-300 mt-8"
+                                disabled={isSubmitting}
+                                className="w-full bg-white/5 border border-white/10 text-white font-bold uppercase tracking-widest text-sm py-4 rounded-xl hover:bg-cyan-400/10 hover:border-cyan-500/30 hover:text-cyan-400 hover:shadow-[0_0_20px_-6px_rgba(6,182,212,0.2)] transition-all duration-300 mt-8 disabled:opacity-50 disabled:cursor-not-allowed"
                             >
-                                Unlock Challenge
+                                {isSubmitting ? 'Unlocking...' : 'Unlock Challenge'}
                             </button>
                         </form>
 
