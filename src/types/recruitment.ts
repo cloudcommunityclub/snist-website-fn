@@ -4,6 +4,7 @@ export interface Candidate {
     name: string;
     email: string;
     mobile: string;
+    passingOutYear: string;
     isVerified: boolean;
 }
 
