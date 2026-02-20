@@ -22,27 +22,39 @@ export default function PositionBoard({ categories = RECRUITMENT_CATEGORIES, onS
     const recruitmentItems: MenuItemData[] = [
         {
             link: '#',
+            text: 'Documentation',
+            image: '/assets/recruitment/recruitment_documentation.png',
+            onClick: () => setExpandedCategory('documentation')
+        },
+        {
+            link: '#',
             text: 'Designing',
             image: '/assets/recruitment/recruitment_designing.png',
             onClick: () => setExpandedCategory('designing')
         },
         {
             link: '#',
-            text: 'Development',
-            image: '/assets/recruitment/recruitment_development.png',
-            onClick: () => setExpandedCategory('development')
+            text: 'Organizing',
+            image: '/assets/recruitment/recruitment_organizing.png',
+            onClick: () => setExpandedCategory('organizing')
         },
         {
             link: '#',
-            text: 'Marketing',
-            image: '/assets/recruitment/recruitment_marketing.png',
-            onClick: () => setExpandedCategory('marketing')
+            text: 'Technical',
+            image: '/assets/recruitment/recruitment_technical.png',
+            onClick: () => setExpandedCategory('technical')
         },
         {
             link: '#',
-            text: 'Operations',
-            image: '/assets/recruitment/recruitment_operations.png',
-            onClick: () => setExpandedCategory('operations')
+            text: 'Social Media',
+            image: '/assets/recruitment/recruitment_socialmedia.png',
+            onClick: () => setExpandedCategory('socialmedia')
+        },
+        {
+            link: '#',
+            text: 'Publicity',
+            image: '/assets/recruitment/recruitment_publicity.png',
+            onClick: () => setExpandedCategory('publicity')
         }
     ];
 
