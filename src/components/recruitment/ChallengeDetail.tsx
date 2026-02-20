@@ -18,21 +18,21 @@ const instructions = [
     },
     {
         step: '02',
-        title: 'Fork & Clone',
-        command: 'git clone https://github.com/YOUR_USERNAME/repo.git',
-        description: 'Fork the repository and clone it to your local machine.',
+        title: 'Read & Research',
+        command: 'Analyze the requirements',
+        description: 'Understand the expected outcome and prepare your approach.',
     },
     {
         step: '03',
         title: 'Implement Solution',
-        command: 'git checkout -b feature/your-solution',
-        description: 'Create a new branch and implement your solution.',
+        command: 'Code, design, or write internally',
+        description: 'Work on your solution locally or using your preferred tools.',
     },
     {
         step: '04',
-        title: 'Submit PR',
-        command: 'git push origin feature/your-solution',
-        description: 'Push your changes and open a Pull Request.',
+        title: 'Submit Progress',
+        command: 'Comment: Upload links, files, or screenshots',
+        description: 'Post your final solution directly in the issue comments. No PR required.',
     },
 ];
 
