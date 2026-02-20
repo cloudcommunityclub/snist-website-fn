@@ -53,13 +53,28 @@ export async function POST(request: Request) {
                 }
             );
 
-            const backendData = await backendResponse.json();
+            let backendData;
+            const contentType = backendResponse.headers.get("content-type");
+
+            if (contentType && contentType.indexOf("application/json") !== -1) {
+                backendData = await backendResponse.json();
+            } else {
+                const text = await backendResponse.text();
+                console.error(`Non-JSON response from backend (Status: ${backendResponse.status}):`, text.substring(0, 200));
+                return NextResponse.json(
+                    {
+                        success: false,
+                        message: `Backend service is currently unavailable or returned an invalid response (Status: ${backendResponse.status}).`,
+                    },
+                    { status: backendResponse.status >= 500 ? backendResponse.status : 502 }
+                );
+            }
 
             if (!backendResponse.ok) {
                 return NextResponse.json(
                     {
                         success: false,
-                        message: backendData.error || 'Failed to unlock challenges',
+                        message: backendData?.error || backendData?.message || 'Failed to unlock challenges',
                     },
                     { status: backendResponse.status }
                 );
