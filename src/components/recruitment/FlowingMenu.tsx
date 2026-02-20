@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { gsap } from 'gsap';
+import Image from 'next/image';
 
 export interface MenuItemData {
     link: string;
@@ -180,10 +181,15 @@ const MenuItem: React.FC<MenuItemProps> = ({
                     {[...Array(repetitions)].map((_, idx) => (
                         <div className="marquee-part flex items-center flex-shrink-0" key={idx} style={{ color: marqueeTextColor }}>
                             <span className="whitespace-nowrap uppercase font-normal text-[4vh] leading-[1] px-[1vw]">{text}</span>
-                            <div
-                                className="w-[200px] h-[7vh] my-[2em] mx-[2vw] py-[1em] rounded-[50px] bg-cover bg-center"
-                                style={{ backgroundImage: `url(${image})` }}
-                            />
+                            <div className="relative w-[200px] h-[7vh] my-[2em] mx-[2vw] py-[1em] rounded-[50px] overflow-hidden flex-shrink-0">
+                                <Image
+                                    src={image}
+                                    alt=""
+                                    fill
+                                    style={{ objectFit: 'cover', objectPosition: 'center' }}
+                                    sizes="200px"
+                                />
+                            </div>
                         </div>
                     ))}
                 </div>
