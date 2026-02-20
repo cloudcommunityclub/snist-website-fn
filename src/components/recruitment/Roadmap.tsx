@@ -8,26 +8,26 @@ const steps = [
     {
         id: '01',
         title: 'Target Lock',
-        desc: 'Identify your role within the ecosystem.',
-        icon: '/assets/recruitment/icon-target.png',
+        desc: 'Pick an open challenge below that matches your skills.',
+        icon: '/assets/recruitment/icon-target.webp', // Also updating to webp
     },
     {
         id: '02',
-        title: 'Deploy Skills',
-        desc: 'Showcase your capability through challenges.',
-        icon: '/assets/recruitment/icon-zap.png',
+        title: 'Claim Issue',
+        desc: 'Open the linked GitHub issue, assign it to yourself, and comment that you are starting.',
+        icon: '/assets/recruitment/icon-zap.webp', // Also updating to webp
     },
     {
         id: '03',
-        title: 'Push Origin',
-        desc: 'Submit your solution for code review.',
-        icon: '/assets/recruitment/icon-rocket.png',
+        title: 'Deploy Skills',
+        desc: 'Work on the task. Post all your progress and final submission directly in the issue comments. No PRs required.',
+        icon: '/assets/recruitment/icon-rocket.webp', // Also updating to webp
     },
     {
         id: '04',
         title: 'System Upgrade',
-        desc: 'Join the core team & access classifieds.',
-        icon: '/assets/recruitment/icon-core.png',
+        desc: 'We review your activity on the issue. Show your capability to join the core team.',
+        icon: '/assets/recruitment/icon-core.webp', // Also updating to webp
     },
 ];
 
