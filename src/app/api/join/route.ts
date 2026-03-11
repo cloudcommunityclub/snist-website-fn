@@ -1,4 +1,3 @@
-
 import { NextResponse } from 'next/server'
 import { z } from 'zod'
 
@@ -17,7 +16,7 @@ const joinClubSchema = z.object({
         .min(10, 'Roll number must be at least 10 characters')
         .regex(/^[A-Z0-9]+$/i, 'Roll number must be alphanumeric'),
     email: z.string().email(),
-    phone: z.string().min(10),
+    phone: z.string().regex(/^(\+91[\s-]?)?[6-9]\d{9}$/, 'Enter a valid 10-digit Indian mobile number'),
     department: z.string(), // accepting string for enum
     year: z.string(),
     motivation: z.string().min(20).max(500),
@@ -38,38 +37,61 @@ export async function POST(request: Request) {
             rollNumber: validatedData.rollNumber,
             department: validatedData.department,
             year: validatedData.year,
-            interests: ["Cloud Computing"], // Default interest
+            interests: ['Cloud Computing'], // Default interest
             experience: validatedData.motivation, // Mapping motivation to experience
-            expectations: "Join C3",
-            referral: "Website"
+            expectations: 'Join C3',
+            referral: 'Website',
         }
 
         try {
-            const backendResponse = await fetch('http://localhost:5000/api/register', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(backendPayload)
-            })
+            const backendUrl = process.env.BACKEND_URL || 'http://localhost:5000';
+            const apiKey = process.env.API_KEY;
+
+            if (!apiKey) {
+                console.error('API_KEY not configured');
+                throw new Error('API configuration error');
+            }
+
+            const backendResponse = await fetch(
+                `${backendUrl}/api/register`,
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'x-api-key': apiKey
+                    },
+                    body: JSON.stringify(backendPayload),
+                }
+            )
 
             const backendData = await backendResponse.json()
 
             if (!backendResponse.ok) {
                 return NextResponse.json(
-                    { success: false, message: backendData.error || 'Backend registration failed' },
+                    {
+                        success: false,
+                        message: 'Registration failed. Please try again later.',
+                    },
                     { status: backendResponse.status }
                 )
             }
 
-            return NextResponse.json({ success: true, message: 'Registration successful', data: backendData })
-
+            return NextResponse.json({
+                success: true,
+                message: 'Registration successful',
+                data: backendData,
+            })
         } catch (fetchError) {
             console.error('Backend connection error:', fetchError)
             return NextResponse.json(
-                { success: false, message: 'Could not connect to registration server. Please try again later.' },
+                {
+                    success: false,
+                    message:
+                        'Could not connect to registration server. Please try again later.',
+                },
                 { status: 503 }
             )
         }
-
     } catch (error) {
         if (error instanceof z.ZodError) {
             return NextResponse.json(

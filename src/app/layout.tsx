@@ -1,4 +1,4 @@
-import { Inter, Poppins, JetBrains_Mono } from 'next/font/google'
+import { Inter, Poppins, JetBrains_Mono, Mrs_Saint_Delafield } from 'next/font/google'
 import { Metadata } from 'next'
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import Navbar from '@/components/Navbar'
@@ -24,6 +24,14 @@ const jetbrainsMono = JetBrains_Mono({
     subsets: ['latin'],
     display: 'swap',
     variable: '--font-jetbrains',
+    preload: false
+})
+
+const mrsSaintDelafield = Mrs_Saint_Delafield({
+    weight: '400',
+    subsets: ['latin'],
+    display: 'swap',
+    variable: '--font-cursive',
     preload: false
 })
 
@@ -70,7 +78,7 @@ export default function RootLayout({
     children: React.ReactNode
 }) {
     return (
-        <html lang="en" className={`${inter.variable} ${poppins.variable} ${jetbrainsMono.variable}`}>
+        <html lang="en" className={`${inter.variable} ${poppins.variable} ${jetbrainsMono.variable} ${mrsSaintDelafield.variable}`}>
             <body className="min-h-screen bg-black text-white" suppressHydrationWarning>
                 <Navbar />
                 <main>{children}</main>

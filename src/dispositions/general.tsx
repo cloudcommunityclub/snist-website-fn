@@ -1,5 +1,10 @@
 // Announcement bar configurations
-export const ANNOUNCEMENT_TEXT = "JOIN SUMMER OF AI 2025: Build India's First Telugu LLM with 1,00,000 Interns! Register at viswam.ai/summer-of-ai 🚀"
-export const ANNOUNCEMENT_GRAD_COLOR = "from-red-600"
+export const ANNOUNCEMENT_TEXT = "C3 Recruitment 2026 is now live — Claim your GitHub issue and submit your PR to join the core team!"
+export const ANNOUNCEMENT_GRAD_COLOR = "from-cyan-700"
 
-// Add other general configuration constants below as needed 
+/**
+ * Recruitment open/close toggle.
+ * Set to false to show a "Recruitment Closed" state instead of the problem board.
+ * No redeployment needed — just change this value and the UI updates immediately.
+ */
+export const RECRUITMENT_OPEN = true;

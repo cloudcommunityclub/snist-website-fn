@@ -33,7 +33,7 @@ export const joinClubSchema = z.object({
         .min(10, 'Roll number must be at least 10 characters')
         .regex(/^[A-Z0-9]+$/i, 'Roll number must be alphanumeric'),
     email: z.string().email(),
-    phone: z.string().min(10),
+    phone: z.string().regex(/^(\+91[\s-]?)?[6-9]\d{9}$/, 'Enter a valid 10-digit Indian mobile number'),
     department: z.enum(DEPARTMENTS),
     year: z.enum(['1', '2', '3', '4']),
     motivation: z.string().min(20).max(500),
@@ -141,9 +141,9 @@ function TerminalProgress({ currentStep, steps }: TerminalProgressProps) {
 }
 
 const slideVariants = {
-    enter: (direction: number) => ({ x: direction > 0 ? 300 : -300, opacity: 0 }),
+    enter: (direction: number) => ({ x: direction > 0 ? '100%' : '-100%', opacity: 0 }),
     center: { x: 0, opacity: 1 },
-    exit: (direction: number) => ({ x: direction > 0 ? -300 : 300, opacity: 0 }),
+    exit: (direction: number) => ({ x: direction > 0 ? '-100%' : '100%', opacity: 0 }),
 }
 
 const terminalInputClass = `
@@ -158,6 +158,24 @@ const terminalTextareaClass = `
     focus:ring-0 focus:outline-none font-mono leading-6 p-0
 `
 
+// Reuseable Cursor Component
+interface BlinkingCursorProps {
+    cursorPosition: { line: number; col: number }
+    colOffset?: number
+    style?: React.CSSProperties
+}
+
+const BlinkingCursor = ({ cursorPosition, colOffset = 0, style = {} }: BlinkingCursorProps) => (
+    <span
+        className="absolute w-2 h-5 bg-gray-400 pointer-events-none animate-[pulse_1s_ease-in-out_infinite] z-20"
+        style={{
+            left: `calc(${cursorPosition.col - 1 + colOffset} * 1ch)`,
+            top: '2px', // vertically center in h-6 (24px - 20px / 2 = 2px)
+            ...style
+        }}
+    />
+)
+
 export default function TerminalJoinForm() {
     const [submissionLogs, setSubmissionLogs] = useState<string[]>([])
     const [currentStep, setCurrentStep] = useState(0)
@@ -169,6 +187,13 @@ export default function TerminalJoinForm() {
     const [focusedField, setFocusedField] = useState<FieldName | null>(null)
     const containerRef = useRef<HTMLDivElement>(null)
     const textareaRef = useRef<HTMLTextAreaElement>(null)
+
+    React.useEffect(() => {
+        try {
+            const registeredEmail = localStorage.getItem('c3_registered_email')
+            if (registeredEmail) setSubmitSuccess(true)
+        } catch {}
+    }, [])
 
     // Helper to reset cursor state on step change
     const updateCursorPosition = useCallback((element: HTMLInputElement | HTMLTextAreaElement) => {
@@ -208,14 +233,10 @@ export default function TerminalJoinForm() {
         trigger,
         formState: { errors },
         getValues,
-        watch
     } = useForm<JoinClubFormData>({
         resolver: zodResolver(joinClubSchema),
         mode: 'onBlur',
     })
-
-    // Watch values to ensure cursor updates even on programmatic changes if needed
-    watch()
 
     const currentStepConfig = FORM_STEPS[currentStep]
     const isFirstStep = currentStep === 0
@@ -287,6 +308,7 @@ export default function TerminalJoinForm() {
             await new Promise(resolve => setTimeout(resolve, 400))
 
             setSubmitSuccess(true)
+            try { localStorage.setItem('c3_registered_email', data.email) } catch {}
         } catch (error) {
             console.error('Registration failed:', error)
             setSubmissionLogs(prev => [
@@ -349,24 +371,12 @@ export default function TerminalJoinForm() {
 
     // Handle Enter key for navigation
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        if (e.key === 'Enter' && !e.shiftKey) {
+        if (e.key === 'Enter' && !e.shiftKey && e.currentTarget.tagName !== 'TEXTAREA') {
             e.preventDefault()
             nextStep()
         }
         handleInputEvents(e)
     }
-
-    // Reuseable Cursor Component
-    const BlinkingCursor = ({ colOffset = 0, style = {} }) => (
-        <span
-            className="absolute w-2 h-5 bg-gray-400 pointer-events-none animate-[pulse_1s_ease-in-out_infinite] z-20"
-            style={{
-                left: `calc(${(cursorPosition.col - 1 + colOffset)} * 1ch)`,
-                top: '2px', // vertically center in h-6 (24px - 20px / 2 = 2px)
-                ...style
-            }}
-        />
-    )
 
     const renderField = (fieldName: FieldName) => {
         const error = errors[fieldName]
@@ -419,7 +429,7 @@ export default function TerminalJoinForm() {
                                     onFocus={(e) => handleFocus(2, 'fullName', e)}
                                     autoFocus
                                 />
-                                {focusedField === 'fullName' && <BlinkingCursor />}
+                                {focusedField === 'fullName' && <BlinkingCursor cursorPosition={cursorPosition} />}
                             </div>
                             <span className="text-[#f1fa8c]">"</span>
                             <span className="text-[#6272a4] ml-1">;</span>
@@ -453,7 +463,7 @@ export default function TerminalJoinForm() {
                                     }}
                                     onFocus={(e) => handleFocus(5, 'rollNumber', e)}
                                 />
-                                {focusedField === 'rollNumber' && <BlinkingCursor />}
+                                {focusedField === 'rollNumber' && <BlinkingCursor cursorPosition={cursorPosition} />}
                             </div>
                             <span className="text-[#f1fa8c]">"</span>
                             <span className="text-[#6272a4] ml-1">;</span>
@@ -488,7 +498,7 @@ export default function TerminalJoinForm() {
                                     onFocus={(e) => handleFocus(5, 'email', e)}
                                     autoFocus
                                 />
-                                {focusedField === 'email' && <BlinkingCursor />}
+                                {focusedField === 'email' && <BlinkingCursor cursorPosition={cursorPosition} />}
                             </div>
                             <span className="text-[#f1fa8c]">"</span>
                             <span className="text-[#6272a4] ml-1">;</span>
@@ -522,7 +532,7 @@ export default function TerminalJoinForm() {
                                     }}
                                     onFocus={(e) => handleFocus(5, 'phone', e)}
                                 />
-                                {focusedField === 'phone' && <BlinkingCursor />}
+                                {focusedField === 'phone' && <BlinkingCursor cursorPosition={cursorPosition} />}
                             </div>
                             <span className="text-[#f1fa8c]">"</span>
                             <span className="text-[#6272a4] ml-1">;</span>
@@ -648,6 +658,7 @@ export default function TerminalJoinForm() {
                                     />
                                     {focusedField === 'motivation' && (
                                         <BlinkingCursor
+                                            cursorPosition={cursorPosition}
                                             style={{
                                                 left: `calc(3rem + ${(cursorPosition.col - 1)} * 1ch)`, // 3rem accounts for pl-12 (which is 3rem)
                                                 top: `calc(${(cursorPosition.line - 1)} * 24px + 2px)`

@@ -4,27 +4,38 @@ import React, { useState } from 'react'
 import Image from 'next/image'
 import { Link as ScrollLink, animateScroll } from 'react-scroll'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 
 import { HiOutlineCloud } from 'react-icons/hi2'
 import { GoHome, GoCodeOfConduct } from 'react-icons/go'
 import { FaBars, FaTimes } from 'react-icons/fa'
 import { FiBook, FiEdit } from 'react-icons/fi'
-import { MdOutlineEmojiEvents, MdOutlineWorkOutline, MdGroupAdd } from 'react-icons/md'
+import {
+    MdOutlineEmojiEvents,
+    MdOutlineWorkOutline,
+    MdGroupAdd,
+} from 'react-icons/md'
 import { motion } from 'framer-motion'
 
-import { ANNOUNCEMENT_TEXT, ANNOUNCEMENT_GRAD_COLOR } from '@/dispositions/general'
+import {
+    ANNOUNCEMENT_TEXT,
+    ANNOUNCEMENT_GRAD_COLOR,
+} from '@/dispositions/general'
 
 const logo = '/assets/bits/sreenidhi-logo.webp'
 
 export default function Navbar(): React.ReactNode {
+    const pathname = usePathname()
     const [nav, setNav] = useState(false)
     const [announceDismissed, setAnnounceDismissed] = useState(false)
     const handleClick = () => setNav(!nav)
 
+    // Hide the site navbar on admin routes (admin has its own nav)
+    if (pathname.startsWith('/admin')) return null
+
     return (
         <div className='z-50 flex flex-col fixed w-full'>
             {/* Announcement Banner */}
-            {/*
             {ANNOUNCEMENT_TEXT ? (
                 <motion.div
                     onMouseDown={() => {
@@ -40,28 +51,34 @@ export default function Navbar(): React.ReactNode {
                         !announceDismissed
                             ? { opacity: 1, translateY: '0%' }
                             : {
-                                opacity: 0,
-                                translateY: '-100%',
-                                position: 'absolute'
-                            }
+                                  opacity: 0,
+                                  translateY: '-100%',
+                                  position: 'absolute',
+                              }
                     }
                     transition={{ duration: 1, ease: 'easeOut' }}
                 >
-                    <p className='w-full font-semibold text-sm text-center text-blue-100 group-hover/announcement_bar:animate-pulse'>
+                    <p className='w-full font-semibold text-xs sm:text-sm text-center text-blue-100 group-hover/announcement_bar:animate-pulse truncate px-2'>
                         {ANNOUNCEMENT_TEXT}
                     </p>
-                    
+
                     <video
                         autoPlay
                         loop
                         muted
                         playsInline
-                        className='-z-10 absolute w-full opacity-5 group-hover/announcement_bar:opacity-20 transition-all duration-500 pointer-events-none object-cover'
+                        className='-z-10 absolute w-full opacity-5 group-hover/announcement_bar:opacity-20 transition-all duration-500 pointer-events-none h-20 object-cover'
                     >
-                        <source src='/assets/bits/diagonal_slowglide_overlay.webm' type='video/webm' />
-                        <source src='/assets/bits/diagonal_slowglide_overlay.mp4' type='video/mp4' />
+                        <source
+                            src='/assets/bits/diagonal_slowglide_overlay.webm'
+                            type='video/webm'
+                        />
+                        <source
+                            src='/assets/bits/diagonal_slowglide_overlay.mp4'
+                            type='video/mp4'
+                        />
                     </video>
-                
+
                     <p className='z-10 right-4 absolute text-neutral-600 text-xs font-semibold select-none animate-pulse'>
                         press to dismiss
                     </p>
@@ -69,7 +86,6 @@ export default function Navbar(): React.ReactNode {
             ) : (
                 <></>
             )}
-            */}
 
             {/* Top Bar */}
             <motion.div
@@ -147,8 +163,11 @@ export default function Navbar(): React.ReactNode {
                 </ul>
 
                 {/* Mobile Menu Button */}
-                <div onClick={handleClick} className='md:hidden z-10'>
-                    {!nav ? <FaBars /> : <FaTimes />}
+                <div
+                    onClick={handleClick}
+                    className='md:hidden z-10 min-h-[44px] min-w-[44px] flex items-center justify-center cursor-pointer'
+                >
+                    {!nav ? <FaBars size={20} /> : <FaTimes size={20} />}
                 </div>
 
                 {/* Mobile Menu */}
@@ -160,7 +179,7 @@ export default function Navbar(): React.ReactNode {
                     }
                 >
                     <div className='flex flex-col gap-4'>
-                        <div className='text-2xl text-white font-semibold flex active:scale-90 hover:scale-105 transition duration-300 ease-out'>
+                        <div className='text-2xl text-white font-semibold flex items-center min-h-[44px] active:scale-90 hover:scale-105 transition duration-300 ease-out'>
                             <GoHome className='my-auto mr-2 text-2xl' />
                             <Link
                                 href='/'
@@ -173,47 +192,44 @@ export default function Navbar(): React.ReactNode {
                             </Link>
                         </div>
 
-                        <div className='text-2xl text-white font-semibold flex active:scale-90 hover:scale-105 transition duration-300 ease-out'>
+                        <div className='text-2xl text-white font-semibold flex items-center min-h-[44px] active:scale-90 hover:scale-105 transition duration-300 ease-out'>
                             <HiOutlineCloud className='my-auto mr-2 text-2xl' />
                             <Link href='/projects' onClick={handleClick}>
                                 Project Schools
                             </Link>
                         </div>
 
-                        <div className='text-2xl text-white font-semibold flex active:scale-90 hover:scale-105 transition duration-300 ease-out'>
+                        <div className='text-2xl text-white font-semibold flex items-center min-h-[44px] active:scale-90 hover:scale-105 transition duration-300 ease-out'>
                             <FiEdit className='my-auto mr-2 text-2xl' />
                             <Link href='/blogs' onClick={handleClick}>
                                 Blogs
                             </Link>
                         </div>
 
-                        <div className='text-2xl text-white font-semibold flex active:scale-90 hover:scale-105 transition duration-300 ease-out'>
+                        <div className='text-2xl text-white font-semibold flex items-center min-h-[44px] active:scale-90 hover:scale-105 transition duration-300 ease-out'>
                             <MdOutlineWorkOutline className='my-auto mr-2 text-2xl' />
                             <Link href='/internships' onClick={handleClick}>
                                 Internships
                             </Link>
                         </div>
 
-                        <div className='text-2xl text-white font-semibold flex active:scale-90 hover:scale-105 transition duration-300 ease-out'>
+                        <div className='text-2xl text-white font-semibold flex items-center min-h-[44px] active:scale-90 hover:scale-105 transition duration-300 ease-out'>
                             <MdGroupAdd className='my-auto mr-2 text-2xl' />
                             <Link href='/recruitment' onClick={handleClick}>
                                 Recruitment
                             </Link>
                         </div>
 
-                        <div className='text-2xl text-white font-semibold flex active:scale-90 hover:scale-105 transition duration-300 ease-out'>
+                        <div className='text-2xl text-white font-semibold flex items-center min-h-[44px] active:scale-90 hover:scale-105 transition duration-300 ease-out'>
                             <MdOutlineEmojiEvents className='my-auto mr-2 text-2xl' />
                             <Link href='/events' onClick={handleClick}>
                                 Events
                             </Link>
                         </div>
 
-                        <div className='text-2xl text-white font-semibold flex active:scale-90 hover:scale-105 transition duration-300 ease-out'>
+                        <div className='text-2xl text-white font-semibold flex items-center min-h-[44px] active:scale-90 hover:scale-105 transition duration-300 ease-out'>
                             <GoCodeOfConduct className='my-auto mr-2 text-2xl' />
-                            <a
-                                href='/join'
-                                onMouseUp={handleClick}
-                            >
+                            <a href='/join' onMouseUp={handleClick}>
                                 Join Us!
                             </a>
                         </div>

@@ -7,7 +7,6 @@ import useSound from 'use-sound'
 import { motion } from 'framer-motion'
 
 import {
-    SiAmazon,
     SiGooglecloud,
     SiDocker,
     SiKubernetes,
@@ -24,6 +23,7 @@ import {
     SiTypescript,
 } from 'react-icons/si'
 import { VscAzure } from 'react-icons/vsc'
+import { FaAws } from 'react-icons/fa'
 
 const SECTION_TYPED_KEYWORDS = [
     'Cloud Platforms',
@@ -46,7 +46,7 @@ const TECH_ICON_SHADOW = { filter: 'drop-shadow(4px 4px 2px rgba(0, 0, 0, 1))' }
 
 const TECHNOLOGIES: { [key: string]: React.ReactNode } = {
     'AWS': (
-        <SiAmazon
+        <FaAws
             color='#FF9900'
             className={TECH_ICON_CLASSES}
             style={TECH_ICON_SHADOW}
