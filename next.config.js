@@ -1,4 +1,5 @@
 /** @type {import('next').NextConfig} */
+
 const nextConfig = {
     output: 'standalone',
     images: {
@@ -55,7 +56,7 @@ const nextConfig = {
                 headers: [
                     {
                         key: 'Content-Security-Policy',
-                        value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.ravenjs.com https://*.widgetbot.io https://*.discord.com https://va.vercel-scripts.com https://prod.spline.design https://*.spline.design; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://*.widgetbot.io https://*.discord.com; img-src 'self' data: https://*.discordapp.com https://*.discord.com https://prod.spline.design https://*.spline.design; font-src 'self' https://fonts.gstatic.com https://*.widgetbot.io https://*.discord.com; connect-src 'self' https://*.widgetbot.io https://*.discord.com https://c3-backend-cnhr.onrender.com https://va.vercel-scripts.com https://prod.spline.design https://*.spline.design; frame-src 'self' https://*.widgetbot.io https://*.discord.com https://prod.spline.design https://*.spline.design;",
+                        value: `default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.ravenjs.com https://*.widgetbot.io https://*.discord.com https://va.vercel-scripts.com https://prod.spline.design https://*.spline.design; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://*.widgetbot.io https://*.discord.com; img-src 'self' data: https://*.discordapp.com https://*.discord.com https://prod.spline.design https://*.spline.design https://images.unsplash.com; font-src 'self' https://fonts.gstatic.com https://*.widgetbot.io https://*.discord.com; connect-src 'self' https://*.widgetbot.io https://*.discord.com https://va.vercel-scripts.com https://prod.spline.design https://*.spline.design; frame-src 'self' https://*.widgetbot.io https://*.discord.com https://prod.spline.design https://*.spline.design;`,
                     },
                     {
                         key: 'X-Content-Type-Options',

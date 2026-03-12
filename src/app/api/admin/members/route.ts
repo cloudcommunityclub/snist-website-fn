@@ -1,41 +1,70 @@
 import { NextResponse } from 'next/server'
+import dbConnect from '@/lib/db'
+import Registration2026 from '@/models/Registration2026'
+
+
+const MAX_SEARCH_LENGTH = 100
+
+function escapeRegex(str: string): string {
+    return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+}
 
 export async function GET(request: Request) {
     try {
+        await dbConnect()
+
         const { searchParams } = new URL(request.url)
-        const backendUrl = process.env.BACKEND_URL || 'http://localhost:5000'
-        const apiKey = process.env.API_KEY
+        const page = searchParams.get('page') || '1'
+        const limit = searchParams.get('limit') || '20'
+        const search = searchParams.get('search') || ''
+        const dept = searchParams.get('dept') || ''
+        const year = searchParams.get('year') || ''
+        const emailSent = searchParams.get('emailSent') || ''
 
-        if (!apiKey) {
-            return NextResponse.json({ message: 'Server configuration error' }, { status: 500 })
+        if (search.length > MAX_SEARCH_LENGTH) {
+            return NextResponse.json({ message: 'Search query too long' }, { status: 400 })
         }
 
-        // Forward all query params to backend
-        const backendRes = await fetch(
-            `${backendUrl}/api/admin/members?${searchParams.toString()}`,
-            { headers: { 'x-api-key': apiKey } }
-        )
+        const pageNum = Math.max(1, parseInt(page, 10) || 1)
+        const limitNum = Math.min(100, Math.max(1, parseInt(limit, 10) || 20))
+        const skip = (pageNum - 1) * limitNum
 
-        if (!backendRes.ok) {
-            return NextResponse.json({ message: 'Backend error' }, { status: backendRes.status })
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const filter: Record<string, any> = {}
+        if (search.trim()) {
+            const searchRegex = new RegExp(escapeRegex(search.trim()), 'i')
+            filter.$or = [
+                { name: searchRegex },
+                { email: searchRegex },
+                { rollNumber: searchRegex },
+            ]
         }
+        if (dept.trim()) filter.department = { $eq: dept.trim() }
+        if (year.trim()) filter.year = { $eq: year.trim() }
+        if (emailSent === 'true') filter.emailSent = true
+        if (emailSent === 'false') filter.emailSent = false
 
-        // Handle CSV export (Content-Type: text/csv)
-        const contentType = backendRes.headers.get('content-type') || ''
-        if (contentType.includes('text/csv')) {
-            const csvText = await backendRes.text()
-            return new Response(csvText, {
-                headers: {
-                    'Content-Type': 'text/csv; charset=utf-8',
-                    'Content-Disposition': backendRes.headers.get('content-disposition') || 'attachment; filename="members.csv"',
-                },
-            })
-        }
+        const [data, total] = await Promise.all([
+            Registration2026.find(filter)
+                .sort({ createdAt: -1 })
+                .skip(skip)
+                .limit(limitNum)
+                .select('-__v')
+                .lean(),
+            Registration2026.countDocuments(filter),
+        ])
 
-        const data = await backendRes.json()
-        return NextResponse.json(data)
+        return NextResponse.json({
+            data,
+            pagination: {
+                total,
+                page: pageNum,
+                limit: limitNum,
+                pages: Math.ceil(total / limitNum) || 1,
+            },
+        })
     } catch (error) {
-        console.error('Admin members proxy error:', error)
-        return NextResponse.json({ message: 'Could not reach backend' }, { status: 503 })
+        console.error('Admin members list error:', error)
+        return NextResponse.json({ message: 'Failed to fetch members' }, { status: 500 })
     }
 }

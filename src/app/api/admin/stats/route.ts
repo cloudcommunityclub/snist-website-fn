@@ -1,27 +1,49 @@
 import { NextResponse } from 'next/server'
+import dbConnect from '@/lib/db'
+import Registration2026 from '@/models/Registration2026'
+import Recruitment from '@/models/Recruitment'
 
 export async function GET() {
     try {
-        const backendUrl = process.env.BACKEND_URL || 'http://localhost:5000'
-        const apiKey = process.env.API_KEY
+        await dbConnect()
 
-        if (!apiKey) {
-            return NextResponse.json({ message: 'Server configuration error' }, { status: 500 })
-        }
+        const now = new Date()
+        const last24h = new Date(now.getTime() - 24 * 60 * 60 * 1000)
 
-        const res = await fetch(`${backendUrl}/api/admin/stats`, {
-            headers: { 'x-api-key': apiKey },
-            next: { revalidate: 60 }, // cache for 60s
+        const [
+            totalMembers,
+            members24h,
+            emailSent,
+            totalRecruitment,
+            recruitment24h,
+            unlocked,
+            submitted,
+        ] = await Promise.all([
+            Registration2026.countDocuments(),
+            Registration2026.countDocuments({ createdAt: { $gte: last24h } }),
+            Registration2026.countDocuments({ emailSent: true }),
+            Recruitment.countDocuments(),
+            Recruitment.countDocuments({ createdAt: { $gte: last24h } }),
+            Recruitment.countDocuments({ problemUnlocked: { $exists: true, $ne: null } }),
+            Recruitment.countDocuments({ submittedSolution: true }),
+        ])
+
+        return NextResponse.json({
+            members: {
+                total: totalMembers,
+                last24h: members24h,
+                emailSent,
+                emailPending: totalMembers - emailSent,
+            },
+            recruitment: {
+                total: totalRecruitment,
+                last24h: recruitment24h,
+                unlocked,
+                submitted,
+            },
         })
-
-        if (!res.ok) {
-            return NextResponse.json({ message: 'Backend error' }, { status: res.status })
-        }
-
-        const data = await res.json()
-        return NextResponse.json(data)
     } catch (error) {
-        console.error('Admin stats proxy error:', error)
-        return NextResponse.json({ message: 'Could not reach backend' }, { status: 503 })
+        console.error('Admin stats error:', error)
+        return NextResponse.json({ message: 'Failed to fetch stats' }, { status: 500 })
     }
 }

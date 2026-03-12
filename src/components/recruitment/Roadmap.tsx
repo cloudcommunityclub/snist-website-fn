@@ -7,29 +7,49 @@ import Image from 'next/image';
 const steps = [
     {
         id: '01',
-        title: 'Target Lock',
-        desc: 'Pick an open challenge below that matches your skills.',
-        icon: '/assets/recruitment/icon-target.webp', // Also updating to webp
+        title: 'Explore',
+        desc: 'Browse open tasks on GitHub. Pick something that actually excites you—tech, design, content, or operations.',
+        icon: '/assets/recruitment/icon-target.png',
     },
     {
         id: '02',
-        title: 'Claim Issue',
-        desc: 'Open the linked GitHub issue, assign it to yourself, and comment that you are starting.',
-        icon: '/assets/recruitment/icon-zap.webp', // Also updating to webp
+        title: 'Build',
+        desc: 'Work on the task in public. Ask doubts in the issue, collaborate with others, and focus on shipping, not perfection.',
+        icon: '/assets/recruitment/icon-zap.png',
     },
     {
         id: '03',
-        title: 'Deploy Skills',
-        desc: 'Work on the task. Post all your progress and final submission directly in the issue comments. No PRs required.',
-        icon: '/assets/recruitment/icon-rocket.webp', // Also updating to webp
+        title: 'Submit',
+        desc: 'Share your work before the deadline—pull request, document, design file, or proposal. Let your work speak for you.',
+        icon: '/assets/recruitment/icon-rocket.png',
     },
     {
         id: '04',
-        title: 'System Upgrade',
-        desc: 'We review your activity on the issue. Show your capability to join the core team.',
-        icon: '/assets/recruitment/icon-core.webp', // Also updating to webp
+        title: 'Earn',
+        desc: 'If your work shows ownership, clarity, and effort, we reach out with a core team role offer. No forms. No favoritism.',
+        icon: '/assets/recruitment/icon-core.png',
     },
 ];
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 export default function Roadmap() {
     return (
@@ -62,7 +82,7 @@ export default function Roadmap() {
                             </span>
                         </h3>
                         <p className="mt-5 max-w-lg mx-auto text-gray-500 text-base md:text-lg font-light leading-relaxed">
-                            Four stages between you and the inner circle. No shortcuts.
+                            Four simple stages. No shortcuts, no forms, no politics. Do real work in public, prove what you can do, and earn your place.
                         </p>
                     </motion.div>
                 </div>
@@ -76,7 +96,7 @@ export default function Roadmap() {
                         <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/0 via-cyan-500/20 to-purple-500/0 h-px opacity-40" />
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-4 gap-6 md:gap-5">
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-8 md:gap-5">
                         {steps.map((step, index) => (
                             <motion.div
                                 key={step.id}
@@ -92,7 +112,7 @@ export default function Roadmap() {
                                 </div>
 
                                 {/* Card */}
-                                <div className="relative h-full flex flex-col items-center text-center px-6 py-10 rounded-2xl bg-white/[0.02] border border-white/[0.04] backdrop-blur-sm transition-all duration-500 group-hover:border-cyan-500/20 group-hover:bg-white/[0.04] group-hover:-translate-y-1.5 group-hover:shadow-[0_8px_40px_-12px_rgba(6,182,212,0.12)]">
+                                <div className="relative h-full flex flex-col items-start text-left md:items-center md:text-center px-5 py-8 md:px-6 md:py-10 rounded-2xl bg-white/[0.02] border border-white/[0.04] backdrop-blur-sm transition-all duration-500 group-hover:border-cyan-500/20 group-hover:bg-white/[0.04] group-hover:-translate-y-1.5 group-hover:shadow-[0_8px_40px_-12px_rgba(6,182,212,0.12)]">
                                     {/* Step number — top-right */}
                                     <span className="absolute top-4 right-5 font-mono text-[11px] text-white/10 group-hover:text-cyan-400/60 transition-colors duration-500">
                                         {step.id}
@@ -119,7 +139,7 @@ export default function Roadmap() {
                                     </h4>
 
                                     {/* Description */}
-                                    <p className="text-[13px] text-gray-600 leading-relaxed font-light max-w-[200px]">
+                                    <p className="mt-1 text-[13px] text-gray-400 leading-relaxed font-light max-w-[320px] md:max-w-[220px]">
                                         {step.desc}
                                     </p>
                                 </div>

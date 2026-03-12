@@ -1,116 +1,88 @@
-import { NextResponse } from 'next/server';
-import { z } from 'zod';
+import { NextResponse } from 'next/server'
+import { z } from 'zod'
+import dbConnect from '@/lib/db'
+import Recruitment from '@/models/Recruitment'
 
-// Validation schema for recruitment unlock
 const recruitmentUnlockSchema = z.object({
     name: z.string().min(2, 'Name must be at least 2 characters'),
     email: z.string()
         .email('Invalid email address')
         .refine(
             (email) => {
-                const domain = email.toLowerCase().split('@')[1];
-                // Accept any subdomain ending in .sreenidhi.edu.in or .shu.edu.in
-                return domain && (domain.endsWith('sreenidhi.edu.in') || domain.endsWith('shu.edu.in'));
+                const domain = email.toLowerCase().split('@')[1]
+                return domain && (domain.endsWith('sreenidhi.edu.in') || domain.endsWith('shu.edu.in'))
             },
             { message: 'Only emails from sreenidhi.edu.in or shu.edu.in domains are accepted (including department subdomains like @ece.sreenidhi.edu.in)' }
         ),
     mobile: z.string().min(10, 'Mobile number must be at least 10 digits'),
     passingOutYear: z.string().min(4, 'Please enter a valid year').max(4, 'Please enter a valid year'),
-});
+    problemId: z.string().optional(),
+})
 
 export async function POST(request: Request) {
     try {
-        const body = await request.json();
+        const body = await request.json()
+        const validatedData = recruitmentUnlockSchema.parse(body)
 
-        // Validate the data
-        const validatedData = recruitmentUnlockSchema.parse(body);
+        await dbConnect()
 
-        // Get backend URL and API key from environment
-        const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000';
-        const apiKey = process.env.NEXT_PUBLIC_API_KEY;
+        const email = validatedData.email.trim()
 
-        if (!apiKey) {
-            console.error('NEXT_PUBLIC_API_KEY not configured');
+        // Mobile number format validation (Indian 10-digit)
+        const mobileRegex = /^[6-9]\d{9}$/
+        if (!mobileRegex.test(validatedData.mobile.replace(/\s+/g, '').replace(/^\+91/, ''))) {
             return NextResponse.json(
-                {
-                    success: false,
-                    message: 'Server configuration error',
-                },
-                { status: 500 }
-            );
+                { success: false, message: 'Invalid mobile number format. Please provide a valid 10-digit Indian mobile number' },
+                { status: 400 }
+            )
         }
 
-        try {
-            const backendResponse = await fetch(
-                `${backendUrl}/api/recruitment/unlock`,
-                {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'x-api-key': apiKey
-                    },
-                    body: JSON.stringify(validatedData),
-                }
-            );
-
-            let backendData;
-            const contentType = backendResponse.headers.get("content-type");
-
-            if (contentType && contentType.indexOf("application/json") !== -1) {
-                backendData = await backendResponse.json();
-            } else {
-                const text = await backendResponse.text();
-                console.error(`Non-JSON response from backend (Status: ${backendResponse.status}):`, text.substring(0, 200));
-                return NextResponse.json(
-                    {
-                        success: false,
-                        message: `Backend service is currently unavailable or returned an invalid response (Status: ${backendResponse.status}).`,
-                    },
-                    { status: backendResponse.status >= 500 ? backendResponse.status : 502 }
-                );
-            }
-
-            if (!backendResponse.ok) {
-                return NextResponse.json(
-                    {
-                        success: false,
-                        message: backendData?.error || backendData?.message || 'Failed to unlock challenges',
-                    },
-                    { status: backendResponse.status }
-                );
-            }
-
-            return NextResponse.json({
-                success: true,
-                message: 'Successfully unlocked challenges',
-                data: backendData.data,
-            });
-        } catch (fetchError) {
-            console.error('Backend connection error:', fetchError);
-            return NextResponse.json(
-                {
-                    success: false,
-                    message: 'Could not connect to backend server. Please try again later.',
-                },
-                { status: 503 }
-            );
+        const candidateData: Record<string, unknown> = {
+            name: validatedData.name,
+            email,
+            mobile: validatedData.mobile,
+            passingOutYear: validatedData.passingOutYear,
+            source: 'Recruitment Page',
+            updatedAt: new Date(),
         }
+
+        if (validatedData.problemId && typeof validatedData.problemId === 'string') {
+            candidateData.problemUnlocked = validatedData.problemId
+        }
+
+        await Recruitment.findOneAndUpdate(
+            { email: { $eq: email } },
+            { $set: candidateData },
+            { upsert: true, new: true, setDefaultsOnInsert: true }
+        )
+
+        console.log(`✅ Recruitment candidate saved: ${validatedData.name} (${email})`)
+
+        return NextResponse.json({
+            success: true,
+            message: 'Successfully unlocked challenges',
+            data: {
+                name: validatedData.name,
+                email,
+                unlocked: true,
+            },
+        })
     } catch (error) {
         if (error instanceof z.ZodError) {
             return NextResponse.json(
                 {
                     success: false,
                     message: error.issues.map(issue => issue.message).join('. '),
-                    errors: error.issues
+                    errors: error.issues,
                 },
                 { status: 400 }
-            );
+            )
         }
 
-        console.error('Recruitment unlock error:', error);
+        console.error('Recruitment unlock error:', error)
         return NextResponse.json(
             { success: false, message: 'Internal Server Error' },
             { status: 500 }
-        );
+        )
     }
 }

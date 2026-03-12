@@ -1,31 +1,42 @@
-import { NextResponse } from 'next/server'
+import dbConnect from '@/lib/db'
+import Recruitment from '@/models/Recruitment'
+import { escCsv } from '@/lib/csv'
 
 export async function GET() {
     try {
-        const backendUrl = process.env.BACKEND_URL || 'http://localhost:5000'
-        const apiKey = process.env.API_KEY
+        await dbConnect()
 
-        if (!apiKey) {
-            return NextResponse.json({ message: 'Server configuration error' }, { status: 500 })
-        }
+        const candidates = await Recruitment.find()
+            .sort({ createdAt: -1 })
+            .select('-__v -_id')
+            .lean()
 
-        const backendRes = await fetch(`${backendUrl}/api/admin/recruitment/export`, {
-            headers: { 'x-api-key': apiKey },
-        })
+        const headers = [
+            'Name', 'Email', 'Mobile', 'Passing Year',
+            'Problem Unlocked', 'Solution Submitted', 'Source', 'Registered At',
+        ]
 
-        if (!backendRes.ok) {
-            return NextResponse.json({ message: 'Backend export failed' }, { status: backendRes.status })
-        }
+        const rows = candidates.map(c => [
+            c.name, c.email, c.mobile, c.passingOutYear,
+            c.problemUnlocked ?? '',
+            c.submittedSolution ? 'Yes' : 'No',
+            c.source ?? '',
+            c.createdAt ? new Date(c.createdAt).toISOString() : '',
+        ].map(escCsv).join(','))
 
-        const csvText = await backendRes.text()
-        return new Response(csvText, {
+        const csv = [headers.join(','), ...rows].join('\n')
+
+        return new Response(csv, {
             headers: {
                 'Content-Type': 'text/csv; charset=utf-8',
                 'Content-Disposition': `attachment; filename="c3-recruitment-${Date.now()}.csv"`,
             },
         })
     } catch (error) {
-        console.error('Recruitment export proxy error:', error)
-        return NextResponse.json({ message: 'Could not reach backend' }, { status: 503 })
+        console.error('Recruitment export error:', error)
+        return new Response(JSON.stringify({ message: 'Failed to export recruitment data' }), {
+            status: 500,
+            headers: { 'Content-Type': 'application/json' },
+        })
     }
 }

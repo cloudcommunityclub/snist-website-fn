@@ -4,8 +4,12 @@ import React, { useRef } from 'react'
 import { motion, useScroll, useTransform, MotionValue } from 'framer-motion'
 import { Rocket, BookOpen, FlaskConical, Users, LucideIcon } from 'lucide-react'
 import Link from 'next/link'
-import { SiDiscord, SiLinkedin, SiInstagram, SiGithub } from 'react-icons/si'
-import { FaXTwitter } from 'react-icons/fa6'
+import { SiDiscord, SiInstagram, SiGithub } from 'react-icons/si'
+import { FaXTwitter, FaLinkedin } from 'react-icons/fa6'
+
+
+
+
 
 type Activity = {
     title: string;
@@ -193,7 +197,7 @@ export default function Overview() {
                             />
                             <SocialButton
                                 href='https://www.linkedin.com/company/cloud-community-club'
-                                icon={SiLinkedin}
+                                icon={FaLinkedin}
                                 label="LinkedIn"
                                 hoverColor="hover:bg-[#0077b5]"
                                 hoverBorder="hover:border-[#0077b5]"
