@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import FlowingMenu, { MenuItemData } from './FlowingMenu';
 import { AnimatePresence, motion } from 'framer-motion';
 import { RECRUITMENT_CATEGORIES } from '@/dispositions/recruitment';
@@ -15,11 +15,11 @@ interface PositionBoardProps {
 export default function PositionBoard({ categories = RECRUITMENT_CATEGORIES, onSelectProblem }: PositionBoardProps) {
     const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
 
-    const handleBack = () => {
+    const handleBack = useCallback(() => {
         setExpandedCategory(null);
-    };
+    }, []);
 
-    const recruitmentItems: MenuItemData[] = [
+    const recruitmentItems: MenuItemData[] = useMemo(() => [
         {
             link: '#',
             text: 'Documentation',
@@ -56,7 +56,7 @@ export default function PositionBoard({ categories = RECRUITMENT_CATEGORIES, onS
             image: '/assets/recruitment/recruitment_publicity.png',
             onClick: () => setExpandedCategory('publicity')
         }
-    ];
+    ], []);
 
     const activeCategoryData = categories.find(c => c.id === expandedCategory);
 

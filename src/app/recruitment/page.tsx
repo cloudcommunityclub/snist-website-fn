@@ -1,15 +1,16 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useCallback } from 'react';
+import dynamic from 'next/dynamic';
 import { Candidate, ProblemStatement } from '@/types/recruitment';
 import { RECRUITMENT_CATEGORIES } from '@/dispositions/recruitment';
 
-// Component Imports
-import Hero from '@/components/recruitment/Hero';
-import Roadmap from '@/components/recruitment/Roadmap';
-import PositionBoard from '@/components/recruitment/PositionBoard';
-import UnlockModal from '@/components/recruitment/UnlockModal';
-import ChallengeDetail from '@/components/recruitment/ChallengeDetail';
+// Lazy load heavy components for better initial page load
+const Hero = dynamic(() => import('@/components/recruitment/Hero'), { ssr: true });
+const Roadmap = dynamic(() => import('@/components/recruitment/Roadmap'), { ssr: true });
+const PositionBoard = dynamic(() => import('@/components/recruitment/PositionBoard'), { ssr: true });
+const UnlockModal = dynamic(() => import('@/components/recruitment/UnlockModal'), { ssr: false });
+const ChallengeDetail = dynamic(() => import('@/components/recruitment/ChallengeDetail'), { ssr: true });
 
 export default function RecruitmentPage() {
     // State
@@ -21,7 +22,7 @@ export default function RecruitmentPage() {
     const pendingProblemRef = useRef<ProblemStatement | null>(null);
 
     // Handler: Problem Click (Interceptor Logic)
-    const handleProblemClick = (problem: ProblemStatement) => {
+    const handleProblemClick = useCallback((problem: ProblemStatement) => {
         if (!userProfile) {
             // User not verified, store pending problem and show modal
             pendingProblemRef.current = problem;
@@ -30,10 +31,10 @@ export default function RecruitmentPage() {
             // User is verified, navigate to challenge detail
             setSelectedProblem(problem);
         }
-    };
+    }, [userProfile]);
 
     // Handler: Unlock (Form Submission)
-    const handleUnlock = (candidateData: Candidate) => {
+    const handleUnlock = useCallback((candidateData: Candidate) => {
         // Simulate API call - save candidate data
         setUserProfile(candidateData);
 
@@ -45,18 +46,18 @@ export default function RecruitmentPage() {
             setSelectedProblem(pendingProblemRef.current);
             pendingProblemRef.current = null;
         }
-    };
+    }, []);
 
     // Handler: Back from Challenge Detail
-    const handleBack = () => {
+    const handleBack = useCallback(() => {
         setSelectedProblem(null);
-    };
+    }, []);
 
     // Handler: Close Modal
-    const handleCloseModal = () => {
+    const handleCloseModal = useCallback(() => {
         setShowUnlockModal(false);
         pendingProblemRef.current = null;
-    };
+    }, []);
 
     return (
         <div className="min-h-screen overflow-x-hidden bg-black text-slate-300">

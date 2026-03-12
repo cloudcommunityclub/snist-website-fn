@@ -34,9 +34,13 @@ export async function proxy(request: NextRequest) {
     }
 
     try {
-        const secret = new TextEncoder().encode(
-            process.env.ADMIN_JWT_SECRET || 'fallback-dev-secret-change-in-prod'
-        )
+        const jwtSecret = process.env.ADMIN_JWT_SECRET
+        if (!jwtSecret) {
+            console.error('ADMIN_JWT_SECRET not configured')
+            const loginUrl = new URL('/admin/login', request.url)
+            return NextResponse.redirect(loginUrl)
+        }
+        const secret = new TextEncoder().encode(jwtSecret)
         await jwtVerify(token, secret, { algorithms: ['HS256'] })
         return NextResponse.next()
     } catch {
