@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { SiDiscord, SiLinkedin, SiGithub, SiInstagram } from 'react-icons/si'
-import { FaXTwitter } from 'react-icons/fa6'
+import { SiDiscord, SiGithub, SiInstagram } from 'react-icons/si'
+import { FaXTwitter, FaLinkedin } from 'react-icons/fa6'
 import { MdOutlineEmail } from 'react-icons/md'
 
 export default function Footer() {
@@ -10,12 +10,12 @@ export default function Footer() {
 
             <p className='font-semibold'>Connect with C³</p>
 
-            <div className='flex flex-row flex-wrap gap-3 justify-center py-4 overflow-x-hidden'>
+            <div className='flex flex-row flex-wrap gap-3 justify-center py-4 overflow-x-hidden px-4'>
                 <Link
                     href='https://discord.gg/dBNXWDKhrD'
                     target='_blank'
                 >
-                    <button className='flex group w-full justify-center bg-neutral-700 dark:bg-neutral-900 bg-opacity-80 rounded-md gap-2 py-2 px-4 active:scale-95 hover:bg-[#5865F2] hover:outline-4 hover:text-white active:outline-2 hover:outline-double outline-white border-[1px] border-neutral-800 hover:outline-[#5865F2] active:outline-neutral-200 duration-200 active:duration-200'>
+                    <button className='flex group w-full justify-center bg-neutral-700 dark:bg-neutral-900 bg-opacity-80 rounded-md gap-2 py-2 px-4 min-h-[44px] items-center active:scale-95 hover:bg-[#5865F2] hover:outline-4 hover:text-white active:outline-2 hover:outline-double outline-white border-[1px] border-neutral-800 hover:outline-[#5865F2] active:outline-neutral-200 duration-200 active:duration-200'>
                         <SiDiscord className='my-auto group-hover:text-white' />
                         Discord
                     </button>
@@ -25,7 +25,7 @@ export default function Footer() {
                     href='https://www.instagram.com/c3.snist/'
                     target='_blank'
                 >
-                    <button className='flex group w-full justify-center bg-neutral-700 dark:bg-neutral-900 bg-opacity-80 rounded-md gap-2 py-2 px-4 active:scale-95 hover:bg-[#E4405F] hover:outline-4 hover:text-white active:outline-2 hover:outline-double outline-white border-[1px] border-neutral-800 hover:outline-[#E4405F] active:outline-neutral-200 duration-200 active:duration-200'>
+                    <button className='flex group w-full justify-center bg-neutral-700 dark:bg-neutral-900 bg-opacity-80 rounded-md gap-2 py-2 px-4 min-h-[44px] items-center active:scale-95 hover:bg-[#E4405F] hover:outline-4 hover:text-white active:outline-2 hover:outline-double outline-white border-[1px] border-neutral-800 hover:outline-[#E4405F] active:outline-neutral-200 duration-200 active:duration-200'>
                         <SiInstagram className='my-auto group-hover:text-white' />
                         Instagram
                     </button>
@@ -35,8 +35,8 @@ export default function Footer() {
                     href='https://www.linkedin.com/company/cloud-community-club'
                     target='_blank'
                 >
-                    <button className='flex group w-full justify-center bg-neutral-700 dark:bg-neutral-900 bg-opacity-80 rounded-md gap-2 py-2 px-4 active:scale-95 hover:bg-[#0A66C2] hover:outline-4 hover:text-white active:outline-2 hover:outline-double outline-white border-[1px] border-neutral-800 hover:outline-[#0A66C2] active:outline-neutral-200 duration-200 active:duration-200'>
-                        <SiLinkedin className='my-auto group-hover:text-white' />
+                    <button className='flex group w-full justify-center bg-neutral-700 dark:bg-neutral-900 bg-opacity-80 rounded-md gap-2 py-2 px-4 min-h-[44px] items-center active:scale-95 hover:bg-[#0A66C2] hover:outline-4 hover:text-white active:outline-2 hover:outline-double outline-white border-[1px] border-neutral-800 hover:outline-[#0A66C2] active:outline-neutral-200 duration-200 active:duration-200'>
+                        <FaLinkedin className='my-auto group-hover:text-white' />
                         LinkedIn
                     </button>
                 </Link>
@@ -45,21 +45,21 @@ export default function Footer() {
                     href='https://github.com/C3Snist'
                     target='_blank'
                 >
-                    <button className='flex group w-full justify-center bg-neutral-700 dark:bg-neutral-900 bg-opacity-80 rounded-md gap-1 py-2 px-4 active:scale-95 hover:bg-[#24292e] hover:outline-4 hover:text-white active:outline-2 hover:outline-double outline-white border-[1px] border-neutral-800 hover:outline-[#24292e] active:outline-neutral-200 duration-200 active:duration-200'>
+                    <button className='flex group w-full justify-center bg-neutral-700 dark:bg-neutral-900 bg-opacity-80 rounded-md gap-1 py-2 px-4 min-h-[44px] items-center active:scale-95 hover:bg-[#24292e] hover:outline-4 hover:text-white active:outline-2 hover:outline-double outline-white border-[1px] border-neutral-800 hover:outline-[#24292e] active:outline-neutral-200 duration-200 active:duration-200'>
                         <SiGithub className='my-auto group-hover:text-white' />
                         GitHub
                     </button>
                 </Link>
 
                 <Link href='https://x.com/C3Snist' target='_blank'>
-                    <button className='flex group w-full justify-center bg-neutral-700 dark:bg-neutral-900 bg-opacity-80 rounded-md gap-2 py-2 px-4 active:scale-95 hover:bg-black hover:outline-4 hover:text-white active:outline-2 hover:outline-double outline-white border-[1px] border-neutral-800 hover:outline-neutral-700 active:outline-neutral-200 duration-200 active:duration-200'>
+                    <button className='flex group w-full justify-center bg-neutral-700 dark:bg-neutral-900 bg-opacity-80 rounded-md gap-2 py-2 px-4 min-h-[44px] items-center active:scale-95 hover:bg-black hover:outline-4 hover:text-white active:outline-2 hover:outline-double outline-white border-[1px] border-neutral-800 hover:outline-neutral-700 active:outline-neutral-200 duration-200 active:duration-200'>
                         <FaXTwitter className='my-auto group-hover:text-white' />
                         X
                     </button>
                 </Link>
 
                 <Link href='mailto:C3@snist.cloudcommunityclub.in'>
-                    <button className='flex group w-full justify-center bg-neutral-700 dark:bg-neutral-900 bg-opacity-80 rounded-md gap-2 py-2 px-4 active:scale-95 hover:bg-[#EA4335] hover:outline-4 hover:text-white active:outline-2 hover:outline-double outline-white border-[1px] border-neutral-800 hover:outline-[#EA4335] active:outline-neutral-200 duration-200 active:duration-200'>
+                    <button className='flex group w-full justify-center bg-neutral-700 dark:bg-neutral-900 bg-opacity-80 rounded-md gap-2 py-2 px-4 min-h-[44px] items-center active:scale-95 hover:bg-[#EA4335] hover:outline-4 hover:text-white active:outline-2 hover:outline-double outline-white border-[1px] border-neutral-800 hover:outline-[#EA4335] active:outline-neutral-200 duration-200 active:duration-200'>
                         <MdOutlineEmail className='my-auto group-hover:text-white' />
                         Email
                     </button>

@@ -45,7 +45,7 @@ export default function TerminalWindow({
                 </div>
 
                 {/* Terminal Content */}
-                <div ref={containerRef} className="bg-[#282a36]/95 backdrop-blur-md flex min-h-[300px] font-mono text-sm overflow-hidden relative">
+                <div ref={containerRef} className="bg-[#282a36]/95 backdrop-blur-md flex min-h-[300px] font-mono text-sm overflow-x-hidden relative">
                     {/* Active Line Highlight */}
                     {activeLine && (
                         <div
@@ -64,7 +64,7 @@ export default function TerminalWindow({
                     </div>
 
                     {/* Code Area */}
-                    <div className="flex-1 p-6 text-[#f8f8f2] leading-6 relative z-10">
+                    <div className="flex-1 p-3 sm:p-6 text-[#f8f8f2] leading-6 relative z-10">
                         {children || (
                             <>
                                 <p className="text-[#6272a4]">{'// Welcome to Cloud Community Club v1.0.0'}</p>

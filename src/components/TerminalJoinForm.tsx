@@ -33,7 +33,7 @@ export const joinClubSchema = z.object({
         .min(10, 'Roll number must be at least 10 characters')
         .regex(/^[A-Z0-9]+$/i, 'Roll number must be alphanumeric'),
     email: z.string().email(),
-    phone: z.string().min(10),
+    phone: z.string().regex(/^(\+91[\s-]?)?[6-9]\d{9}$/, 'Enter a valid 10-digit Indian mobile number'),
     department: z.enum(DEPARTMENTS),
     year: z.enum(['1', '2', '3', '4']),
     motivation: z.string().min(20).max(500),
@@ -141,9 +141,9 @@ function TerminalProgress({ currentStep, steps }: TerminalProgressProps) {
 }
 
 const slideVariants = {
-    enter: (direction: number) => ({ x: direction > 0 ? 300 : -300, opacity: 0 }),
+    enter: (direction: number) => ({ x: direction > 0 ? '100%' : '-100%', opacity: 0 }),
     center: { x: 0, opacity: 1 },
-    exit: (direction: number) => ({ x: direction > 0 ? -300 : 300, opacity: 0 }),
+    exit: (direction: number) => ({ x: direction > 0 ? '-100%' : '100%', opacity: 0 }),
 }
 
 const terminalInputClass = `
@@ -188,6 +188,13 @@ export default function TerminalJoinForm() {
     const containerRef = useRef<HTMLDivElement>(null)
     const textareaRef = useRef<HTMLTextAreaElement>(null)
 
+    React.useEffect(() => {
+        try {
+            const registeredEmail = localStorage.getItem('c3_registered_email')
+            if (registeredEmail) setSubmitSuccess(true)
+        } catch {}
+    }, [])
+
     // Helper to reset cursor state on step change
     const updateCursorPosition = useCallback((element: HTMLInputElement | HTMLTextAreaElement) => {
         const text = element.value.substring(0, element.selectionStart || 0)
@@ -226,14 +233,10 @@ export default function TerminalJoinForm() {
         trigger,
         formState: { errors },
         getValues,
-        watch
     } = useForm<JoinClubFormData>({
         resolver: zodResolver(joinClubSchema),
         mode: 'onBlur',
     })
-
-    // Watch values to ensure cursor updates even on programmatic changes if needed
-    watch()
 
     const currentStepConfig = FORM_STEPS[currentStep]
     const isFirstStep = currentStep === 0
@@ -305,6 +308,7 @@ export default function TerminalJoinForm() {
             await new Promise(resolve => setTimeout(resolve, 400))
 
             setSubmitSuccess(true)
+            try { localStorage.setItem('c3_registered_email', data.email) } catch {}
         } catch (error) {
             console.error('Registration failed:', error)
             setSubmissionLogs(prev => [
@@ -367,7 +371,7 @@ export default function TerminalJoinForm() {
 
     // Handle Enter key for navigation
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        if (e.key === 'Enter' && !e.shiftKey) {
+        if (e.key === 'Enter' && !e.shiftKey && e.currentTarget.tagName !== 'TEXTAREA') {
             e.preventDefault()
             nextStep()
         }

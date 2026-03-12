@@ -13,9 +13,9 @@ import {
     SiGithub,
     SiInstagram,
     SiDiscord,
-    SiLinkedin,
 } from 'react-icons/si'
 import { FaNetworkWired, FaQuoteLeft } from 'react-icons/fa'
+import { FaLinkedin } from 'react-icons/fa6'
 
 const sfx_clunk = '/assets/sound_fx/clunk.mp3'
 const sfx_hoverThunk = '/assets/sound_fx/muffled_hover_thunk.mp3'
@@ -57,6 +57,7 @@ const MajorLeaderCard: React.FC<props_MajorLeaderCard> = ({
 
     const [displayQuote, setDisplayQuote] = useState(false)
     const [isAnimating, setIsAnimating] = useState(false)
+    const [imgError, setImgError] = useState(false)
 
     const ref = useRef(null)
     const isInView = useInView(ref, { once: true })
@@ -118,13 +119,20 @@ const MajorLeaderCard: React.FC<props_MajorLeaderCard> = ({
                     </div>
                 </motion.div>
 
-                <Image
-                    width={320}
-                    height={320}
-                    className='rounded-t-xl rounded-b-lg aspect-square'
-                    alt=''
-                    src={majorLeaderDetails.imgSrc}
-                />
+                {imgError ? (
+                    <div className='rounded-t-xl rounded-b-lg aspect-square w-[320px] h-[320px] bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center text-4xl font-bold text-white/20 select-none'>
+                        {majorLeaderDetails.role?.[0] ?? '?'}
+                    </div>
+                ) : (
+                    <Image
+                        width={320}
+                        height={320}
+                        className='rounded-t-xl rounded-b-lg aspect-square'
+                        alt=''
+                        src={majorLeaderDetails.imgSrc}
+                        onError={() => setImgError(true)}
+                    />
+                )}
             </div>
 
             {/* Leader Name and Role */}
@@ -203,7 +211,7 @@ const MajorLeaderCard: React.FC<props_MajorLeaderCard> = ({
                         target='_blank'
                         rel='noreferrer'
                     >
-                        <SiLinkedin size={'3vh'} className='h-10' />
+                        <FaLinkedin size={'3vh'} className='h-10' />
                     </a>
                 ) : (
                     <></>
@@ -234,6 +242,7 @@ const MinorLeaderCard: React.FC<props_MinorLeaderCard> = ({
     const [playSfx_discorda] = useSound(sfx_discorda)
     const [displayQuote, setDisplayQuote] = useState(false)
     const [isAnimating, setIsAnimating] = useState(false)
+    const [imgError, setImgError] = useState(false)
 
     const ref = useRef(null)
     const isInView = useInView(ref, { once: true })
@@ -313,13 +322,20 @@ const MinorLeaderCard: React.FC<props_MinorLeaderCard> = ({
                         </div>
                     </motion.div>
 
-                    <Image
-                        width={320}
-                        height={320}
-                        className='rounded-t-xl rounded-b-lg aspect-square'
-                        alt={minorLeaderDetails.label}
-                        src={minorLeaderDetails.imgSrc || ''}
-                    />
+                    {imgError ? (
+                        <div className='rounded-t-xl rounded-b-lg aspect-square w-[320px] h-[320px] bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center text-4xl font-bold text-[#ff6f61]/30 select-none'>
+                            {minorLeaderDetails.label?.[0] ?? '?'}
+                        </div>
+                    ) : (
+                        <Image
+                            width={320}
+                            height={320}
+                            className='rounded-t-xl rounded-b-lg aspect-square'
+                            alt={minorLeaderDetails.label}
+                            src={minorLeaderDetails.imgSrc || ''}
+                            onError={() => setImgError(true)}
+                        />
+                    )}
                 </div>
 
                 {/* Leader Name and Role */}
@@ -370,7 +386,7 @@ const MinorLeaderCard: React.FC<props_MinorLeaderCard> = ({
                             target='_blank'
                             rel='noreferrer'
                         >
-                            <SiLinkedin size={'3vh'} className='h-10' />
+                            <FaLinkedin size={'3vh'} className='h-10' />
                         </a>
                     )}
                     {minorLeaderDetails.instagram && (
