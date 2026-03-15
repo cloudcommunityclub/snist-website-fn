@@ -79,37 +79,7 @@ function SubmitPR({ candidateEmail, problemId }: { candidateEmail: string; probl
         );
     }
 
-    return (
-        <div className="mt-10">
-            <div className="mb-8 border-t border-white/[0.04]" />
-            <h2 className="font-mono text-white/30 text-xs uppercase tracking-widest mb-2">
-                Submit Your PR
-            </h2>
-            <p className="text-gray-600 text-xs font-light mb-4">
-                Paste the link to your Pull Request once you&apos;ve pushed your solution.
-            </p>
-            <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3">
-                <input
-                    type="url"
-                    value={prUrl}
-                    onChange={e => setPrUrl(e.target.value)}
-                    placeholder="https://github.com/org/repo/pull/123"
-                    className="flex-1 font-mono text-sm text-white bg-white/[0.03] border border-white/[0.06] rounded-lg px-4 py-3 focus:border-cyan-400/40 focus:outline-none placeholder:text-white/20 transition-colors min-w-0"
-                    required
-                />
-                <button
-                    type="submit"
-                    disabled={status === 'submitting' || !prUrl.trim()}
-                    className="px-6 py-3 bg-white/5 border border-white/10 text-white font-bold uppercase text-xs tracking-widest rounded-xl hover:bg-cyan-400/10 hover:border-cyan-500/30 hover:text-cyan-400 transition-all duration-300 disabled:opacity-40 disabled:cursor-not-allowed whitespace-nowrap sm:w-auto w-full min-h-[44px]"
-                >
-                    {status === 'submitting' ? 'Submitting…' : 'Submit PR'}
-                </button>
-            </form>
-            {status === 'error' && (
-                <p className="text-red-400 text-xs mt-2 font-mono">{errorMsg}</p>
-            )}
-        </div>
-    );
+    
 }
 
 export default function ChallengeDetail({ problem, candidateEmail, onBack }: ChallengeDetailProps) {
@@ -160,8 +130,8 @@ export default function ChallengeDetail({ problem, candidateEmail, onBack }: Cha
                         <p className="font-mono text-white/30 text-xs uppercase tracking-widest mb-1">How it works</p>
                         <p className="text-gray-500 text-sm font-light leading-relaxed">
                             Pick <strong className="text-gray-400 font-medium">one problem</strong> from any category.
-                            Claim the GitHub issue, fork the repo, implement your solution, and open a PR.
-                            Paste your PR link below — we track all submissions in our backend.
+                            Claim the GitHub issue, implement your solution.
+                            — we track all submissions in our backend.
                         </p>
                     </div>
 
@@ -180,37 +150,7 @@ export default function ChallengeDetail({ problem, candidateEmail, onBack }: Cha
                     <div className="my-10 border-t border-white/[0.04]" />
 
                     {/* Instructions Checklist */}
-                    <div>
-                        <h2 className="font-mono text-white/30 text-xs uppercase tracking-widest mb-6">
-                            Mission Protocol
-                        </h2>
-                        <div className="space-y-6">
-                            {instructions.map((item, index) => (
-                                <motion.div
-                                    key={item.step}
-                                    initial={{ opacity: 0, x: -20 }}
-                                    animate={{ opacity: 1, x: 0 }}
-                                    transition={{ delay: index * 0.1 }}
-                                    className="flex gap-4"
-                                >
-                                    <div className="flex-shrink-0 mt-0.5">
-                                        <CheckCircle2 className="w-4 h-4 text-cyan-400/60" />
-                                    </div>
-                                    <div className="min-w-0">
-                                        <p className="text-white font-medium text-sm mb-1.5 title-main">
-                                            {item.step}. {item.title}
-                                        </p>
-                                        <code className="block font-mono text-cyan-400/70 text-xs bg-black/40 border border-white/[0.04] px-3 py-2 rounded-lg mb-2 break-all">
-                                            {item.command}
-                                        </code>
-                                        <p className="text-gray-600 text-sm font-light">
-                                            {item.description}
-                                        </p>
-                                    </div>
-                                </motion.div>
-                            ))}
-                        </div>
-                    </div>
+                    
 
                     {/* PR Submission Form — only shown to verified candidates */}
                     {candidateEmail && (
