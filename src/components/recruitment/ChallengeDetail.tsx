@@ -1,13 +1,11 @@
 'use client';
 
-import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { ChevronLeft, ExternalLink, CheckCircle2 } from 'lucide-react';
 import { ProblemStatement } from '@/types/recruitment';
 
 interface ChallengeDetailProps {
     problem: ProblemStatement;
-    candidateEmail: string;
     onBack: () => void;
 }
 
@@ -32,87 +30,13 @@ const instructions = [
     },
     {
         step: '04',
-        title: 'Submit PR',
-        command: 'git push origin feature/your-solution',
-        description: 'Push your changes and open a Pull Request against the main branch.',
+        title: 'Submit on Issue',
+        command: 'Comment on the selected GitHub issue',
+        description: 'Post your complete solution in the issue comments using the required submission format before the deadline.',
     },
 ];
 
-function SubmitPR({ candidateEmail, problemId }: { candidateEmail: string; problemId: string }) {
-    const [prUrl, setPrUrl] = useState('');
-    const [status, setStatus] = useState<'idle' | 'submitting' | 'done' | 'error'>('idle');
-    const [errorMsg, setErrorMsg] = useState('');
-
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        const trimmed = prUrl.trim();
-        if (!trimmed) return;
-        setStatus('submitting');
-        setErrorMsg('');
-        try {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/recruitment/submit`, {
-                method: 'POST',
-                headers: { 
-                    'Content-Type': 'application/json',
-                    'x-api-key': process.env.NEXT_PUBLIC_API_KEY || ''
-                },
-                body: JSON.stringify({ email: candidateEmail, problemId, prUrl: trimmed }),
-            });
-            if (!res.ok) {
-                const data = await res.json().catch(() => ({}));
-                throw new Error(data?.error ?? 'Submission failed');
-            }
-            setStatus('done');
-        } catch (err) {
-            setErrorMsg(err instanceof Error ? err.message : 'Something went wrong. Please try again.');
-            setStatus('error');
-        }
-    };
-
-    if (status === 'done') {
-        return (
-            <div className="mt-8 p-5 bg-cyan-400/5 border border-cyan-500/20 rounded-xl text-center">
-                <CheckCircle2 className="w-5 h-5 text-cyan-400 mx-auto mb-2" />
-                <p className="text-cyan-400 font-mono text-sm">PR submission recorded. Good luck!</p>
-                <p className="text-gray-600 font-mono text-xs mt-1">We&apos;ll be in touch for the next round.</p>
-            </div>
-        );
-    }
-
-    return (
-        <div className="mt-10">
-            <div className="mb-8 border-t border-white/[0.04]" />
-            <h2 className="font-mono text-white/30 text-xs uppercase tracking-widest mb-2">
-                Submit Your PR
-            </h2>
-            <p className="text-gray-600 text-xs font-light mb-4">
-                Paste the link to your Pull Request once you&apos;ve pushed your solution.
-            </p>
-            <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3">
-                <input
-                    type="url"
-                    value={prUrl}
-                    onChange={e => setPrUrl(e.target.value)}
-                    placeholder="https://github.com/org/repo/pull/123"
-                    className="flex-1 font-mono text-sm text-white bg-white/[0.03] border border-white/[0.06] rounded-lg px-4 py-3 focus:border-cyan-400/40 focus:outline-none placeholder:text-white/20 transition-colors min-w-0"
-                    required
-                />
-                <button
-                    type="submit"
-                    disabled={status === 'submitting' || !prUrl.trim()}
-                    className="px-6 py-3 bg-white/5 border border-white/10 text-white font-bold uppercase text-xs tracking-widest rounded-xl hover:bg-cyan-400/10 hover:border-cyan-500/30 hover:text-cyan-400 transition-all duration-300 disabled:opacity-40 disabled:cursor-not-allowed whitespace-nowrap sm:w-auto w-full min-h-[44px]"
-                >
-                    {status === 'submitting' ? 'Submitting…' : 'Submit PR'}
-                </button>
-            </form>
-            {status === 'error' && (
-                <p className="text-red-400 text-xs mt-2 font-mono">{errorMsg}</p>
-            )}
-        </div>
-    );
-}
-
-export default function ChallengeDetail({ problem, candidateEmail, onBack }: ChallengeDetailProps) {
+export default function ChallengeDetail({ problem, onBack }: ChallengeDetailProps) {
     return (
         <motion.section
             initial={{ opacity: 0, y: 20 }}
@@ -160,8 +84,8 @@ export default function ChallengeDetail({ problem, candidateEmail, onBack }: Cha
                         <p className="font-mono text-white/30 text-xs uppercase tracking-widest mb-1">How it works</p>
                         <p className="text-gray-500 text-sm font-light leading-relaxed">
                             Pick <strong className="text-gray-400 font-medium">one problem</strong> from any category.
-                            Claim the GitHub issue, fork the repo, implement your solution, and open a PR.
-                            Paste your PR link below — we track all submissions in our backend.
+                            Claim the GitHub issue, build your solution, and submit it as a structured issue comment.
+                            We only evaluate what is posted on the issue before the deadline.
                         </p>
                     </div>
 
@@ -212,10 +136,17 @@ export default function ChallengeDetail({ problem, candidateEmail, onBack }: Cha
                         </div>
                     </div>
 
-                    {/* PR Submission Form — only shown to verified candidates */}
-                    {candidateEmail && (
-                        <SubmitPR candidateEmail={candidateEmail} problemId={problem.id} />
-                    )}
+                    {/* Submission guidance */}
+                    <div className="mt-10">
+                        <div className="mb-8 border-t border-white/[0.04]" />
+                        <h2 className="font-mono text-white/30 text-xs uppercase tracking-widest mb-2">
+                            Submit Your Solution
+                        </h2>
+                        <p className="text-gray-600 text-xs font-light leading-relaxed">
+                            Reply directly on the selected GitHub issue using the submission format from the repository README:
+                            problem chosen, complete solution, work links, and reflection.
+                        </p>
+                    </div>
                 </div>
             </div>
         </motion.section>
