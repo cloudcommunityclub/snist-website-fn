@@ -92,7 +92,6 @@ export default function RecruitmentPage() {
             {selectedProblem ? (
                 <ChallengeDetail
                     problem={selectedProblem}
-                    candidateEmail={userProfile?.email ?? ''}
                     onBack={handleBack}
                 />
             ) : (
