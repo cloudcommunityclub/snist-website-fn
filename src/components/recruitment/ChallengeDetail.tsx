@@ -50,12 +50,9 @@ function SubmitPR({ candidateEmail, problemId }: { candidateEmail: string; probl
         setStatus('submitting');
         setErrorMsg('');
         try {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/recruitment/submit`, {
+            const res = await fetch('/api/recruitment/submit', {
                 method: 'POST',
-                headers: { 
-                    'Content-Type': 'application/json',
-                    'x-api-key': process.env.NEXT_PUBLIC_API_KEY || ''
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email: candidateEmail, problemId, prUrl: trimmed }),
             });
             if (!res.ok) {

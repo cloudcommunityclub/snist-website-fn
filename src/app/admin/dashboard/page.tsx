@@ -59,7 +59,7 @@ interface PaginatedResponse<T> {
 // ─── Fetcher ──────────────────────────────────────────────────────────────────
 
 const fetcher = (url: string) =>
-    fetch(url, { headers: { "x-api-key": process.env.NEXT_PUBLIC_API_KEY || '' } }).then(res => {
+    fetch(url).then(res => {
         if (!res.ok) throw new Error(`HTTP ${res.status}`)
         return res.json()
     })
@@ -195,7 +195,8 @@ function MembersTab() {
         ...(emailSent && { emailSent }),
     })
 
-    const { data, error, isLoading, mutate } = useSWR<PaginatedResponse<Member>>(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/admin/members?${params.toString()}`,
+    const { data, error, isLoading, mutate } = useSWR<PaginatedResponse<Member>>(
+        `/api/admin/members?${params.toString()}`,
         fetcher,
         { keepPreviousData: true }
     )
@@ -208,14 +209,9 @@ function MembersTab() {
     const handleExport = async () => {
         setDownloading(true)
         try {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/admin/members?export=true`, { 
-                headers: { 
-                    'Accept': 'text/csv',
-                    'x-api-key': process.env.NEXT_PUBLIC_API_KEY || ''
-                } 
-            })
+            const res = await fetch('/api/admin/members?export=true', { headers: { 'Accept': 'text/csv' } })
             // Actually call export endpoint directly
-            const exportRes = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/admin/members/export`, { headers: { 'x-api-key': process.env.NEXT_PUBLIC_API_KEY || '' } })
+            const exportRes = await fetch(`/api/admin/members/export`)
             const blob = await exportRes.blob()
             const url = URL.createObjectURL(blob)
             const a = document.createElement('a')
@@ -391,7 +387,8 @@ function RecruitmentTab() {
         ...(unlocked && { unlocked }),
     })
 
-    const { data, error, isLoading, mutate } = useSWR<PaginatedResponse<RecruitmentCandidate>>(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/admin/recruitment?${params.toString()}`,
+    const { data, error, isLoading, mutate } = useSWR<PaginatedResponse<RecruitmentCandidate>>(
+        `/api/admin/recruitment?${params.toString()}`,
         fetcher,
         { keepPreviousData: true }
     )
@@ -404,7 +401,7 @@ function RecruitmentTab() {
     const handleExport = async () => {
         setDownloading(true)
         try {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/admin/recruitment/export`, { headers: { 'x-api-key': process.env.NEXT_PUBLIC_API_KEY || '' } })
+            const res = await fetch('/api/admin/recruitment/export')
             const blob = await res.blob()
             const url = URL.createObjectURL(blob)
             const a = document.createElement('a')
@@ -569,17 +566,15 @@ export default function AdminDashboard() {
     const [loggingOut, setLoggingOut] = useState(false)
     const router = useRouter()
 
-    const { data: stats, isLoading: statsLoading, mutate: refreshStats } = useSWR<Stats>(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/admin/stats`,
+    const { data: stats, isLoading: statsLoading, mutate: refreshStats } = useSWR<Stats>(
+        '/api/admin/stats',
         fetcher,
         { refreshInterval: 60000 } // auto-refresh every 60s
     )
 
     const handleLogout = async () => {
         setLoggingOut(true)
-        await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/admin/logout`, { 
-            method: 'POST',
-            headers: { 'x-api-key': process.env.NEXT_PUBLIC_API_KEY || '' }
-        })
+        await fetch('/api/admin/logout', { method: 'POST' })
         router.replace('/admin/login')
     }
 
