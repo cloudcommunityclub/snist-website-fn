@@ -28,12 +28,9 @@ export default function UnlockModal({ isOpen, onUnlock, onClose }: UnlockModalPr
 
         try {
             // Call backend API to save candidate data
-            const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/recruitment/unlock`, {
+            const response = await fetch('/api/recruitment/unlock', {
                 method: 'POST',
-                headers: { 
-                    'Content-Type': 'application/json',
-                    'x-api-key': process.env.NEXT_PUBLIC_API_KEY || ''
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData),
             });
 

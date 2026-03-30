@@ -5,8 +5,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "NODE_OPTIONS='--max-old-space-size=4096' next build",
-    "start": "rm -rf .next/standalone/.next/static .next/standalone/public && cp -R .next/static .next/standalone/.next/static && cp -R public .next/standalone/public && node .next/standalone/server.js",
+    "build": "next build",
+    "start": "next start",
     "lint": "eslint .",
     "format": "prettier --write .",
     "test": "node --experimental-strip-types --test src/dispositions/projects.test.ts"
@@ -24,8 +24,11 @@
     "clsx": "^2.1.1",
     "critters": "^0.0.25",
     "framer-motion": "^12.35.1",
+    "googleapis": "^171.4.0",
     "gsap": "^3.14.2",
+    "jose": "^5.10.0",
     "lucide-react": "^0.563.0",
+    "mongoose": "^9.3.0",
     "next": "^16.1.5",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
