@@ -20,7 +20,7 @@ const steps = [
     {
         id: '03',
         title: 'Submit',
-        desc: 'Share your work before the deadline by replying on the issue with your solution, links, and reflection. Let your work speak for you.',
+        desc: 'Share your work before the deadline—pull request, document, design file, or proposal. Let your work speak for you.',
         icon: '/assets/recruitment/icon-rocket.png',
     },
     {
