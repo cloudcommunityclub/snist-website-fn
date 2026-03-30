@@ -79,7 +79,7 @@ const MajorLeaderCard: React.FC<props_MajorLeaderCard> = ({
                 isInView ? { opacity: 1, transform: 'translateZ(0px) translateX(0%)' } : ''
             }
             transition={{ duration: 1.25, delay: index * 0.15, ease: 'easeOut' }}
-            className={`${isAnimating && 'pointer-events-none'} hover:z-20 sm:hover:mx-4 w-[160px] sm:w-[200px] ring-2 ring-gold-deep relative group/majorcard hover:rounded-b-none sm:hover:!scale-[115%] transition-all duration-500 select-none rounded-t-xl rounded-b-lg bg-gradient-to-t from-[#040404] via-gold-deep to-gold-deep shadow-md hover:shadow-2xl shadow-neutral-600 hover:shadow-gold`}
+            className={`${isAnimating && 'pointer-events-none'} hover:z-20 sm:hover:mx-4 w-[160px] sm:w-[200px] ring-2 ring-gold-deep relative group/majorcard sm:hover:!scale-[115%] transition-all duration-500 select-none rounded-t-xl rounded-b-lg bg-gradient-to-t from-[#040404] via-gold-deep to-gold-deep shadow-md hover:shadow-2xl shadow-neutral-600 hover:shadow-gold`}
             key={leaderName}
         >
             {/* Leader Portrait + Leader Quote Overlay */}
@@ -120,7 +120,7 @@ const MajorLeaderCard: React.FC<props_MajorLeaderCard> = ({
                 </motion.div>
 
                 {imgError ? (
-                    <div className='rounded-t-xl rounded-b-lg aspect-square w-[320px] h-[320px] bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center text-4xl font-bold text-white/20 select-none'>
+                    <div className='rounded-t-xl rounded-b-lg aspect-square w-full bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center text-4xl font-bold text-white/20 select-none'>
                         {majorLeaderDetails.role?.[0] ?? '?'}
                     </div>
                 ) : (
@@ -150,7 +150,7 @@ const MajorLeaderCard: React.FC<props_MajorLeaderCard> = ({
             <div
                 onMouseDown={() => playSfx_clunk()}
                 onMouseUp={() => playSfx_clunk()}
-                className='z-10 absolute hidden group-hover/majorcard:flex border-b-4 border-gold-muted justify-center w-full rounded-b-lg bg-gradient-to-b from-[#040a04] to-black gap-2 px-2 pb-2'
+                className='z-10 hidden group-hover/majorcard:flex border-b-4 border-gold-muted justify-center w-full rounded-b-lg bg-gradient-to-b from-[#040a04] to-black gap-2 px-2 pb-2'
             >
                 {majorLeaderDetails.linktree ? (
                     <a
@@ -266,26 +266,25 @@ const MinorLeaderCard: React.FC<props_MinorLeaderCard> = ({
                 }
                 transition={{ duration: 1.25, delay: index * 0.15, ease: 'easeOut' }}
                 className={`${isAnimating && 'pointer-events-none'} 
-                    hover:z-20 
-                    w-[160px] sm:w-[200px] 
-                    ring-2 
-                    ring-[#ff6f61] 
-                    relative 
-                    group/minorcard 
-                    hover:rounded-b-none 
-                    sm:hover:!scale-[115%] 
-                    transition-all 
-                    duration-500 
-                    select-none 
-                    rounded-t-xl 
-                    rounded-b-lg 
-                    bg-gradient-to-t 
-                    from-[#040404] 
-                    via-[#ff6f61]/20 
-                    to-[#ff6f61]/20 
-                    shadow-md 
-                    hover:shadow-2xl 
-                    shadow-neutral-600 
+                    hover:z-20
+                    w-[160px] sm:w-[200px]
+                    ring-2
+                    ring-[#ff6f61]
+                    relative
+                    group/minorcard
+                    sm:hover:!scale-[115%]
+                    transition-all
+                    duration-500
+                    select-none
+                    rounded-t-xl
+                    rounded-b-lg
+                    bg-gradient-to-t
+                    from-[#040404]
+                    via-[#ff6f61]/20
+                    to-[#ff6f61]/20
+                    shadow-md
+                    hover:shadow-2xl
+                    shadow-neutral-600
                     hover:shadow-[#ff6f61]`}
             >
                 {/* Leader Portrait + Leader Quote Overlay */}
@@ -323,7 +322,7 @@ const MinorLeaderCard: React.FC<props_MinorLeaderCard> = ({
                     </motion.div>
 
                     {imgError ? (
-                        <div className='rounded-t-xl rounded-b-lg aspect-square w-[320px] h-[320px] bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center text-4xl font-bold text-[#ff6f61]/30 select-none'>
+                        <div className='rounded-t-xl rounded-b-lg aspect-square w-full bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center text-4xl font-bold text-[#ff6f61]/30 select-none'>
                             {minorLeaderDetails.label?.[0] ?? '?'}
                         </div>
                     ) : (
@@ -353,7 +352,7 @@ const MinorLeaderCard: React.FC<props_MinorLeaderCard> = ({
                 <div
                     onMouseDown={() => playSfx_clunk()}
                     onMouseUp={() => playSfx_clunk()}
-                    className='z-10 absolute hidden group-hover/minorcard:flex border-b-4 border-[#ff6f61] justify-center w-full rounded-b-lg bg-gradient-to-b from-[#040a04] to-black gap-2 px-2 pb-2'
+                    className='z-10 hidden group-hover/minorcard:flex border-b-4 border-[#ff6f61] justify-center w-full rounded-b-lg bg-gradient-to-b from-[#040a04] to-black gap-2 px-2 pb-2'
                 >
                     {minorLeaderDetails.github && (
                         <a
@@ -411,7 +410,7 @@ export default function Leadership(): React.ReactNode {
         <div className='w-full h-full pb-40 text-secondary bg-gradient-to-b from-void via-gold-deep/20 to-void'>
             <Element name='leadership' />
 
-            <div className='flex flex-col justify-center items-center w-full h-full py-[44px] px-[10px] sm:px-[7.5vw] lg:px-[14.2vw] gap-4 overflow-x-hidden'>
+            <div className='flex flex-col justify-center items-center w-full h-full py-[44px] px-[10px] sm:px-[7.5vw] lg:px-[14.2vw] gap-4 overflow-x-clip'>
                 <div>
                     <h1 className='title-main w-full text-center text-3xl font-semibold leading-7 drop-shadow-[0_0_14px_rgba(255,255,255,0.5)]'>
                         Our Club Leadership
@@ -425,7 +424,7 @@ export default function Leadership(): React.ReactNode {
                 <div className='w-full text-4xl font-semibold border-b-2 border-[#345222] mb-2 drop-shadow-[0_0_30px_rgba(50,255,50,1)]'></div>
 
                 {/* Major Leadership Role Cards */}
-                <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-7 gap-y-[18px] justify-items-center max-w-7xl mx-auto'>
+                <div className='flex flex-wrap justify-center gap-4 sm:gap-7 max-w-7xl mx-auto'>
                     {Object.keys(leadership.major).map(
                         (majorLeaderName, index) => (
                             <MajorLeaderCard
@@ -438,7 +437,7 @@ export default function Leadership(): React.ReactNode {
                 </div>
 
                 {/* Minor Leadership Role Cards */}
-                <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 justify-items-center mt-8 mb-4 max-w-7xl mx-auto'>
+                <div className='flex flex-wrap justify-center gap-4 mt-8 mb-4 max-w-7xl mx-auto'>
                     {Object.keys(leadership.minor).map(
                         (minorLeaderRoleName, index) => (
                             <MinorLeaderCard
