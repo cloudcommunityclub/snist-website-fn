@@ -77,14 +77,12 @@ export default function RootLayout({
 }: {
     children: React.ReactNode
 }) {
-    const isVercelDeployment = process.env.VERCEL === '1'
-
     return (
         <html lang="en" className={`${inter.variable} ${poppins.variable} ${jetbrainsMono.variable} ${mrsSaintDelafield.variable}`}>
             <body className="min-h-screen bg-black text-white" suppressHydrationWarning>
                 <Navbar />
                 <main>{children}</main>
-                {process.env.NODE_ENV === 'production' && isVercelDeployment && <SpeedInsights />}
+                {process.env.NODE_ENV === 'production' && <SpeedInsights />}
             </body>
         </html>
     )
