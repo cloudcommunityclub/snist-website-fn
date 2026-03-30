@@ -283,12 +283,9 @@ export default function TerminalJoinForm() {
         // 2. API Request Promise
         const apiRequest = async () => {
             try {
-                const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/join`, {
+                const response = await fetch('/api/join', {
                     method: 'POST',
-                    headers: { 
-                        'Content-Type': 'application/json',
-                        'x-api-key': process.env.NEXT_PUBLIC_API_KEY || ''
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(data),
                 })
 
