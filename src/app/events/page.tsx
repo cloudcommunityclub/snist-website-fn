@@ -140,7 +140,26 @@ const pastEvents: Event[] = [
 ]
 
 // Upcoming Events Data
-const upcomingEvents: Event[] = []
+const upcomingEvents: Event[] = [
+    {
+        id: "6",
+        title: "INIT – C³ Day 0",
+        date: "March 31, 2026",
+        time: "1:30 PM – 3:30 PM",
+        location: "Seminar Hall 1, SNIST",
+        description: "The Cloud Community Club proudly invites you to a power-packed kickoff event filled with innovation, interaction, and excitement!\n\nWhat's Happening?\n• Launch of a New Event Management Platform – a ticketing system designed for all clubs\n• Introduction of our New Board Members\n• Lightning Talks on 'Will AI Replace Humans?'\n• Interactive Activities – quizzes & fun games\n• Free Goodies for Everyone + exciting prizes for winners\n\nNo Registration Fee • Attendance will be Provided • No Limits, Just Show Up!\n\nBe a part of this exciting journey and experience something new, engaging, and impactful.",
+        image: "/assets/events/init_event.webp",
+        highlights: [
+            "Launch of New Event Management Platform",
+            "Introduction of New Board Members",
+            "Lightning Talks on 'Will AI Replace Humans?'",
+            "Interactive Quizzes & Fun Games",
+            "Free Goodies + Exciting Prizes",
+            "No Registration Fee"
+        ],
+        tags: ["Kickoff", "AI", "Community", "Interactive"],
+    }
+]
 
 
 // Animation variants
