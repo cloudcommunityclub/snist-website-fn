@@ -48,7 +48,7 @@ export const leadership = {
             imgSrc: pfp_nikhilanand,
             quote: <p>The future is digital.</p>,
             instagram: 'https://www.instagram.com/_nikhillanand/',
-            github: 'https://github.com/NIKHIL-CAT',
+            github: 'https://github.com/nikhilanandd',
             linkedin: 'https://www.linkedin.com/in/nikhil-anand-94948a25a/',
             icon: <BiCrown />,
         },
