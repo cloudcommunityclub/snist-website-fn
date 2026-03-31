@@ -34,6 +34,7 @@ const pfp_himanshu = dir_leaderPortraits + 'himanshu.webp'
 const pfp_premsai = dir_leaderPortraits + 'premsai.webp'
 const pfp_pranavi = dir_leaderPortraits + 'pravnavi.webp'
 const pfp_thanmayee = dir_leaderPortraits + 'thanmayee.webp'
+const pfp_tharun = dir_leaderPortraits + 'tharun.webp'
 const pfp_none = dir_leaderPortraits + 'noprofile.webp'
 export const FALLBACK_QUOTE = (
     <p>
@@ -126,8 +127,10 @@ export const leadership = {
         },
         'Tharun': {
             role: 'Designing Head',
-            imgSrc: pfp_none,
-            quote: '',
+            imgSrc: pfp_tharun,
+            quote: <p>Exploring new cutting edge technologies...!</p>,
+            github: 'https://github.com/tharun-maram',
+            linkedin: 'https://www.linkedin.com/in/tharun-maram-226903326/',
             icon: <PiHandshakeBold />,
         },
     },
