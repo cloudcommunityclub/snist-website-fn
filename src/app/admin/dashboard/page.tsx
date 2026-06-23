@@ -614,6 +614,13 @@ export default function AdminDashboard() {
                                 <span className="hidden sm:inline">{tab}</span>
                             </button>
                         ))}
+                        <button
+                            onClick={() => router.push('/admin/dashboard/digital_india')}
+                            className="px-4 py-1.5 rounded-md text-sm font-mono transition-all duration-200 flex items-center gap-2 text-[#6272a4] hover:text-[#8be9fd]"
+                        >
+                            <Unlock size={13} className="text-[#8be9fd]" />
+                            <span className="hidden sm:inline">Ideathon</span>
+                        </button>
                     </div>
 
                     {/* Right: Refresh + Logout */}

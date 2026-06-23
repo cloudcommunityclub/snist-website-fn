@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert';
-import { getAllProjects, getProjectByName, projects, PROJECT_CATEGORIES } from './projects.ts';
+import { getAllProjects, getProjectByName, projects, PROJECT_CATEGORIES } from './projects';
+
 
 test('projects object structure', () => {
     assert.strictEqual(typeof projects, 'object');

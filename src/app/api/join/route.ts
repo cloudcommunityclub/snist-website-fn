@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server'
 import { z } from 'zod'
 import dbConnect from '@/lib/db'
 import Registration2026 from '@/models/Registration2026'
-import { escHtml, sendEmail } from '@/lib/gmail'
+import { escHtml, sendEmail } from '@/lib/mail'
 
 const joinClubSchema = z.object({
     fullName: z

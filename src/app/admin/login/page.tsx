@@ -134,7 +134,7 @@ function AdminLoginContent() {
                                 className={`w-full py-3 rounded-lg font-mono text-sm font-bold transition-all duration-200 flex items-center justify-center gap-2
                                     ${loading || !password
                                         ? 'bg-[#44475a]/50 text-[#6272a4] cursor-not-allowed'
-                                        : 'bg-[#bd93f9]/20 hover:bg-[#bd93f9]/30 text-[#bd93f9] border border-[#bd93f9]/40 hover:border-[#bd93f9]/70'
+                                        : 'bg-[#bd93f9] hover:bg-[#a87ff5] text-[#0d0e12]'
                                     }`}
                             >
                                 {loading ? (
