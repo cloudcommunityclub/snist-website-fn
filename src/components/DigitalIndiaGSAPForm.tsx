@@ -38,6 +38,7 @@ export default function DigitalIndiaGSAPForm() {
     const [screenshotPreview, setScreenshotPreview] = useState<string | null>(null)
 
     const [errors, setErrors] = useState<FormErrors>({})
+    const [isDesktop, setIsDesktop] = useState(false)
     const isFirstRender = useRef(true)
 
     // DOM Refs for animations
@@ -51,8 +52,24 @@ export default function DigitalIndiaGSAPForm() {
     const upiId = process.env.NEXT_PUBLIC_UPI_ID || 'c3club@upi'
     const upiAmount = '99'
 
+    // Detect screen width
+    useEffect(() => {
+        const checkIsDesktop = () => {
+            setIsDesktop(window.innerWidth >= 1024)
+        }
+        checkIsDesktop()
+        window.addEventListener('resize', checkIsDesktop)
+        return () => window.removeEventListener('resize', checkIsDesktop)
+    }, [])
+
     // Animate width changes between cards using GSAP, ensuring height is fixed at 100%
     useEffect(() => {
+        if (!isDesktop) {
+            // Clear GSAP inline styles on mobile/tablet
+            gsap.set([step1Ref.current, step2Ref.current, step3Ref.current, step4Ref.current], { clearProps: 'all' })
+            return
+        }
+
         const duration = isFirstRender.current ? 0 : 0.8
         const innerDuration = isFirstRender.current ? 0 : 0.5
         const innerDelay = isFirstRender.current ? 0 : 0.2
@@ -108,7 +125,7 @@ export default function DigitalIndiaGSAPForm() {
         if (isFirstRender.current) {
             isFirstRender.current = false
         }
-    }, [activeStep, isSubmitted])
+    }, [activeStep, isSubmitted, isDesktop])
 
     const validateStep1 = (): boolean => {
         const newErrors: FormErrors = {}
@@ -283,16 +300,62 @@ export default function DigitalIndiaGSAPForm() {
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(157,255,0,0.04)_0%,transparent_70%)] pointer-events-none" />
 
             {/* Main Section */}
-            <main className="relative z-10 w-full max-w-7xl mx-auto flex-1 flex items-center justify-center py-6">
-                <div className="flex w-full items-stretch justify-center gap-6 max-w-5xl h-[600px] relative">
+            <main className="relative z-10 w-full max-w-7xl mx-auto flex-1 flex flex-col items-center justify-center py-6">
+                {/* Horizontal Top Stepper for Mobile/Tablet */}
+                <div className="lg:hidden w-full max-w-5xl mb-6 px-2 font-mono text-[10px] uppercase tracking-widest flex items-center justify-between">
+                    {[
+                        { num: '01.', label: 'PROFILE' },
+                        { num: '02.', label: 'EXPERTISE' },
+                        { num: '03.', label: 'MESSAGE' },
+                        { num: '04.', label: 'PAYMENT' }
+                    ].map((s, idx) => {
+                        const stepNum = idx + 1;
+                        const isActive = activeStep === stepNum;
+                        const isCompleted = activeStep > stepNum;
+                        return (
+                            <div 
+                                key={s.num} 
+                                onClick={() => activeStep > stepNum && setActiveStep(stepNum as 1 | 2 | 3 | 4)}
+                                className={`flex flex-col items-center gap-1.5 flex-1 relative ${
+                                    activeStep > stepNum ? 'cursor-pointer' : ''
+                                }`}
+                            >
+                                {/* Connecting line between steps */}
+                                {idx > 0 && (
+                                    <div className={`absolute right-[50%] top-3 -translate-y-1/2 w-full h-[1px] -z-10 transition-colors duration-300 ${
+                                        activeStep >= stepNum ? 'bg-[#9dff00]/50' : 'bg-zinc-800/60'
+                                    }`} />
+                                )}
+                                <div className={`w-6 h-6 rounded-full flex items-center justify-center border font-bold text-[9px] transition-all duration-300 ${
+                                    isActive 
+                                        ? 'bg-[#9dff00] border-[#9dff00] text-zinc-950 shadow-[0_0_10px_rgba(157,255,0,0.3)]'
+                                        : isCompleted 
+                                            ? 'bg-zinc-800 border-[#9dff00] text-[#9dff00]' 
+                                            : 'bg-zinc-900 border-zinc-800/60 text-zinc-500'
+                                }`}>
+                                    {isCompleted ? <Check className="w-3 h-3 stroke-[3]" /> : stepNum}
+                                </div>
+                                <span className={`text-[8px] sm:text-[9px] font-sans font-bold tracking-wider transition-colors duration-300 ${
+                                    isActive ? 'text-[#9dff00]' : isCompleted ? 'text-zinc-300' : 'text-zinc-500'
+                                }`}>
+                                    {s.label}
+                                </span>
+                            </div>
+                        );
+                    })}
+                </div>
+
+                <div className="flex w-full flex-col lg:flex-row items-stretch justify-center gap-6 max-w-5xl h-auto lg:h-[600px] relative">
                     
-                    <div ref={containerRef} className="flex-1 flex gap-4 w-full h-full items-stretch select-none">
+                    <div ref={containerRef} className="flex-1 flex flex-col lg:flex-row gap-4 w-full h-auto lg:h-full items-stretch select-none">
                                 {/* Step 1 Card: PROFILE */}
                                 <div 
                                     key="step-1"
                                     ref={step1Ref}
                                     onClick={() => activeStep > 1 && setActiveStep(1)}
-                                    className={`relative border border-zinc-800/40 overflow-hidden flex flex-col justify-between h-full ${
+                                    className={`relative border border-zinc-800/40 overflow-hidden flex-col justify-between h-auto lg:h-full w-full lg:w-auto bg-[#18181b] text-[#f4f4f5] rounded-[32px] p-6 sm:p-8 lg:p-10 ${
+                                        activeStep === 1 ? 'flex' : 'hidden lg:flex'
+                                    } ${
                                         activeStep > 1 ? 'cursor-pointer' : ''
                                     }`}
                                 >
@@ -306,14 +369,14 @@ export default function DigitalIndiaGSAPForm() {
                                                 <div className="text-xs font-bold text-zinc-500 font-mono mb-4">01.</div>
                                                 <h2 className="text-3xl font-light text-white mb-10 tracking-tight">Add your personal information.</h2>
                                                 
-                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                                                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 mb-6 lg:mb-8">
                                                     <div>
                                                         <input 
                                                             type="text" 
                                                             value={firstName} 
                                                             onChange={(e) => setFirstName(e.target.value)}
                                                             placeholder="First Name" 
-                                                            className={`w-full text-2xl font-light py-2.5 border-b ${
+                                                            className={`w-full text-xl sm:text-2xl font-light py-2.5 border-b ${
                                                                 errors.firstName ? 'border-red-400 focus:border-red-500' : 'border-zinc-800 focus:border-zinc-400'
                                                             } outline-none bg-transparent text-white placeholder-zinc-700 transition-all`}
                                                         />
@@ -325,22 +388,22 @@ export default function DigitalIndiaGSAPForm() {
                                                             value={lastName} 
                                                             onChange={(e) => setLastName(e.target.value)}
                                                             placeholder="Last Name" 
-                                                            className={`w-full text-2xl font-light py-2.5 border-b ${
+                                                            className={`w-full text-xl sm:text-2xl font-light py-2.5 border-b ${
                                                                 errors.lastName ? 'border-red-400 focus:border-red-500' : 'border-zinc-800 focus:border-zinc-400'
                                                             } outline-none bg-transparent text-white placeholder-zinc-700 transition-all`}
                                                         />
                                                         <span className="text-[10px] text-zinc-500 font-mono uppercase tracking-widest mt-1.5 block">Last Name</span>
                                                     </div>
                                                 </div>
-
-                                                <div className="space-y-8 mb-6">
+ 
+                                                <div className="space-y-6 lg:space-y-8 mb-6">
                                                     <div>
                                                         <input 
                                                             type="email" 
                                                             value={email} 
                                                             onChange={(e) => setEmail(e.target.value)}
                                                             placeholder="Email" 
-                                                            className={`w-full text-2xl font-light py-2.5 border-b ${
+                                                            className={`w-full text-xl sm:text-2xl font-light py-2.5 border-b ${
                                                                 errors.email ? 'border-red-400 focus:border-red-500' : 'border-zinc-800 focus:border-zinc-400'
                                                             } outline-none bg-transparent text-white placeholder-zinc-700 transition-all`}
                                                         />
@@ -352,7 +415,7 @@ export default function DigitalIndiaGSAPForm() {
                                                             value={phone} 
                                                             onChange={(e) => setPhone(e.target.value)}
                                                             placeholder="(00) 00000 0000" 
-                                                            className={`w-full text-2xl font-light py-2.5 border-b ${
+                                                            className={`w-full text-xl sm:text-2xl font-light py-2.5 border-b ${
                                                                 errors.phone ? 'border-red-400 focus:border-red-500' : 'border-zinc-800 focus:border-zinc-400'
                                                             } outline-none bg-transparent text-white placeholder-zinc-700 transition-all`}
                                                         />
@@ -360,7 +423,7 @@ export default function DigitalIndiaGSAPForm() {
                                                     </div>
                                                 </div>
                                             </div>
-
+ 
                                             <div className="flex justify-between items-center mt-6">
                                                 <div className="w-2.5 h-2.5 bg-[#9dff00] rounded-full animate-pulse shadow-[0_0_10px_rgba(157,255,0,0.4)]" />
                                                 <button 
@@ -373,13 +436,15 @@ export default function DigitalIndiaGSAPForm() {
                                         </div>
                                     )}
                                 </div>
-
+ 
                                 {/* Step 2 Card: EXPERTISE / DOMAIN */}
                                 <div 
                                     key="step-2"
                                     ref={step2Ref}
                                     onClick={() => activeStep > 2 && setActiveStep(2)}
-                                    className={`relative border border-zinc-800/40 overflow-hidden flex flex-col justify-between h-full ${
+                                    className={`relative border border-zinc-800/40 overflow-hidden flex-col justify-between h-auto lg:h-full w-full lg:w-auto bg-[#18181b] text-[#f4f4f5] rounded-[32px] p-6 sm:p-8 lg:p-10 ${
+                                        activeStep === 2 ? 'flex' : 'hidden lg:flex'
+                                    } ${
                                         activeStep > 2 ? 'cursor-pointer' : ''
                                     }`}
                                 >
@@ -420,21 +485,21 @@ export default function DigitalIndiaGSAPForm() {
                                                     ))}
                                                     {errors.domain && <p className="text-red-400 text-xs mt-1">{errors.domain}</p>}
                                                 </div>
-
+ 
                                                 <div className="mt-6">
                                                     <input 
                                                         type="text" 
                                                         value={college} 
                                                         onChange={(e) => setCollege(e.target.value)}
                                                         placeholder="College / Institution" 
-                                                        className={`w-full text-2xl font-light py-2 border-b ${
+                                                        className={`w-full text-xl sm:text-2xl font-light py-2 border-b ${
                                                             errors.college ? 'border-red-400 focus:border-red-500' : 'border-zinc-800 focus:border-zinc-400'
                                                         } outline-none bg-transparent text-white placeholder-zinc-700 transition-all`}
                                                     />
                                                     <span className="text-[10px] text-zinc-500 font-mono uppercase tracking-widest mt-1.5 block">College Name</span>
                                                 </div>
                                             </div>
-
+ 
                                             <div className="flex justify-between items-center mt-6">
                                                 <div className="w-2.5 h-2.5 bg-[#9dff00] rounded-full animate-pulse shadow-[0_0_10px_rgba(157,255,0,0.4)]" />
                                                 <div className="flex gap-3">
@@ -455,13 +520,15 @@ export default function DigitalIndiaGSAPForm() {
                                         </div>
                                     )}
                                 </div>
-
+ 
                                 {/* Step 3 Card: IDEA DESCRIPTION */}
                                 <div 
                                     key="step-3"
                                     ref={step3Ref}
                                     onClick={() => activeStep > 3 && setActiveStep(3)}
-                                    className={`relative border border-zinc-800/40 overflow-hidden flex flex-col justify-between h-full ${
+                                    className={`relative border border-zinc-800/40 overflow-hidden flex-col justify-between h-auto lg:h-full w-full lg:w-auto bg-[#18181b] text-[#f4f4f5] rounded-[32px] p-6 sm:p-8 lg:p-10 ${
+                                        activeStep === 3 ? 'flex' : 'hidden lg:flex'
+                                    } ${
                                         activeStep > 3 ? 'cursor-pointer' : ''
                                     }`}
                                 >
@@ -478,7 +545,7 @@ export default function DigitalIndiaGSAPForm() {
                                                 <div className="text-xs font-bold text-zinc-500 font-mono mb-4">03.</div>
                                                 <h2 className="text-3xl font-light text-white mb-6 tracking-tight">Describe your idea.</h2>
                                                 
-                                                <div className="flex-1 flex flex-col min-h-[220px]">
+                                                <div className="flex-1 flex flex-col min-h-[150px] lg:min-h-[220px]">
                                                     <textarea 
                                                         value={idea} 
                                                         onChange={(e) => setIdea(e.target.value)}
@@ -496,7 +563,7 @@ export default function DigitalIndiaGSAPForm() {
                                                     {errors.idea && <p className="text-red-400 text-xs mt-1">{errors.idea}</p>}
                                                 </div>
                                             </div>
-
+ 
                                             <div className="flex justify-between items-center mt-6 pt-4 border-t border-zinc-800">
                                                 <div className="w-2.5 h-2.5 bg-[#9dff00] rounded-full animate-pulse shadow-[0_0_10px_rgba(157,255,0,0.4)]" />
                                                 <div className="flex gap-3">
@@ -517,12 +584,14 @@ export default function DigitalIndiaGSAPForm() {
                                         </div>
                                     )}
                                 </div>
-
+ 
                                 {/* Step 4 Card: PAYMENT VERIFICATION */}
                                 <div 
                                     key="step-4"
                                     ref={step4Ref}
-                                    className="relative border border-zinc-800/40 overflow-hidden flex flex-col justify-between h-full"
+                                    className={`relative border border-zinc-800/40 overflow-hidden flex-col justify-between h-auto lg:h-full w-full lg:w-auto bg-[#18181b] text-[#f4f4f5] rounded-[32px] p-6 sm:p-8 lg:p-10 ${
+                                        activeStep === 4 ? 'flex' : 'hidden lg:flex'
+                                    }`}
                                 >
                                     {activeStep < 4 ? (
                                         /* Unopened Collapsed View */
@@ -543,7 +612,7 @@ export default function DigitalIndiaGSAPForm() {
                                                     </p>
                                                 </div>
                                             </div>
-
+ 
                                             <div className="flex justify-end items-center mt-6 pt-4 border-t border-zinc-800">
                                                 <button 
                                                     type="button"
@@ -557,14 +626,14 @@ export default function DigitalIndiaGSAPForm() {
                                     ) : (
                                         /* Expanded View (Payment Only) */
                                         <form onSubmit={handleSubmit} className="fade-in-content flex flex-col justify-between h-full w-full">
-                                            <div className="overflow-y-auto pr-2 max-h-[380px] custom-scrollbar space-y-5">
+                                            <div className="overflow-y-auto pr-2 max-h-none lg:max-h-[380px] custom-scrollbar space-y-5">
                                                 <div>
                                                     <div className="text-xs font-bold text-zinc-500 font-mono mb-2">04.</div>
                                                     <h2 className="text-3xl font-light text-white mb-4 tracking-tight">Complete payment verification.</h2>
                                                 </div>
-
+ 
                                                 {/* Payment details integration */}
-                                                <div className="bg-zinc-900/50 p-5 rounded-2xl border border-zinc-800 grid grid-cols-1 md:grid-cols-2 gap-6">
+                                                <div className="bg-zinc-900/50 p-5 rounded-2xl border border-zinc-800 grid grid-cols-1 lg:grid-cols-2 gap-6">
                                                     <div>
                                                         <h4 className="text-xs font-bold uppercase text-zinc-400 mb-2 flex items-center gap-1.5 font-mono">
                                                             <CreditCard className="w-4 h-4 text-zinc-300" /> Registration Fee
@@ -588,8 +657,8 @@ export default function DigitalIndiaGSAPForm() {
                                                         </div>
                                                     </div>
                                                 </div>
-
-                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-1">
+ 
+                                                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 pt-1">
                                                     <div>
                                                         <label className="text-[10px] text-zinc-500 font-mono uppercase tracking-widest mb-1.5 block">UTR ID (12-Digit Transaction ID)</label>
                                                         <input 
@@ -603,7 +672,7 @@ export default function DigitalIndiaGSAPForm() {
                                                         />
                                                         {errors.utrId && <p className="text-red-400 text-xs mt-1">{errors.utrId}</p>}
                                                     </div>
-
+ 
                                                     <div>
                                                         <label className="text-[10px] text-zinc-500 font-mono uppercase tracking-widest mb-1.5 block">Upload Receipt Screenshot</label>
                                                         <div className={`relative border border-dashed rounded-xl p-3 text-center transition-all ${
@@ -631,12 +700,12 @@ export default function DigitalIndiaGSAPForm() {
                                                         {errors.screenshot && <p className="text-red-500 text-xs mt-1">{errors.screenshot}</p>}
                                                     </div>
                                                 </div>
-
+ 
                                                 {apiError && (
                                                     <p className="text-red-500 text-xs text-center border border-red-200/50 bg-red-50 rounded-xl py-2 px-4">{apiError}</p>
                                                 )}
                                             </div>
-
+ 
                                             <div className="flex justify-between items-center mt-4 pt-4 border-t border-zinc-800">
                                                 <div className="text-[9px] text-zinc-500 max-w-[280px] leading-tight font-mono uppercase">
                                                     THIS SITE IS PROTECTED BY RECAPTCHA. THE GOOGLE PRIVACY POLICY AND TERMS OF SERVICE APPLY.

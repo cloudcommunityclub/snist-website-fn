@@ -35,3 +35,11 @@ This document records the architectural and technology decisions made during the
 - **Decision**: Enforced explicit use of `{ email: { $eq: email } }` operators in lookup queries.
 - **Rationale**:
   - Enforces string comparisons, preventing malicious JSON query payloads (e.g., `{ "$gt": "" }`) from bypassing logic checks.
+
+## 6. Responsive Adaptive UI layout Refactoring with GSAP Cleanup
+- **Context**: The GSAP horizontal accordion layout is designed for desktop. On tablet and mobile viewports, the side accordion cards remained active and squeezed the active card to a narrow strip, causing massive text wrapping and horizontal overflows.
+- **Decision**: Added viewport width detection state and disabled the GSAP horizontal accordion layout on viewport widths < 1024px, clearing GSAP inline styles using `gsap.set(..., { clearProps: "all" })` to let fluid CSS/Tailwind layout handle the mobile/tablet single-column structure and top stepper.
+- **Rationale**:
+  - Eliminates overlap: Resetting GSAP's inline styles allows media-query classes to function correctly without specificity conflicts.
+  - Premium UX: Single column and top horizontal stepper provide a native feel on touch devices.
+

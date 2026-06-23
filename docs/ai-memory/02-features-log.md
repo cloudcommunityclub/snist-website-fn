@@ -29,4 +29,6 @@ This log tracks all active user-facing and backend features implemented in the C
 - **Luxury Light-Silver Card Layout**: Apple-style horizontal slider form cards (`DigitalIndiaGSAPForm.tsx`) with vertical completed tabs showing checked profiles.
 - **GSAP Width Animations**: Ref-based GSAP tweens mapping page widths and content fades when progressing/reverting form cards.
 - **Ideathon Submission Pipeline**: Links details, domains, and payment screenshots with `/api/digital-india/submit` backend endpoint.
+- **Responsive Adaptive Interface**: Automatically shifts to a single-column layout on viewport widths < 1024px, hiding side vertical tabs and rendering a clean top horizontal progress stepper.
+
 

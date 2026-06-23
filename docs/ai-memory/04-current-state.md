@@ -16,7 +16,8 @@ This document provides a live summary of the repository status, active component
 | Admin Session Auth (`/admin/login`) | **Completed** | Secure password check producing JWT cookie credentials. |
 | Admin Console (`/admin/dashboard`) | **Completed** | Statistics view, CSV file export capabilities, and student search filter list. |
 | Ideathon & Recruitment APIs | **Completed** | APIs to submit ideas, record payments, and lock/unlock tasks. |
-| GSAP Ideathon Form (`/events/digitalindia`) | **Completed** | Apple-style light silver horizontal accordion form with GSAP width animations. |
+| GSAP Ideathon Form (`/events/digitalindia`) | **Completed** | Apple-style light silver horizontal accordion form with GSAP width animations. Fully responsive for tablet and mobile layouts using a top progress stepper and responsive card stack. |
+
 
 ## 3. Identified Gaps & Technical Debt (P0-P1 Priorities)
 Based on comparative analysis of the standalone backend migration plan:
