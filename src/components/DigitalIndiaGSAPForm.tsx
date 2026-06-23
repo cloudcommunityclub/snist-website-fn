@@ -313,7 +313,7 @@ export default function DigitalIndiaGSAPForm() {
                     </p>
                     <div className="mt-4 flex items-center gap-2 text-xs sm:text-sm text-zinc-300 font-mono uppercase tracking-wider">
                         <span className="w-1.5 h-1.5 rounded-full bg-[#9dff00] animate-pulse"></span>
-                        The top 100 problem statements will be shortlisted
+                        The top 100 most impactful problem statements will be shortlisted.
                     </div>
                 </div>
 
@@ -321,8 +321,8 @@ export default function DigitalIndiaGSAPForm() {
                 <div className="lg:hidden w-full max-w-7xl mb-6 px-2 font-mono text-[10px] uppercase tracking-widest flex items-center justify-between">
                     {[
                         { num: '01.', label: 'PROFILE' },
-                        { num: '02.', label: 'EXPERTISE' },
-                        { num: '03.', label: 'MESSAGE' },
+                        { num: '02.', label: 'Domain' },
+                        { num: '03.', label: 'Solution' },
                         { num: '04.', label: 'PAYMENT' }
                     ].map((s, idx) => {
                         const stepNum = idx + 1;
@@ -436,7 +436,7 @@ export default function DigitalIndiaGSAPForm() {
                                                         setPhone(e.target.value)
                                                         if (errors.phone) setErrors(prev => ({ ...prev, phone: undefined }))
                                                     }}
-                                                    placeholder="(00) 00000 0000"
+                                                    placeholder="00000 0000"
                                                     className={`w-full text-xl sm:text-2xl font-light py-2.5 border-b ${errors.phone ? 'border-red-400 focus:border-red-500' : 'border-zinc-800 focus:border-zinc-400'
                                                         } outline-none bg-transparent text-white placeholder-zinc-700 transition-all`}
                                                 />
@@ -470,10 +470,10 @@ export default function DigitalIndiaGSAPForm() {
                         >
                             {activeStep === 1 ? (
                                 /* Unopened Collapsed View */
-                                renderCollapsedCard('02.', 'EXPERTISE', activeStep > 2)
+                                renderCollapsedCard('02.', 'Domain', activeStep > 2)
                             ) : activeStep > 2 ? (
                                 /* Completed Collapsed View */
-                                renderCollapsedCard('02.', 'EXPERTISE', activeStep > 2)
+                                renderCollapsedCard('02.', 'Domain', activeStep > 2)
                             ) : (
                                 /* Expanded View */
                                 <div className="fade-in-content flex flex-col justify-between h-full w-full">
@@ -516,7 +516,7 @@ export default function DigitalIndiaGSAPForm() {
                                                 className={`w-full text-xl sm:text-2xl font-light py-2 border-b ${errors.college ? 'border-red-400 focus:border-red-500' : 'border-zinc-800 focus:border-zinc-400'
                                                     } outline-none bg-transparent text-white placeholder-zinc-700 transition-all`}
                                             />
-                                            <span className="text-[10px] text-zinc-500 font-mono uppercase tracking-widest mt-1.5 block">College Name</span>
+                                            <span className="text-[10px] text-zinc-500 font-mono uppercase tracking-widest mt-1.5 block">Your College Name</span>
                                             {errors.college && <p className="text-red-400 text-xs mt-1 font-mono">{errors.college}</p>}
                                         </div>
                                     </div>
@@ -553,10 +553,10 @@ export default function DigitalIndiaGSAPForm() {
                         >
                             {activeStep < 3 ? (
                                 /* Unopened Collapsed View */
-                                renderCollapsedCard('03.', 'MESSAGE', activeStep > 3)
+                                renderCollapsedCard('03.', 'Solution', activeStep > 3)
                             ) : activeStep > 3 ? (
                                 /* Completed Collapsed View */
-                                renderCollapsedCard('03.', 'MESSAGE', activeStep > 3)
+                                renderCollapsedCard('03.', 'Solution', activeStep > 3)
                             ) : (
                                 /* Expanded View (Only Idea Description) */
                                 <div className="fade-in-content flex flex-col justify-between h-full w-full">
@@ -568,7 +568,7 @@ export default function DigitalIndiaGSAPForm() {
                                             <textarea
                                                 value={idea}
                                                 onChange={(e) => setIdea(e.target.value)}
-                                                placeholder="Describe your innovative idea for the Digital India Ideathon. What problem does it solve? How does it leverage cloud/FOSS technology? What impact does it make?..."
+                                                placeholder="Describe your innovative idea for the Digital India Ideathon. What problem real-world does it solve?  What impact does it make?..."
                                                 className={`w-full flex-1 text-xl font-light py-4 border-b ${errors.idea ? 'border-red-400 focus:border-red-500' : 'border-zinc-800 focus:border-zinc-400'
                                                     } outline-none bg-transparent text-white placeholder-zinc-750 resize-none transition-all`}
                                             />
@@ -643,7 +643,7 @@ export default function DigitalIndiaGSAPForm() {
                             ) : (
                                 /* Expanded View (Payment Only) */
                                 <form onSubmit={handleSubmit} className="fade-in-content flex flex-col justify-between h-full w-full">
-                                    <div className="overflow-y-auto pr-2 max-h-none lg:max-h-[380px] custom-scrollbar space-y-5">
+                                    <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar space-y-5">
                                         <div>
                                             <div className="text-xs font-bold text-zinc-500 font-mono mb-2">04.</div>
                                             <h2 className="text-3xl font-light text-white mb-4 tracking-tight">Complete payment verification.</h2>
@@ -720,7 +720,7 @@ export default function DigitalIndiaGSAPForm() {
                                         </div>
 
                                         {apiError && (
-                                            <p className="text-red-500 text-xs text-center border border-red-200/50 bg-red-50 rounded-xl py-2 px-4">{apiError}</p>
+                                            <p className="text-red-400 text-xs text-center border border-red-950/40 bg-red-950/25 rounded-xl py-3 px-4 font-mono">{apiError}</p>
                                         )}
                                     </div>
 

@@ -43,3 +43,12 @@ This document records the architectural and technology decisions made during the
   - Eliminates overlap: Resetting GSAP's inline styles allows media-query classes to function correctly without specificity conflicts.
   - Premium UX: Single column and top horizontal stepper provide a native feel on touch devices.
 
+## 7. Migrating from Gmail API OAuth2 to Traditional SMTP
+- **Context**: The existing email utility (`gmail.ts`) connected to Gmail via OAuth2 client IDs, secrets, and refresh tokens. This setup required maintaining GCP credentials, dealing with tokens expiring, and made local development or hosting configuration cumbersome.
+- **Decision**: Replaced the Gmail API OAuth2 connector with standard SMTP mailing powered by `nodemailer` (`mail.ts`).
+- **Rationale**:
+  - Simplicity: Works with standard environment configurations (`SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`) without OAuth2 handshake overhead.
+  - Flexibility: Allows swapping email providers (Gmail SMTP, SendGrid, Resend, Amazon SES, etc.) without code modifications.
+  - Robustness: Traditional SMTP libraries handle connections, TLS encryption/negotiation, and queue retries reliably inside Next.js serverless functions.
+
+

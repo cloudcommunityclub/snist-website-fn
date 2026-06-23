@@ -7,12 +7,12 @@ graph TD
     Client[Next.js 16 Web Client / React 19 / Tailwind 4]
     API[Next.js Serverless API Routes]
     DB[(MongoDB Atlas / Mongoose)]
-    Gmail[Gmail API / googleapis]
+    SMTP[SMTP Mailer / nodemailer]
     R2[(Cloudflare R2 Bucket / AWS S3 SDK)]
 
     Client -->|Form Submissions / JWT Session Auth| API
     API -->|Write Member Details / Submissions| DB
-    API -->|Send HTML Confirmation Emails| Gmail
+    API -->|Send HTML Confirmation Emails| SMTP
     API -->|Upload Verification Screenshots| R2
 ```
 
@@ -43,7 +43,7 @@ All database schemas are built on top of Mongoose with appropriate indexing for 
 
 ## 3. Storage & Integration Layers
 - **File Storage** (`src/lib/r2.ts`): Uses the `@aws-sdk/client-s3` library configured to interact with a Cloudflare R2 bucket for storing static user-uploaded files, such as payment screenshots.
-- **Email Service** (`src/lib/gmail.ts`): Integrated with the Google APIs client library (`googleapis`) to authenticate via OAuth2 credentials, allowing the serverless functions to programmatically send high-quality HTML email templates using a secure Gmail channel.
+- **Email Service** (`src/lib/mail.ts`): Integrated with the `nodemailer` library to establish traditional SMTP connections (using `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`), enabling high-quality HTML email templates to be dispatched dynamically during registration, onboarding, and shortlisting states.
 - **Authentication**: JWT-based session security using the `jose` library. Authentication uses an HTTP-Only cookie (`c3_admin_session`) with a life cycle of 8 hours, strict same-site configuration, and SSL enforcement.
 
 ## 4. Input Validation & Security

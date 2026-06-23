@@ -6,7 +6,7 @@ This document provides a live summary of the repository status, active component
 - `src/app`: Page Router paths including registration (`join`), admin console, and integrated backend routes (`api/`).
 - `src/components`: UI modules including the core terminal interface (`TerminalJoinForm.tsx`).
 - `src/models`: Mongoose database schemas defining database structures.
-- `src/lib`: Core utility helper integrations (Gmail API, Cloudflare R2 bucket connection, CSV helpers, database connections).
+- `src/lib`: Core utility helper integrations (Traditional SMTP Mailer, Cloudflare R2 bucket connection, CSV helpers, database connections).
 
 ## 2. Component Health Matrix
 | Page / Module | Status | Notes |
@@ -16,7 +16,7 @@ This document provides a live summary of the repository status, active component
 | Admin Session Auth (`/admin/login`) | **Completed** | Secure password check producing JWT cookie credentials. |
 | Admin Console (`/admin/dashboard`) | **Completed** | Statistics view, CSV file export capabilities, and student search filter list. |
 | Ideathon & Recruitment APIs | **Completed** | APIs to submit ideas, record payments, and lock/unlock tasks. |
-| GSAP Ideathon Form (`/events/digitalindia`) | **Completed** | Apple-style light silver horizontal accordion form with GSAP width animations. Fully responsive for tablet and mobile layouts using a top progress stepper and responsive card stack. |
+| GSAP Ideathon Form (`/events/digitalindia`) | **Completed** | Apple-style light silver horizontal accordion form with GSAP width animations. Fully responsive for tablet/mobile. Includes hackathon info header, text error feedback, and flexible 10-35 character UTR validation. |
 
 
 ## 3. Identified Gaps & Technical Debt (P0-P1 Priorities)
