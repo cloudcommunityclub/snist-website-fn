@@ -31,6 +31,24 @@ interface Event {
 // Past Events Data
 const pastEvents: Event[] = [
     {
+        id: "6",
+        title: "INIT – C³ Day 0",
+        date: "March 31, 2026",
+        time: "1:30 PM – 3:30 PM",
+        location: "Seminar Hall 1, SNIST",
+        description: "The Cloud Community Club proudly invites you to a power-packed kickoff event filled with innovation, interaction, and excitement!\n\nWhat's Happening?\n• Launch of a New Event Management Platform – a ticketing system designed for all clubs\n• Introduction of our New Board Members\n• Lightning Talks on 'Will AI Replace Humans?'\n• Interactive Activities – quizzes & fun games\n• Free Goodies for Everyone + exciting prizes for winners\n\nNo Registration Fee • Attendance will be Provided • No Limits, Just Show Up!\n\nBe a part of this exciting journey and experience something new, engaging, and impactful.",
+        image: "/assets/events/init_event.webp",
+        highlights: [
+            "Launch of New Event Management Platform",
+            "Introduction of New Board Members",
+            "Lightning Talks on 'Will AI Replace Humans?'",
+            "Interactive Quizzes & Fun Games",
+            "Free Goodies + Exciting Prizes",
+            "No Registration Fee"
+        ],
+        tags: ["Kickoff", "AI", "Community", "Interactive"],
+    },
+    {
         id: "1",
         title: "AI Hack Day 2025",
         date: "February 22, 2025",
@@ -142,22 +160,23 @@ const pastEvents: Event[] = [
 // Upcoming Events Data
 const upcomingEvents: Event[] = [
     {
-        id: "6",
-        title: "INIT – C³ Day 0",
-        date: "March 31, 2026",
-        time: "1:30 PM – 3:30 PM",
-        location: "Seminar Hall 1, SNIST",
-        description: "The Cloud Community Club proudly invites you to a power-packed kickoff event filled with innovation, interaction, and excitement!\n\nWhat's Happening?\n• Launch of a New Event Management Platform – a ticketing system designed for all clubs\n• Introduction of our New Board Members\n• Lightning Talks on 'Will AI Replace Humans?'\n• Interactive Activities – quizzes & fun games\n• Free Goodies for Everyone + exciting prizes for winners\n\nNo Registration Fee • Attendance will be Provided • No Limits, Just Show Up!\n\nBe a part of this exciting journey and experience something new, engaging, and impactful.",
-        image: "/assets/events/init_event.webp",
+        id: "7",
+        title: "Digital India – Hackathon",
+        date: "July 15, 2026",
+        time: "10:00 AM - 4:00 PM IST",
+        location: "Sreenidhi Institute of Science and Technology",
+        description: "Be a part of India's digital transformation! Join the Digital India Hackathon — a platform for students to pitch bold, tech-driven ideas that can reshape governance, education, healthcare, and public services. Whether it's an AI-powered solution, a cloud-native app, or a FOSS-based initiative, this is your chance to innovate for impact.\n\nSubmit your idea and compete for exciting prizes, mentorship, and a chance to present your solution to industry leaders!",
+        image: "/assets/events/digital-india-banner.png",
+        registrationLink: "/events/digitalindia",
         highlights: [
-            "Launch of New Event Management Platform",
-            "Introduction of New Board Members",
-            "Lightning Talks on 'Will AI Replace Humans?'",
-            "Interactive Quizzes & Fun Games",
-            "Free Goodies + Exciting Prizes",
-            "No Registration Fee"
+            "Open to All Departments",
+            "Idea Submission & Pitch Round",
+            "Mentorship from Industry Experts",
+            "Exciting Prizes for Winners",
+            "Focus on Real-World Impact",
+            "Collaboration with Government Initiatives"
         ],
-        tags: ["Kickoff", "AI", "Community", "Interactive"],
+        tags: ["Innovation", "Digital India", "Ideas", "Competition", "Tech for Good"]
     }
 ]
 
@@ -218,15 +237,23 @@ const CountdownTimer = ({ deadline }: { deadline: string }) => {
         };
     };
 
-    const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
+    const [timeLeft, setTimeLeft] = useState<any>(null);
+    const [isMounted, setIsMounted] = useState(false);
 
     useEffect(() => {
-        const timer = setTimeout(() => {
+        setIsMounted(true);
+        setTimeLeft(calculateTimeLeft());
+
+        const timer = setInterval(() => {
             setTimeLeft(calculateTimeLeft());
         }, 1000);
 
-        return () => clearTimeout(timer);
-    });
+        return () => clearInterval(timer);
+    }, [deadline]);
+
+    if (!isMounted || !timeLeft) {
+        return null;
+    }
 
     if (timeLeft.expired) {
         return (
@@ -518,11 +545,16 @@ const EventDetailsModal = ({ event, isOpen, onClose, onGalleryOpen }: EventDetai
 
 // Client component wrapper
 const EventsClient = () => {
+    const [isMounted, setIsMounted] = useState(false);
     const [galleryOpen, setGalleryOpen] = useState(false);
     const [galleryImages, setGalleryImages] = useState<string[]>([]);
     const [currentEventTitle, setCurrentEventTitle] = useState("");
     const [activeTab, setActiveTab] = useState<'upcoming' | 'past'>('upcoming');
     const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
+
+    useEffect(() => {
+        setIsMounted(true);
+    }, []);
 
     const openGallery = (images: string[], eventTitle: string) => {
         setGalleryImages(images);
@@ -541,6 +573,10 @@ const EventsClient = () => {
             element.scrollIntoView({ behavior: 'smooth' });
         }
     };
+
+    if (!isMounted) {
+        return <div className="min-h-screen bg-gradient-to-b from-black via-neutral-900 to-black" />;
+    }
 
     return (
         <div className="min-h-screen bg-gradient-to-b from-black via-neutral-900 to-black">
@@ -723,15 +759,25 @@ const EventsClient = () => {
                                                     <ChevronRight className="w-4 h-4 ml-2" />
                                                 </button>
                                                 {event.registrationLink && (
-                                                    <a
-                                                        href={event.registrationLink}
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                        className="inline-flex items-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-all duration-300"
-                                                    >
-                                                        Register Now
-                                                        <ExternalLink className="w-4 h-4 ml-2" />
-                                                    </a>
+                                                    event.registrationLink.startsWith('/') ? (
+                                                        <Link
+                                                            href={event.registrationLink}
+                                                            className="inline-flex items-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-all duration-300"
+                                                        >
+                                                            Register Now
+                                                            <ChevronRight className="w-4 h-4 ml-2" />
+                                                        </Link>
+                                                    ) : (
+                                                        <a
+                                                            href={event.registrationLink}
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                            className="inline-flex items-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-all duration-300"
+                                                        >
+                                                            Register Now
+                                                            <ExternalLink className="w-4 h-4 ml-2" />
+                                                        </a>
+                                                    )
                                                 )}
                                             </div>
                                         </div>
