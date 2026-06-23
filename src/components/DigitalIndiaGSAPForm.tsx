@@ -295,12 +295,12 @@ export default function DigitalIndiaGSAPForm() {
     }
 
     return (
-        <div className="min-h-screen relative flex flex-col justify-between overflow-hidden bg-gradient-to-br from-[#09090b] via-[#121214] to-[#09090b] text-[#f4f4f5] p-6 md:p-12 font-sans selection:bg-[#9dff00]/40">
+        <div className="min-h-screen relative flex flex-col justify-between overflow-hidden bg-gradient-to-br from-[#09090b] via-[#121214] to-[#09090b] text-[#f4f4f5] p-6 md:p-12 font-sans selection:bg-[#9dff00]/40 ">
             {/* Background spotlight */}
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(157,255,0,0.04)_0%,transparent_70%)] pointer-events-none" />
 
             {/* Main Section */}
-            <main className="relative z-10 w-full max-w-7xl mx-auto flex-1 flex flex-col items-center justify-center py-6">
+            <main className="relative z-10 w-full max-w-7xl mx-auto flex-1 flex flex-col items-center justify-center py-24">
                 {/* Horizontal Top Stepper for Mobile/Tablet */}
                 <div className="lg:hidden w-full max-w-5xl mb-6 px-2 font-mono text-[10px] uppercase tracking-widest flex items-center justify-between">
                     {[
@@ -374,25 +374,33 @@ export default function DigitalIndiaGSAPForm() {
                                                         <input 
                                                             type="text" 
                                                             value={firstName} 
-                                                            onChange={(e) => setFirstName(e.target.value)}
+                                                            onChange={(e) => {
+                                                                setFirstName(e.target.value)
+                                                                if (errors.firstName) setErrors(prev => ({ ...prev, firstName: undefined }))
+                                                            }}
                                                             placeholder="First Name" 
                                                             className={`w-full text-xl sm:text-2xl font-light py-2.5 border-b ${
                                                                 errors.firstName ? 'border-red-400 focus:border-red-500' : 'border-zinc-800 focus:border-zinc-400'
                                                             } outline-none bg-transparent text-white placeholder-zinc-700 transition-all`}
                                                         />
                                                         <span className="text-[10px] text-zinc-500 font-mono uppercase tracking-widest mt-1.5 block">First Name</span>
+                                                        {errors.firstName && <p className="text-red-400 text-xs mt-1 font-mono">{errors.firstName}</p>}
                                                     </div>
                                                     <div>
                                                         <input 
                                                             type="text" 
                                                             value={lastName} 
-                                                            onChange={(e) => setLastName(e.target.value)}
+                                                            onChange={(e) => {
+                                                                setLastName(e.target.value)
+                                                                if (errors.lastName) setErrors(prev => ({ ...prev, lastName: undefined }))
+                                                            }}
                                                             placeholder="Last Name" 
                                                             className={`w-full text-xl sm:text-2xl font-light py-2.5 border-b ${
                                                                 errors.lastName ? 'border-red-400 focus:border-red-500' : 'border-zinc-800 focus:border-zinc-400'
                                                             } outline-none bg-transparent text-white placeholder-zinc-700 transition-all`}
                                                         />
                                                         <span className="text-[10px] text-zinc-500 font-mono uppercase tracking-widest mt-1.5 block">Last Name</span>
+                                                        {errors.lastName && <p className="text-red-400 text-xs mt-1 font-mono">{errors.lastName}</p>}
                                                     </div>
                                                 </div>
  
@@ -401,25 +409,33 @@ export default function DigitalIndiaGSAPForm() {
                                                         <input 
                                                             type="email" 
                                                             value={email} 
-                                                            onChange={(e) => setEmail(e.target.value)}
+                                                            onChange={(e) => {
+                                                                setEmail(e.target.value)
+                                                                if (errors.email) setErrors(prev => ({ ...prev, email: undefined }))
+                                                            }}
                                                             placeholder="Email" 
                                                             className={`w-full text-xl sm:text-2xl font-light py-2.5 border-b ${
                                                                 errors.email ? 'border-red-400 focus:border-red-500' : 'border-zinc-800 focus:border-zinc-400'
                                                             } outline-none bg-transparent text-white placeholder-zinc-700 transition-all`}
                                                         />
                                                         <span className="text-[10px] text-zinc-500 font-mono uppercase tracking-widest mt-1.5 block">Email Address</span>
+                                                        {errors.email && <p className="text-red-400 text-xs mt-1 font-mono">{errors.email}</p>}
                                                     </div>
                                                     <div>
                                                         <input 
                                                             type="tel" 
                                                             value={phone} 
-                                                            onChange={(e) => setPhone(e.target.value)}
+                                                            onChange={(e) => {
+                                                                setPhone(e.target.value)
+                                                                if (errors.phone) setErrors(prev => ({ ...prev, phone: undefined }))
+                                                            }}
                                                             placeholder="(00) 00000 0000" 
                                                             className={`w-full text-xl sm:text-2xl font-light py-2.5 border-b ${
                                                                 errors.phone ? 'border-red-400 focus:border-red-500' : 'border-zinc-800 focus:border-zinc-400'
                                                             } outline-none bg-transparent text-white placeholder-zinc-700 transition-all`}
                                                         />
                                                         <span className="text-[10px] text-zinc-500 font-mono uppercase tracking-widest mt-1.5 block">Phone Number</span>
+                                                        {errors.phone && <p className="text-red-400 text-xs mt-1 font-mono">{errors.phone}</p>}
                                                     </div>
                                                 </div>
                                             </div>
@@ -490,13 +506,17 @@ export default function DigitalIndiaGSAPForm() {
                                                     <input 
                                                         type="text" 
                                                         value={college} 
-                                                        onChange={(e) => setCollege(e.target.value)}
+                                                        onChange={(e) => {
+                                                            setCollege(e.target.value)
+                                                            if (errors.college) setErrors(prev => ({ ...prev, college: undefined }))
+                                                        }}
                                                         placeholder="College / Institution" 
                                                         className={`w-full text-xl sm:text-2xl font-light py-2 border-b ${
                                                             errors.college ? 'border-red-400 focus:border-red-500' : 'border-zinc-800 focus:border-zinc-400'
                                                         } outline-none bg-transparent text-white placeholder-zinc-700 transition-all`}
                                                     />
                                                     <span className="text-[10px] text-zinc-500 font-mono uppercase tracking-widest mt-1.5 block">College Name</span>
+                                                    {errors.college && <p className="text-red-400 text-xs mt-1 font-mono">{errors.college}</p>}
                                                 </div>
                                             </div>
  
@@ -708,7 +728,7 @@ export default function DigitalIndiaGSAPForm() {
  
                                             <div className="flex justify-between items-center mt-4 pt-4 border-t border-zinc-800">
                                                 <div className="text-[9px] text-zinc-500 max-w-[280px] leading-tight font-mono uppercase">
-                                                    THIS SITE IS PROTECTED BY RECAPTCHA. THE GOOGLE PRIVACY POLICY AND TERMS OF SERVICE APPLY.
+                                                   
                                                 </div>
                                                 <div className="flex gap-3">
                                                     <button 
