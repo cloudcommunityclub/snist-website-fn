@@ -173,8 +173,8 @@ export default function DigitalIndiaGSAPForm() {
         const newErrors: FormErrors = {}
         if (!utrId.trim()) {
             newErrors.utrId = 'UTR ID is required'
-        } else if (!/^\d{12}$/.test(utrId.trim())) {
-            newErrors.utrId = 'UTR must be exactly 12 digits'
+        } else if (!/^[A-Za-z0-9]{10,35}$/.test(utrId.trim())) {
+            newErrors.utrId = 'UTR / Transaction ID must be 10 to 35 alphanumeric characters'
         }
 
         if (!screenshot) {
@@ -680,12 +680,15 @@ export default function DigitalIndiaGSAPForm() {
  
                                                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 pt-1">
                                                     <div>
-                                                        <label className="text-[10px] text-zinc-500 font-mono uppercase tracking-widest mb-1.5 block">UTR ID (12-Digit Transaction ID)</label>
+                                                        <label className="text-[10px] text-zinc-500 font-mono uppercase tracking-widest mb-1.5 block">UTR / Transaction ID</label>
                                                         <input 
                                                             type="text" 
                                                             value={utrId} 
-                                                            onChange={(e) => setUtrId(e.target.value)}
-                                                            placeholder="Enter 12 digit Transaction ID" 
+                                                            onChange={(e) => {
+                                                                setUtrId(e.target.value)
+                                                                if (errors.utrId) setErrors(prev => ({ ...prev, utrId: undefined }))
+                                                            }}
+                                                            placeholder="Enter UTR or Transaction ID" 
                                                             className={`w-full text-lg font-light py-2 border-b ${
                                                                 errors.utrId ? 'border-red-400 focus:border-red-500' : 'border-zinc-800 focus:border-zinc-400'
                                                             } outline-none bg-transparent text-white placeholder-zinc-700 transition-all`}
