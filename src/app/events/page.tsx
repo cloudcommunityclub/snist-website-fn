@@ -167,7 +167,7 @@ const upcomingEvents: Event[] = [
         location: "Sreenidhi Institute of Science and Technology",
         description: "Be a part of India's digital transformation! Join the Digital India Innovation Challenge — a platform for students to pitch bold, tech-driven ideas that can reshape governance, education, healthcare, and public services. Whether it's an AI-powered solution, a cloud-native app, or a FOSS-based initiative, this is your chance to innovate for impact.\n\nSubmit your idea and compete for exciting prizes, mentorship, and a chance to present your solution to industry leaders!",
         image: "/assets/events/digital-india-banner.png",
-        registrationLink: "/events/digital_india",
+        registrationLink: "/events/digitalindia",
         highlights: [
             "Open to All Departments",
             "Idea Submission & Pitch Round",
