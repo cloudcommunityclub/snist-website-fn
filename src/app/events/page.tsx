@@ -162,11 +162,11 @@ const upcomingEvents: Event[] = [
     {
         id: "7",
         title: "Digital India – Hackathon",
-        date: "July 15, 2026",
-        time: "10:00 AM - 4:00 PM IST",
+        date: "July 9-11, 2026",
+        time: "48 Hours Hackathon",
         location: "Sreenidhi Institute of Science and Technology",
         description: "Be a part of India's digital transformation! Join the Digital India Hackathon — a platform for students to pitch bold, tech-driven ideas that can reshape governance, education, healthcare, and public services. Whether it's an AI-powered solution, a cloud-native app, or a FOSS-based initiative, this is your chance to innovate for impact.\n\nSubmit your idea and compete for exciting prizes, mentorship, and a chance to present your solution to industry leaders!",
-        image: "/assets/events/digital-india-banner.png",
+        image: "/assets/events/digital-india-banner-v2.png",
         registrationLink: "/events/digitalindia",
         highlights: [
             "Open to All Departments",
@@ -241,6 +241,7 @@ const CountdownTimer = ({ deadline }: { deadline: string }) => {
     const [isMounted, setIsMounted] = useState(false);
 
     useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setIsMounted(true);
         setTimeLeft(calculateTimeLeft());
 
@@ -553,6 +554,7 @@ const EventsClient = () => {
     const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
 
     useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setIsMounted(true);
     }, []);
 
