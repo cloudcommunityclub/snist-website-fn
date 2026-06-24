@@ -3,20 +3,64 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { gsap } from 'gsap'
-import { Check, ArrowRight, Upload, CreditCard, Loader2 } from 'lucide-react'
+import { 
+    Check, ArrowRight, Upload, CreditCard, Loader2,
+    Trophy, Award, Gift, Sparkles, Code, Brain, Users2, ChevronDown
+} from 'lucide-react'
 import Image from 'next/image'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+
+if (typeof window !== 'undefined') {
+    gsap.registerPlugin(ScrollTrigger)
+}
 
 interface FormErrors {
-    firstName?: string
-    lastName?: string
+    leaderName?: string
     email?: string
     phone?: string
     college?: string
     domain?: string
+    teamName?: string
     idea?: string
     utrId?: string
     screenshot?: string
+    [key: string]: string | undefined
 }
+
+const faqs = [
+    {
+        q: "Can I participate solo?",
+        a: "Yes. Individual participation is allowed. If you register with team size 1 (solo), you are considered a solo participant."
+    },
+    {
+        q: "Can team members be from different colleges?",
+        a: "Yes. Cross-college teams are welcome. You can collaborate with innovators from any institution across India."
+    },
+    {
+        q: "Is there a registration fee?",
+        a: "Yes. There is a nominal registration fee of ₹99 for verification. Further details regarding the final hackathon will be shared with the shortlisted participants."
+    },
+    {
+        q: "Can we modify our idea after submission?",
+        a: "No. The submitted idea is considered final and cannot be modified. Make sure to describe your idea thoroughly before submitting."
+    },
+    {
+        q: "Will every participant receive a certificate?",
+        a: "Yes. Every participant who submits a valid idea will receive a Participation Certificate."
+    },
+    {
+        q: "Will food and refreshments be provided?",
+        a: "Yes. Food and refreshments will be provided throughout the workshop and hackathon."
+    },
+    {
+        q: "What should participants bring?",
+        a: "Participants should bring: Laptop, Charger, and a valid College ID or Government-issued ID. Wi-Fi, charging facilities, and power outlets will be available at the venue."
+    },
+    {
+        q: "Is physical attendance mandatory?",
+        a: "Yes. Shortlisted teams must physically attend the workshop and hackathon at SNIST campus to maintain eligibility."
+    }
+]
 
 export default function DigitalIndiaGSAPForm() {
     const router = useRouter()
@@ -26,16 +70,22 @@ export default function DigitalIndiaGSAPForm() {
     const [apiError, setApiError] = useState<string | null>(null)
 
     // Form fields state
-    const [firstName, setFirstName] = useState('')
-    const [lastName, setLastName] = useState('')
+    const [leaderName, setLeaderName] = useState('')
     const [email, setEmail] = useState('')
     const [phone, setPhone] = useState('')
     const [college, setCollege] = useState('')
+    const [teamSize, setTeamSize] = useState<number>(1)
+    const [teamMembers, setTeamMembers] = useState<{ name: string; email: string }[]>([])
     const [domain, setDomain] = useState('')
+    const [teamName, setTeamName] = useState('')
     const [idea, setIdea] = useState('')
     const [utrId, setUtrId] = useState('')
     const [screenshot, setScreenshot] = useState<File | null>(null)
     const [screenshotPreview, setScreenshotPreview] = useState<string | null>(null)
+
+    // Custom dropdown states
+    const [isTeamSizeOpen, setIsTeamSizeOpen] = useState(false)
+    const [isDomainOpen, setIsDomainOpen] = useState(false)
 
     const [errors, setErrors] = useState<FormErrors>({})
     const [isDesktop, setIsDesktop] = useState(false)
@@ -47,6 +97,19 @@ export default function DigitalIndiaGSAPForm() {
     const step2Ref = useRef<HTMLDivElement>(null)
     const step3Ref = useRef<HTMLDivElement>(null)
     const step4Ref = useRef<HTMLDivElement>(null)
+
+    // Dropdown Refs
+    const teamSizeDropdownRef = useRef<HTMLDivElement>(null)
+    const domainDropdownRef = useRef<HTMLDivElement>(null)
+
+    // Landing page states & refs
+    const formSectionRef = useRef<HTMLDivElement>(null)
+    const [openFaq, setOpenFaq] = useState<number | null>(null)
+
+    // Interactive SVG Refs
+    const pageRef = useRef<HTMLDivElement>(null)
+    const heroRef = useRef<HTMLDivElement>(null)
+    const svgWrapRef = useRef<HTMLDivElement>(null)
 
     // UPI configurations
     const upiId = process.env.NEXT_PUBLIC_UPI_ID || 'c3club@upi'
@@ -60,6 +123,318 @@ export default function DigitalIndiaGSAPForm() {
         checkIsDesktop()
         window.addEventListener('resize', checkIsDesktop)
         return () => window.removeEventListener('resize', checkIsDesktop)
+    }, [])
+
+    // Click outside dropdowns
+    useEffect(() => {
+        function handleClickOutside(event: MouseEvent) {
+            if (teamSizeDropdownRef.current && !teamSizeDropdownRef.current.contains(event.target as Node)) {
+                setIsTeamSizeOpen(false)
+            }
+            if (domainDropdownRef.current && !domainDropdownRef.current.contains(event.target as Node)) {
+                setIsDomainOpen(false)
+            }
+        }
+        document.addEventListener('mousedown', handleClickOutside)
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside)
+        }
+    }, [])
+
+    // Dropdown open animation
+    useEffect(() => {
+        if (isTeamSizeOpen) {
+            gsap.fromTo('.team-size-dropdown',
+                { opacity: 0, y: -10, scaleY: 0.95, transformOrigin: 'top' },
+                { opacity: 1, y: 0, scaleY: 1, duration: 0.25, ease: 'power3.out' }
+            )
+        }
+    }, [isTeamSizeOpen])
+
+    useEffect(() => {
+        if (isDomainOpen) {
+            gsap.fromTo('.domain-dropdown',
+                { opacity: 0, y: -10, scaleY: 0.95, transformOrigin: 'top' },
+                { opacity: 1, y: 0, scaleY: 1, duration: 0.25, ease: 'power3.out' }
+            )
+        }
+    }, [isDomainOpen])
+
+    // Global mousemove spotlight card coordinator
+    useEffect(() => {
+        const handleMouseMove = (e: MouseEvent) => {
+            const cards = document.querySelectorAll('.spotlight-card')
+            cards.forEach((card) => {
+                const htmlCard = card as HTMLElement
+                const rect = htmlCard.getBoundingClientRect()
+                const x = e.clientX - rect.left
+                const y = e.clientY - rect.top
+                htmlCard.style.setProperty('--mouse-x', `${x}px`)
+                htmlCard.style.setProperty('--mouse-y', `${y}px`)
+            })
+        }
+        window.addEventListener('mousemove', handleMouseMove)
+        return () => window.removeEventListener('mousemove', handleMouseMove)
+    }, [])
+
+    // Interactive Hero 3D Parallax Tilt
+    useEffect(() => {
+        const hero = heroRef.current
+        const svgWrap = svgWrapRef.current
+        if (!hero || !svgWrap) return
+
+        const handleMouseMove = (e: MouseEvent) => {
+            const rect = hero.getBoundingClientRect()
+            const x = (e.clientX - rect.left) / rect.width - 0.5
+            const y = (e.clientY - rect.top) / rect.height - 0.5
+
+            gsap.to(svgWrap, {
+                rotateY: x * 25,
+                rotateX: y * -25,
+                x: x * 10,
+                y: y * 10,
+                duration: 0.5,
+                ease: 'power2.out',
+                transformPerspective: 1000,
+                transformOrigin: 'center center'
+            })
+        }
+
+        const handleMouseLeave = () => {
+            gsap.to(svgWrap, {
+                rotateY: 0,
+                rotateX: 0,
+                x: 0,
+                y: 0,
+                duration: 0.8,
+                ease: 'power3.out'
+            })
+        }
+
+        hero.addEventListener('mousemove', handleMouseMove)
+        hero.addEventListener('mouseleave', handleMouseLeave)
+
+        return () => {
+            hero.removeEventListener('mousemove', handleMouseMove)
+            hero.removeEventListener('mouseleave', handleMouseLeave)
+        }
+    }, [])
+
+    // Interactive Floating Code-Character Trail
+    useEffect(() => {
+        const page = pageRef.current
+        if (!page) return
+
+        let lastMove = 0
+        const handleMouseMove = (e: MouseEvent) => {
+            const now = Date.now()
+            if (now - lastMove < 40) return // Limit frequency to 40ms for high performance
+            lastMove = now
+
+            const x = e.pageX
+            const y = e.pageY
+
+            const chars = ['{', '}', '[', ']', '(', ')', '<', '>', '/', ';', '+', '-', '=', '*', '%', '!', '?', '&', '|', '^', '~', '$']
+            const char = chars[Math.floor(Math.random() * chars.length)]
+
+            const span = document.createElement('span')
+            span.innerText = char
+            span.className = 'absolute pointer-events-none font-mono text-[#9dff00] font-bold select-none text-shadow-neon'
+            
+            const fontSize = Math.floor(Math.random() * 8) + 12 // 12px to 20px
+            const angle = Math.random() * 360
+            const distance = Math.random() * 40 + 20
+            const travelX = Math.cos(angle * Math.PI / 180) * distance
+            const travelY = -Math.abs(Math.sin(angle * Math.PI / 180) * distance) - 20 // Drift upwards
+
+            span.style.left = `${x}px`
+            span.style.top = `${y}px`
+            span.style.fontSize = `${fontSize}px`
+            span.style.opacity = '0.9'
+            span.style.transform = 'translate(-50%, -50%) scale(0.6)'
+            span.style.transition = 'all 1s cubic-bezier(0.1, 0.8, 0.3, 1)'
+            span.style.zIndex = '50'
+
+            page.appendChild(span)
+
+            requestAnimationFrame(() => {
+                span.style.transform = `translate(-50%, -50%) translate(${travelX}px, ${travelY}px) scale(1.2) rotate(${Math.random() * 60 - 30}deg)`
+                span.style.opacity = '0'
+            })
+
+            setTimeout(() => {
+                span.remove()
+            }, 1000)
+        }
+
+        window.addEventListener('mousemove', handleMouseMove)
+        return () => {
+            window.removeEventListener('mousemove', handleMouseMove)
+        }
+    }, [])
+
+    // Landing page animation
+    useEffect(() => {
+        const updateLinePosition = () => {
+            const container = document.querySelector('.timeline-container-anim')
+            const firstDot = document.querySelector('.timeline-item-anim:first-child .timeline-dot')
+            const lastDot = document.querySelector('.timeline-item-anim:last-child .timeline-dot')
+            const baseLine = document.querySelector('.timeline-base-line')
+            const progressLine = document.querySelector('.timeline-progress-line')
+
+            if (container && firstDot && lastDot && baseLine && progressLine) {
+                const containerRect = container.getBoundingClientRect()
+                const firstRect = firstDot.getBoundingClientRect()
+                const lastRect = lastDot.getBoundingClientRect()
+
+                const top = firstRect.top - containerRect.top + 8
+                const height = lastRect.top - firstRect.top
+
+                gsap.set([baseLine, progressLine], {
+                    top: top,
+                    height: height
+                })
+            }
+        }
+
+        // Initial position set
+        updateLinePosition()
+
+        // Update on resize & scrolltrigger refresh to keep it perfectly responsive
+        window.addEventListener('resize', updateLinePosition)
+        ScrollTrigger.addEventListener("refreshInit", updateLinePosition)
+
+        const ctx = gsap.context(() => {
+            // Hero entrance animations
+            gsap.fromTo('.hero-animate-title', 
+                { opacity: 0, y: 30 },
+                { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out', stagger: 0.12 }
+            )
+            gsap.fromTo('.hero-animate-btn',
+                { opacity: 0, scale: 0.95 },
+                { opacity: 1, scale: 1, duration: 0.6, delay: 0.5, ease: 'back.out(1.4)', stagger: 0.1 }
+            )
+
+            const container = document.querySelector('.timeline-container-anim')
+            const firstDot = document.querySelector('.timeline-item-anim:first-child .timeline-dot')
+            const lastDot = document.querySelector('.timeline-item-anim:last-child .timeline-dot')
+
+            if (container && firstDot && lastDot) {
+                // Dynamic Timeline Progress Line
+                gsap.fromTo('.timeline-progress-line',
+                    { scaleY: 0 },
+                    {
+                        scaleY: 1,
+                        ease: 'none',
+                        scrollTrigger: {
+                            trigger: container,
+                            start: () => {
+                                const containerRect = container.getBoundingClientRect()
+                                const firstRect = firstDot.getBoundingClientRect()
+                                return `top+=${firstRect.top - containerRect.top + 8} 50%`
+                            },
+                            end: () => {
+                                const containerRect = container.getBoundingClientRect()
+                                const lastRect = lastDot.getBoundingClientRect()
+                                return `top+=${lastRect.top - containerRect.top + 8} 50%`
+                            },
+                            scrub: 0.5
+                        }
+                    }
+                )
+            }
+
+            // Timeline items activation scroll triggers
+            const timelineItems = gsap.utils.toArray('.timeline-item-anim') as Element[]
+            timelineItems.forEach((item) => {
+                const dot = item.querySelector('.timeline-dot')
+                const innerDot = item.querySelector('.timeline-inner-dot')
+                const content = item.querySelector('.timeline-content')
+
+                // Initial state via GSAP to prevent flash
+                gsap.set(content, { opacity: 0.2, y: 20 })
+                gsap.set(dot, { borderColor: 'rgba(63, 63, 70, 0.6)', scale: 1 })
+                gsap.set(innerDot, { backgroundColor: 'rgba(63, 63, 70, 0.6)' })
+
+                // Content Highlight
+                gsap.to(content, {
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.4,
+                    ease: 'power2.out',
+                    scrollTrigger: {
+                        trigger: item,
+                        start: 'top 50%',
+                        end: 'bottom 50%',
+                        toggleActions: 'play none none reverse'
+                    }
+                })
+
+                // Outer Dot Highlight
+                gsap.to(dot, {
+                    borderColor: '#9dff00',
+                    scale: 1.25,
+                    boxShadow: '0 0 12px rgba(157, 255, 0, 0.4)',
+                    duration: 0.3,
+                    scrollTrigger: {
+                        trigger: item,
+                        start: 'top 50%',
+                        end: 'bottom 50%',
+                        toggleActions: 'play none none reverse'
+                    }
+                })
+
+                // Inner Dot Highlight
+                gsap.to(innerDot, {
+                    backgroundColor: '#9dff00',
+                    duration: 0.3,
+                    scrollTrigger: {
+                        trigger: item,
+                        start: 'top 50%',
+                        end: 'bottom 50%',
+                        toggleActions: 'play none none reverse'
+                    }
+                })
+            })
+
+            // Selection Process scroll triggers
+            gsap.fromTo('.selection-card-anim',
+                { opacity: 0, y: 30 },
+                {
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.5,
+                    stagger: 0.1,
+                    scrollTrigger: {
+                        trigger: '.selection-grid-anim',
+                        start: 'top 85%',
+                        toggleActions: 'play none none none'
+                    }
+                }
+            )
+
+            // Highlights scroll triggers
+            gsap.fromTo('.highlight-card-anim', 
+                { opacity: 0, y: 30 },
+                { 
+                    opacity: 1, 
+                    y: 0, 
+                    duration: 0.5, 
+                    stagger: 0.08,
+                    scrollTrigger: {
+                        trigger: '.highlight-grid-anim',
+                        start: 'top 85%',
+                        toggleActions: 'play none none none'
+                    }
+                }
+            )
+        })
+
+        return () => {
+            window.removeEventListener('resize', updateLinePosition)
+            ScrollTrigger.removeEventListener("refreshInit", updateLinePosition)
+            ctx.revert()
+        }
     }, [])
 
     // Animate width changes between cards using GSAP, ensuring height is fixed at 100%
@@ -129,8 +504,7 @@ export default function DigitalIndiaGSAPForm() {
 
     const validateStep1 = (): boolean => {
         const newErrors: FormErrors = {}
-        if (!firstName.trim()) newErrors.firstName = 'First name is required'
-        if (!lastName.trim()) newErrors.lastName = 'Last name is required'
+        if (!leaderName.trim()) newErrors.leaderName = 'Team Leader Name is required'
 
         if (!email.trim()) {
             newErrors.email = 'Email is required'
@@ -144,14 +518,33 @@ export default function DigitalIndiaGSAPForm() {
             newErrors.phone = 'Enter a valid 10-digit phone number'
         }
 
+        if (!college.trim()) {
+            newErrors.college = 'College/Institution is required'
+        }
+
+        if (!teamName.trim()) {
+            newErrors.teamName = 'Team Name is required'
+        }
+
         setErrors(newErrors)
         return Object.keys(newErrors).length === 0
     }
 
     const validateStep2 = (): boolean => {
         const newErrors: FormErrors = {}
-        if (!college.trim()) newErrors.college = 'College/Institution is required'
-        if (!domain) newErrors.domain = 'Please select a domain'
+
+        if (teamSize > 1) {
+            teamMembers.forEach((m, idx) => {
+                if (!m.name || !m.name.trim()) {
+                    newErrors[`teamMemberName_${idx}`] = `Member ${idx + 2} name is required`
+                }
+                if (!m.email || !m.email.trim()) {
+                    newErrors[`teamMemberEmail_${idx}`] = `Member ${idx + 2} email is required`
+                } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(m.email)) {
+                    newErrors[`teamMemberEmail_${idx}`] = `Member ${idx + 2} has an invalid email`
+                }
+            })
+        }
 
         setErrors(newErrors)
         return Object.keys(newErrors).length === 0
@@ -159,10 +552,13 @@ export default function DigitalIndiaGSAPForm() {
 
     const validateStep3 = (): boolean => {
         const newErrors: FormErrors = {}
+        if (!domain) {
+            newErrors.domain = 'Please select a domain track'
+        }
         if (!idea.trim()) {
             newErrors.idea = 'Idea description is required'
-        } else if (idea.trim().length < 50) {
-            newErrors.idea = 'Please describe your idea in at least 50 characters'
+        } else if (idea.trim().length < 150) {
+            newErrors.idea = 'Please describe your idea in at least 150 characters'
         }
 
         setErrors(newErrors)
@@ -227,11 +623,15 @@ export default function DigitalIndiaGSAPForm() {
 
         try {
             const submitData = new FormData()
-            submitData.append('name', `${firstName} ${lastName}`.trim())
+            submitData.append('name', leaderName.trim())
             submitData.append('college', college)
             submitData.append('email', email)
             submitData.append('phone', phone)
-            submitData.append('idea', `[Domain: ${domain}] ${idea}`)
+            submitData.append('idea', idea)
+            submitData.append('domain', domain)
+            submitData.append('teamName', teamName)
+            submitData.append('teamSize', String(teamSize))
+            submitData.append('teamMembers', JSON.stringify(teamMembers))
             submitData.append('utrId', utrId)
             if (screenshot) {
                 submitData.append('screenshot', screenshot)
@@ -265,10 +665,14 @@ export default function DigitalIndiaGSAPForm() {
     }
 
     const domains = [
-        'Healthcare & Education',
-        'Smart Cities & Governance',
-        'Agriculture & Fintech',
-        'Sustainability & Accessibility'
+        'Digital Governance & Public Services',
+        'Agritech & Rural Development',
+        'Fintech & Financial Inclusion',
+        'Healthcare & Social Impact',
+        'Sustainability & Climate Solutions',
+        'Education & Skill Development',
+        'Smart Cities & Infrastructure',
+        'Open Innovation & Emerging Technologies'
     ]
 
     // Helper to render collapsed slim vertical text card exactly as drawn in mockup
@@ -293,36 +697,618 @@ export default function DigitalIndiaGSAPForm() {
     }
 
     return (
-        <div className="min-h-screen relative flex flex-col justify-between overflow-hidden bg-gradient-to-br from-[#09090b] via-[#121214] to-[#09090b] text-[#f4f4f5] p-6 md:p-12 font-sans selection:bg-[#9dff00]/40 ">
-            {/* Background spotlight */}
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(157,255,0,0.04)_0%,transparent_70%)] pointer-events-none" />
+        <div ref={pageRef} className="min-h-screen relative flex flex-col overflow-hidden bg-[#09090b] text-[#f4f4f5] font-sans selection:bg-[#9dff00]/40">
+            {/* Inject custom CSS styles for spotlights and custom animations */}
+            <style dangerouslySetInnerHTML={{ __html: `
+                .spotlight-card {
+                    position: relative;
+                    overflow: hidden;
+                }
+                .spotlight-card::before {
+                    content: "";
+                    position: absolute;
+                    inset: 0;
+                    background: radial-gradient(
+                        350px circle at var(--mouse-x, 0px) var(--mouse-y, 0px),
+                        rgba(157, 255, 0, 0.06),
+                        transparent 80%
+                    );
+                    opacity: 0;
+                    transition: opacity 0.3s ease;
+                    pointer-events: none;
+                    z-index: 2;
+                }
+                .spotlight-card:hover::before {
+                    opacity: 1;
+                }
+                .spotlight-card > * {
+                    position: relative;
+                    z-index: 5;
+                }
+                .spotlight-card input, .spotlight-card button, .spotlight-card select, .spotlight-card textarea {
+                    position: relative;
+                    z-index: 10;
+                }
+                
+                .custom-scrollbar::-webkit-scrollbar {
+                    width: 4px;
+                    height: 4px;
+                }
+                .custom-scrollbar::-webkit-scrollbar-track {
+                    background: rgba(24, 24, 27, 0.5);
+                    border-radius: 4px;
+                }
+                .custom-scrollbar::-webkit-scrollbar-thumb {
+                    background: rgba(63, 63, 70, 0.8);
+                    border-radius: 4px;
+                }
+                .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+                    background: #9dff00;
+                }
 
-            {/* Main Section */}
-            <main className="relative z-10 w-full max-w-7xl mx-auto flex-1 flex flex-col items-center justify-center pt-32 pb-12 md:pt-40 md:pb-20">
-                {/* Hackathon Info Section */}
-                <div className="w-full max-w-7xl mb-8 text-left border-b border-zinc-800/40 pb-8">
-                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#9dff00]/20 bg-[#9dff00]/5 text-[#9dff00] text-[10px] font-mono tracking-wider mb-4 uppercase">
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#9dff00] animate-pulse"></span>
-                        Ideathon Challenge
-                    </div>
-                    <h1 className="text-4xl sm:text-5xl font-light text-white tracking-tight mb-4">
-                        Digital India <span className="text-[#9dff00] font-normal">Hackathon</span>
+                @keyframes spin-cw {
+                    from { transform: rotate(0deg); }
+                    to { transform: rotate(360deg); }
+                }
+                @keyframes spin-ccw {
+                    from { transform: rotate(0deg); }
+                    to { transform: rotate(-360deg); }
+                }
+                .spin-cw {
+                    transform-origin: 250px 250px;
+                    animation: spin-cw 35s linear infinite;
+                }
+                .spin-ccw {
+                    transform-origin: 250px 250px;
+                    animation: spin-ccw 25s linear infinite;
+                }
+                .spin-cw-fast {
+                    transform-origin: 250px 250px;
+                    animation: spin-cw 15s linear infinite;
+                }
+
+                @keyframes path-dash {
+                    to {
+                        stroke-dashoffset: -80;
+                    }
+                }
+                .data-flow-path {
+                    stroke-dasharray: 6, 20;
+                    animation: path-dash 3s linear infinite;
+                }
+                
+                @keyframes scan-radar {
+                    0% { r: 12px; opacity: 0.8; }
+                    100% { r: 40px; opacity: 0; }
+                }
+                .node-scan-pulse {
+                    animation: scan-radar 2.5s ease-out infinite;
+                }
+                .text-shadow-neon {
+                    text-shadow: 0 0 8px rgba(157, 255, 0, 0.8), 0 0 2px rgba(157, 255, 0, 0.4);
+                }
+            ` }} />
+
+            {/* Background grids and spotlights */}
+            <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(63,63,70,0.04)_1px,transparent_1px),linear-gradient(to_bottom,rgba(63,63,70,0.04)_1px,transparent_1px)] bg-[size:4rem_4rem] pointer-events-none" />
+            <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-[#9dff00]/5 rounded-full blur-[120px] pointer-events-none" />
+            <div className="absolute top-[80vh] right-1/4 w-[600px] h-[600px] bg-zinc-800/10 rounded-full blur-[150px] pointer-events-none" />
+            <div className="absolute bottom-0 left-1/3 w-[500px] h-[500px] bg-[#9dff00]/5 rounded-full blur-[120px] pointer-events-none" />
+
+            {/* 1. Hero Section */}
+            <section ref={heroRef} className="relative overflow-hidden z-10 w-full max-w-7xl mx-auto min-h-[95vh] flex flex-col lg:flex-row items-center justify-between px-6 md:px-12 pt-36 pb-16 gap-12">
+                <div className="flex-1 text-left max-w-3xl">
+                    <h1 className="hero-animate-title text-5xl sm:text-7xl font-extralight text-white tracking-tight leading-[1.05] mb-6">
+                        Build for <span className="font-normal text-[#9dff00] block sm:inline">INDIA.</span> <br className="hidden sm:inline" />
+                        Innovate for <span className="font-normal text-white">IMPACT.</span>
                     </h1>
-                    <p className="text-zinc-400 text-sm sm:text-base font-light max-w-3xl leading-relaxed">
-                        A hackathon where participants develop tech-driven solutions to real-world challenges faced by regular people in India—from local shopkeepers and street vendors to rural communities. Leverage cloud, FOSS, or smart automation to pitch ideas that drive meaningful, localized impact.
+                    <p className="hero-animate-title text-zinc-400 text-base sm:text-lg font-light leading-relaxed mb-8 max-w-2xl">
+                        A national innovation challenge where participants develop technology-driven solutions to real-world problems faced by millions of Indians—from local shopkeepers and street vendors to rural communities and public services.
                     </p>
-                    <div className="mt-4 flex items-center gap-2 text-xs sm:text-sm text-zinc-300 font-mono uppercase tracking-wider">
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#9dff00] animate-pulse"></span>
-                        The top 100 most impactful problem statements will be shortlisted.
+                    
+                    <div className="hero-animate-title bg-zinc-900/35 border border-zinc-800/60 rounded-2xl p-4 mb-8 text-xs sm:text-sm font-light text-zinc-300 flex items-start gap-3 max-w-xl">
+                        <span className="text-[#9dff00] font-bold text-lg leading-none">★</span>
+                        <div>
+                            <span className="text-white font-medium">Shortlisting Alert: </span>
+                            The Top 100 most impactful problem statements will be shortlisted.
+                        </div>
+                    </div>
+
+                    <div className="hero-animate-title flex flex-wrap gap-4 items-center">
+                        <button
+                            onClick={() => formSectionRef.current?.scrollIntoView({ behavior: 'smooth' })}
+                            className="hero-animate-btn bg-[#9dff00] hover:bg-[#8ae000] text-zinc-950 px-8 py-4 rounded-full font-bold text-sm flex items-center gap-2 shadow-lg shadow-[#9dff00]/10 hover:shadow-[#9dff00]/25 transition-all cursor-pointer"
+                        >
+                            Register Now <ArrowRight className="w-4 h-4" />
+                        </button>
+                        <button
+                            onClick={() => document.getElementById('details')?.scrollIntoView({ behavior: 'smooth' })}
+                            className="hero-animate-btn border border-zinc-800 hover:border-zinc-500 bg-zinc-900/40 text-white px-8 py-4 rounded-full font-medium text-sm transition-all cursor-pointer"
+                        >
+                            Explore Timeline
+                        </button>
+                    </div>
+
+                    {/* Stats Row */}
+                    <div className="hero-animate-title grid grid-cols-2 sm:grid-cols-4 gap-6 mt-16 pt-8 border-t border-zinc-800/40">
+                        <div>
+                            <div className="text-3xl font-light text-[#9dff00] font-mono">₹2.5L</div>
+                            <div className="text-zinc-500 text-[10px] font-mono uppercase tracking-wider mt-1">Prize Pool</div>
+                        </div>
+                        <div>
+                            <div className="text-3xl font-light text-white font-mono">Top 100</div>
+                            <div className="text-zinc-500 text-[10px] font-mono uppercase tracking-wider mt-1">Shortlisted</div>
+                        </div>
+                        <div>
+                            <div className="text-3xl font-light text-white font-mono">1–4</div>
+                            <div className="text-zinc-500 text-[10px] font-mono uppercase tracking-wider mt-1">Team Size</div>
+                        </div>
+                        <div>
+                            <div className="text-3xl font-light text-[#9dff00] font-mono">48H</div>
+                            <div className="text-zinc-500 text-[10px] font-mono uppercase tracking-wider mt-1">Offline Build</div>
+                        </div>
                     </div>
                 </div>
 
+                {/* Right Interactive Hero Illustration */}
+                <div className="flex-1 flex flex-col items-center justify-center w-full">
+                    <div ref={svgWrapRef} className="relative w-full max-w-[460px] h-[460px] flex items-center justify-center select-none">
+                        <div className="absolute w-[280px] h-[280px] bg-[#9dff00]/5 rounded-full blur-[100px] pointer-events-none" />
+                        
+                        <svg viewBox="0 0 500 500" className="w-full h-full drop-shadow-[0_0_40px_rgba(157,255,0,0.08)]">
+                            <defs>
+                                <filter id="glow-neon" x="-30%" y="-30%" width="160%" height="160%">
+                                    <feGaussianBlur stdDeviation="6" result="blur" />
+                                    <feMerge>
+                                        <feMergeNode in="blur" />
+                                        <feMergeNode in="SourceGraphic" />
+                                    </feMerge>
+                                </filter>
+                                <radialGradient id="reactor-core-grad" cx="50%" cy="50%" r="50%">
+                                    <stop offset="0%" stopColor="#9dff00" stopOpacity="0.4" />
+                                    <stop offset="40%" stopColor="#9dff00" stopOpacity="0.1" />
+                                    <stop offset="100%" stopColor="transparent" stopOpacity="0" />
+                                </radialGradient>
+                                <linearGradient id="circuit-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stopColor="rgba(157,255,0,0.4)" />
+                                    <stop offset="100%" stopColor="rgba(63,63,70,0.1)" />
+                                </linearGradient>
+                            </defs>
+
+                            {/* Background coordinate grid */}
+                            <g opacity="0.15">
+                                <line x1="250" y1="10" x2="250" y2="490" stroke="#9dff00" strokeWidth="0.5" strokeDasharray="3 3" />
+                                <line x1="10" y1="250" x2="490" y2="250" stroke="#9dff00" strokeWidth="0.5" strokeDasharray="3 3" />
+                                <circle cx="250" cy="250" r="240" fill="none" stroke="rgba(63, 63, 70, 0.3)" strokeWidth="0.5" />
+                                <circle cx="250" cy="250" r="180" fill="none" stroke="rgba(63, 63, 70, 0.3)" strokeWidth="0.5" />
+                                <circle cx="250" cy="250" r="120" fill="none" stroke="rgba(63, 63, 70, 0.3)" strokeWidth="0.5" />
+                            </g>
+
+                            {/* 6 Circuit board traces branching from center to nodes */}
+                            <g fill="none" stroke="url(#circuit-grad)" strokeWidth="1.5">
+                                <path d="M 250,250 L 250,70" />
+                                <path d="M 250,250 L 340,250 L 400,160" />
+                                <path d="M 250,250 L 340,250 L 400,340" />
+                                <path d="M 250,250 L 250,430" />
+                                <path d="M 250,250 L 160,250 L 100,340" />
+                                <path d="M 250,250 L 160,250 L 100,160" />
+                            </g>
+
+                            {/* Glowing Data Packets traveling along the traces */}
+                            <g filter="url(#glow-neon)">
+                                {/* AI Track */}
+                                <circle r="3" fill="#9dff00">
+                                    <animateMotion dur="2.2s" repeatCount="indefinite" path="M 250,250 L 250,70" begin="0s" />
+                                </circle>
+                                <circle r="2" fill="#9dff00" opacity="0.5">
+                                    <animateMotion dur="2.2s" repeatCount="indefinite" path="M 250,250 L 250,70" begin="1.1s" />
+                                </circle>
+
+                                {/* CLOUD Track */}
+                                <circle r="3" fill="#9dff00">
+                                    <animateMotion dur="2.8s" repeatCount="indefinite" path="M 250,250 L 340,250 L 400,160" begin="0.3s" />
+                                </circle>
+                                <circle r="2" fill="#9dff00" opacity="0.5">
+                                    <animateMotion dur="2.8s" repeatCount="indefinite" path="M 250,250 L 340,250 L 400,160" begin="1.7s" />
+                                </circle>
+
+                                {/* DATABASE Track */}
+                                <circle r="3" fill="#9dff00">
+                                    <animateMotion dur="2.6s" repeatCount="indefinite" path="M 250,250 L 340,250 L 400,340" begin="0.6s" />
+                                </circle>
+                                <circle r="2" fill="#9dff00" opacity="0.5">
+                                    <animateMotion dur="2.6s" repeatCount="indefinite" path="M 250,250 L 340,250 L 400,340" begin="1.9s" />
+                                </circle>
+
+                                {/* AUTOMATION Track */}
+                                <circle r="3" fill="#9dff00">
+                                    <animateMotion dur="2.4s" repeatCount="indefinite" path="M 250,250 L 250,430" begin="0.2s" />
+                                </circle>
+                                <circle r="2" fill="#9dff00" opacity="0.5">
+                                    <animateMotion dur="2.4s" repeatCount="indefinite" path="M 250,250 L 250,430" begin="1.4s" />
+                                </circle>
+
+                                {/* FOSS Track */}
+                                <circle r="3" fill="#9dff00">
+                                    <animateMotion dur="2.9s" repeatCount="indefinite" path="M 250,250 L 160,250 L 100,340" begin="0.5s" />
+                                </circle>
+                                <circle r="2" fill="#9dff00" opacity="0.5">
+                                    <animateMotion dur="2.9s" repeatCount="indefinite" path="M 250,250 L 160,250 L 100,340" begin="1.92s" />
+                                </circle>
+
+                                {/* SECURITY Track */}
+                                <circle r="3" fill="#9dff00">
+                                    <animateMotion dur="2.7s" repeatCount="indefinite" path="M 250,250 L 160,250 L 100,160" begin="0.1s" />
+                                </circle>
+                                <circle r="2" fill="#9dff00" opacity="0.5">
+                                    <animateMotion dur="2.7s" repeatCount="indefinite" path="M 250,250 L 160,250 L 100,160" begin="1.45s" />
+                                </circle>
+                            </g>
+
+                            {/* Symmetrical holographic rotating rings */}
+                            <g className="spin-cw">
+                                <circle cx="250" cy="250" r="210" fill="none" stroke="rgba(157, 255, 0, 0.15)" strokeWidth="1" strokeDasharray="40 80" />
+                                <circle cx="250" cy="250" r="150" fill="none" stroke="rgba(157, 255, 0, 0.1)" strokeWidth="1.5" strokeDasharray="120 180" />
+                            </g>
+                            <g className="spin-ccw">
+                                <circle cx="250" cy="250" r="225" fill="none" stroke="rgba(157, 255, 0, 0.08)" strokeWidth="0.75" strokeDasharray="10 30" />
+                                <circle cx="250" cy="250" r="170" fill="none" stroke="rgba(157, 255, 0, 0.2)" strokeWidth="1.25" strokeDasharray="8 8" />
+                                <circle cx="250" cy="250" r="130" fill="none" stroke="rgba(157, 255, 0, 0.12)" strokeWidth="1" strokeDasharray="30 15 5 15" />
+                            </g>
+                            <g className="spin-cw-fast">
+                                <circle cx="250" cy="250" r="90" fill="none" stroke="#9dff00" strokeWidth="1.5" strokeDasharray="50 150" filter="url(#glow-neon)" />
+                            </g>
+
+                            {/* Orbiting HUD tech bars or markers */}
+                            <circle cx="250" cy="250" r="235" fill="none" stroke="rgba(63, 63, 70, 0.2)" strokeWidth="1" />
+                            <path d="M 250,15 A 235,235 0 0,1 485,250" fill="none" stroke="#9dff00" strokeWidth="1.5" strokeDasharray="50 400" className="spin-cw" opacity="0.4" />
+                            <path d="M 250,485 A 235,235 0 0,1 15,250" fill="none" stroke="#9dff00" strokeWidth="1.5" strokeDasharray="30 350" className="spin-ccw" opacity="0.4" />
+
+                            {/* Symmetrical Hexagonal Nodes */}
+                            {/* Node 1: AI */}
+                            <g>
+                                <circle cx="250" cy="70" r="18" fill="none" stroke="rgba(157, 255, 0, 0.2)" strokeWidth="1" />
+                                <circle cx="250" cy="70" r="12" fill="#09090b" stroke="#9dff00" strokeWidth="1.5" filter="url(#glow-neon)" />
+                                <circle cx="250" cy="70" r="4" fill="#9dff00" />
+                            </g>
+
+                            {/* Node 2: CLOUD */}
+                            <g>
+                                <circle cx="400" cy="160" r="18" fill="none" stroke="rgba(157, 255, 0, 0.2)" strokeWidth="1" />
+                                <circle cx="400" cy="160" r="12" fill="#09090b" stroke="#9dff00" strokeWidth="1.5" filter="url(#glow-neon)" />
+                                <circle cx="400" cy="160" r="4" fill="#9dff00" />
+                            </g>
+
+                            {/* Node 3: DATABASE */}
+                            <g>
+                                <circle cx="400" cy="340" r="18" fill="none" stroke="rgba(157, 255, 0, 0.2)" strokeWidth="1" />
+                                <circle cx="400" cy="340" r="12" fill="#09090b" stroke="#9dff00" strokeWidth="1.5" filter="url(#glow-neon)" />
+                                <circle cx="400" cy="340" r="4" fill="#9dff00" />
+                            </g>
+
+                            {/* Node 4: AUTOMATION */}
+                            <g>
+                                <circle cx="250" cy="430" r="18" fill="none" stroke="rgba(157, 255, 0, 0.2)" strokeWidth="1" />
+                                <circle cx="250" cy="430" r="12" fill="#09090b" stroke="#9dff00" strokeWidth="1.5" filter="url(#glow-neon)" />
+                                <circle cx="250" cy="430" r="4" fill="#9dff00" />
+                            </g>
+
+                            {/* Node 5: FOSS */}
+                            <g>
+                                <circle cx="100" cy="340" r="18" fill="none" stroke="rgba(157, 255, 0, 0.2)" strokeWidth="1" />
+                                <circle cx="100" cy="340" r="12" fill="#09090b" stroke="#9dff00" strokeWidth="1.5" filter="url(#glow-neon)" />
+                                <circle cx="100" cy="340" r="4" fill="#9dff00" />
+                            </g>
+
+                            {/* Node 6: SECURITY */}
+                            <g>
+                                <circle cx="100" cy="160" r="18" fill="none" stroke="rgba(157, 255, 0, 0.2)" strokeWidth="1" />
+                                <circle cx="100" cy="160" r="12" fill="#09090b" stroke="#9dff00" strokeWidth="1.5" filter="url(#glow-neon)" />
+                                <circle cx="100" cy="160" r="4" fill="#9dff00" />
+                            </g>
+
+                            {/* Core Nucleus Reactor */}
+                            <g>
+                                <circle cx="250" cy="250" r="70" fill="url(#reactor-core-grad)" />
+                                <circle cx="250" cy="250" r="50" fill="none" stroke="rgba(157, 255, 0, 0.2)" strokeWidth="1" />
+                                <circle cx="250" cy="250" r="38" fill="#09090b" stroke="#9dff00" strokeWidth="2" filter="url(#glow-neon)" />
+                                <g className="spin-ccw">
+                                    <circle cx="250" cy="250" r="30" fill="none" stroke="rgba(157, 255, 0, 0.3)" strokeWidth="1.5" strokeDasharray="15 15" />
+                                    <path d="M 235,250 L 265,250 M 250,235 L 250,265" stroke="#9dff00" strokeWidth="1" />
+                                </g>
+                                <circle cx="250" cy="250" r="6" fill="#9dff00" filter="url(#glow-neon)" />
+                            </g>
+                        </svg>
+                    </div>
+                </div>
+            </section>
+
+            {/* 2. Selection Process Section */}
+            <section className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-12 py-20 md:py-28 border-t border-zinc-800/40">
+                <div className="text-center mb-16">
+                    <h2 className="text-3xl md:text-5xl font-light text-white tracking-tight mb-4">
+                        Selection <span className="text-[#9dff00] font-normal">Workflow</span>
+                    </h2>
+                    <p className="text-zinc-400 text-sm md:text-base font-light max-w-2xl mx-auto leading-relaxed">
+                        A rigorous screening process designed to filter the most impactful ideas and bring the top minds to SNIST.
+                    </p>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 selection-grid-anim">
+                    {/* Step 1 */}
+                    <div className="selection-card-anim spotlight-card border border-zinc-800 bg-zinc-900/10 hover:border-[#9dff00]/25 rounded-3xl p-6 transition-all duration-300">
+                        <div className="text-2xl font-bold font-mono text-[#9dff00] mb-4">01.</div>
+                        <h4 className="text-lg font-medium text-white mb-2">Submit Proposal</h4>
+                        <p className="text-zinc-400 text-xs sm:text-sm font-light leading-relaxed">
+                            Form a team of 1–4 members, select a domain track, and submit your abstract detailing the solution before 5 July.
+                        </p>
+                    </div>
+
+                    {/* Step 2 */}
+                    <div className="selection-card-anim spotlight-card border border-zinc-800 bg-zinc-900/10 hover:border-[#9dff00]/25 rounded-3xl p-6 transition-all duration-300">
+                        <div className="text-2xl font-bold font-mono text-white mb-4">02.</div>
+                        <h4 className="text-lg font-medium text-white mb-2">Top 100 Shortlist</h4>
+                        <p className="text-zinc-400 text-xs sm:text-sm font-light leading-relaxed">
+                            Our evaluation panel will shortlist the Top 100 most impactful, original problem statements based on localization and feasibility.
+                        </p>
+                    </div>
+
+                    {/* Step 3 */}
+                    <div className="selection-card-anim spotlight-card border border-zinc-800 bg-zinc-900/10 hover:border-[#9dff00]/25 rounded-3xl p-6 transition-all duration-300">
+                        <div className="text-2xl font-bold font-mono text-white mb-4">03.</div>
+                        <h4 className="text-lg font-medium text-white mb-2">Attend Workshop</h4>
+                        <p className="text-zinc-400 text-xs sm:text-sm font-light leading-relaxed">
+                            Invited teams will attend a physical hands-on development workshop at SNIST campus on 9 July to refine products.
+                        </p>
+                    </div>
+
+                    {/* Step 4 */}
+                    <div className="selection-card-anim spotlight-card border border-[#9dff00]/20 bg-zinc-900/20 hover:border-[#9dff00]/45 rounded-3xl p-6 transition-all duration-300 shadow-[0_0_20px_rgba(157,255,0,0.02)]">
+                        <div className="text-2xl font-bold font-mono text-[#9dff00] mb-4">04.</div>
+                        <h4 className="text-lg font-medium text-white mb-2">Build & Compete</h4>
+                        <p className="text-zinc-400 text-xs sm:text-sm font-light leading-relaxed">
+                            Develop your idea into a working software application during the 48-hour build sprint on 10–11 July and present to judges.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            {/* 3. Timeline Section */}
+            <section id="details" className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-12 py-20 md:py-28 border-t border-zinc-800/40">
+                <div className="text-center mb-16">
+                    <h2 className="text-3xl md:text-5xl font-light text-white tracking-tight mb-4">
+                        Event <span className="text-[#9dff00] font-normal">Timeline</span>
+                    </h2>
+                    <p className="text-zinc-400 text-sm md:text-base font-light max-w-2xl mx-auto leading-relaxed">
+                        Track the major program milestones. Shortlisted teams will transition from online submissions to on-campus development.
+                    </p>
+                </div>
+
+                <div className="relative timeline-container-anim max-w-4xl mx-auto">
+                    {/* Vertical connecting line */}
+                    <div className="absolute left-4 md:left-1/2 w-[1px] bg-zinc-800 timeline-base-line" />
+                    <div className="absolute left-4 md:left-1/2 w-[1px] bg-[#9dff00] origin-top scale-y-0 timeline-progress-line shadow-[0_0_10px_#9dff00]" style={{ transformOrigin: 'top' }} />
+
+                    <div className="space-y-12">
+                        {/* Timeline Item 1 */}
+                        <div className="timeline-item-anim relative flex flex-col md:flex-row items-start md:justify-between group">
+                            <div className="timeline-dot absolute left-4 md:left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-zinc-900 border-2 border-zinc-700 transition-colors z-20 flex items-center justify-center">
+                                <div className="timeline-inner-dot w-1.5 h-1.5 rounded-full bg-zinc-800 transition-colors" />
+                            </div>
+                            <div className="timeline-content pl-12 md:pl-0 md:w-[45%] text-left md:text-right">
+                                <div className="text-xs font-mono text-[#9dff00] mb-2 uppercase tracking-wider">UNTIL 5 JULY</div>
+                                <h3 className="text-xl font-medium text-white mb-2">Idea Abstract Submission</h3>
+                                <p className="text-zinc-400 text-sm font-light leading-relaxed">
+                                    Pitch your innovative idea abstract and choose your domain track. Valid submissions are awarded a certificate and evaluated for the final event.
+                                </p>
+                            </div>
+                            <div className="hidden md:block w-[10%]" />
+                            <div className="hidden md:block w-[45%]" />
+                        </div>
+
+                        {/* Timeline Item 2 */}
+                        <div className="timeline-item-anim relative flex flex-col md:flex-row items-start md:justify-between group">
+                            <div className="timeline-dot absolute left-4 md:left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-zinc-900 border-2 border-zinc-700 transition-colors z-20 flex items-center justify-center">
+                                <div className="timeline-inner-dot w-1.5 h-1.5 rounded-full bg-zinc-800 transition-colors" />
+                            </div>
+                            <div className="hidden md:block w-[45%]" />
+                            <div className="hidden md:block w-[10%]" />
+                            <div className="timeline-content pl-12 md:pl-0 md:w-[45%] text-left">
+                                <div className="text-xs font-mono text-[#9dff00] mb-2 uppercase tracking-wider">9 JULY</div>
+                                <h3 className="text-xl font-medium text-white mb-2">AI & Development Workshop</h3>
+                                <p className="text-zinc-400 text-sm font-light leading-relaxed mb-3">
+                                    A hands-on physical workshop designed to prepare teams. We cover cloud APIs, FOSS implementation, smart automation integrations, and rapid deployment frameworks.
+                                </p>
+                                <div className="flex flex-wrap gap-2">
+                                    {['AI Tools', 'Cloud Systems', 'FOSS Integration', 'Automation'].map(t => (
+                                        <span key={t} className="text-[9px] font-mono px-2 py-0.5 rounded border border-zinc-800 bg-zinc-900/60 text-zinc-400">{t}</span>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Timeline Item 3 */}
+                        <div className="timeline-item-anim relative flex flex-col md:flex-row items-start md:justify-between group">
+                            <div className="timeline-dot absolute left-4 md:left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-zinc-900 border-2 border-zinc-700 transition-colors z-20 flex items-center justify-center">
+                                <div className="timeline-inner-dot w-1.5 h-1.5 rounded-full bg-zinc-800 transition-colors" />
+                            </div>
+                            <div className="timeline-content pl-12 md:pl-0 md:w-[45%] text-left md:text-right">
+                                <div className="text-xs font-mono text-[#9dff00] mb-2 uppercase tracking-wider">10–11 JULY</div>
+                                <h3 className="text-xl font-medium text-white mb-2">48-Hour Offline Hackathon</h3>
+                                <p className="text-zinc-400 text-sm font-light leading-relaxed">
+                                    Sprint physically at SNIST to transform your proposal into a fully working software solution. Collaborate with on-site mentors and industry evaluators.
+                                </p>
+                            </div>
+                            <div className="hidden md:block w-[10%]" />
+                            <div className="hidden md:block w-[45%]" />
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* 4. Prize Pool & Highlights Section */}
+            <section className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-12 py-20 md:py-28 border-t border-zinc-800/40">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch highlight-grid-anim">
+                    {/* Grand Prize Card */}
+                    <div className="highlight-card-anim spotlight-card lg:col-span-1 border border-[#9dff00]/25 bg-gradient-to-b from-[#18181b] to-[#0d0d0e] rounded-3xl p-8 flex flex-col justify-between shadow-[0_0_40px_rgba(157,255,0,0.03)] relative overflow-hidden group">
+                        <div className="absolute -top-12 -right-12 w-32 h-32 bg-[#9dff00]/10 rounded-full blur-2xl pointer-events-none" />
+                        <div>
+                            <div className="w-12 h-12 rounded-2xl bg-[#9dff00]/10 border border-[#9dff00]/20 flex items-center justify-center mb-8">
+                                <Trophy className="w-6 h-6 text-[#9dff00]" />
+                            </div>
+                            <span className="text-xs font-mono text-[#9dff00] uppercase tracking-widest block mb-1">CASH PRIZES & MORE</span>
+                            <h3 className="text-4xl font-light text-white tracking-tight leading-tight mb-4">
+                                ₹2.5 Lakhs <br />
+                                <span className="font-semibold text-[#9dff00]">Prize Pool</span>
+                            </h3>
+                            <p className="text-zinc-400 text-xs sm:text-sm font-light leading-relaxed">
+                                Exciting cash rewards, exclusive internships, custom swag packages, and recognition certificates await top-performing teams.
+                            </p>
+                        </div>
+                        <div className="mt-8 pt-6 border-t border-zinc-800/60 text-left">
+                            <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest block mb-1">INCENTIVES</span>
+                            <div className="text-white text-xs font-mono font-bold uppercase tracking-wider">Winner categories revealed soon</div>
+                        </div>
+                    </div>
+
+                    {/* Highlights Grid */}
+                    <div className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        {/* Certificates */}
+                        <div className="highlight-card-anim spotlight-card border border-zinc-800/80 bg-zinc-900/10 hover:border-zinc-700 rounded-3xl p-6 flex flex-col justify-between transition-all group">
+                            <div className="flex items-start justify-between">
+                                <div className="w-10 h-10 rounded-xl bg-zinc-800/40 border border-zinc-800 flex items-center justify-center group-hover:border-[#9dff00]/30 transition-all">
+                                    <Award className="w-5 h-5 text-zinc-300 group-hover:text-[#9dff00] transition-colors" />
+                                </div>
+                            </div>
+                            <div className="mt-8">
+                                <h4 className="text-lg font-normal text-white mb-2">Participation Certificates</h4>
+                                <p className="text-zinc-400 text-xs sm:text-sm font-light leading-relaxed">
+                                    Every participant who submits a valid idea abstract and completes the verification will receive an official Participation Certificate.
+                                </p>
+                            </div>
+                        </div>
+
+                        {/* Internships */}
+                        <div className="highlight-card-anim spotlight-card border border-zinc-800/80 bg-zinc-900/10 hover:border-zinc-700 rounded-3xl p-6 flex flex-col justify-between transition-all group">
+                            <div className="flex items-start justify-between">
+                                <div className="w-10 h-10 rounded-xl bg-zinc-800/40 border border-zinc-800 flex items-center justify-center group-hover:border-[#9dff00]/30 transition-all">
+                                    <Brain className="w-5 h-5 text-zinc-300 group-hover:text-[#9dff00] transition-colors" />
+                                </div>
+                            </div>
+                            <div className="mt-8">
+                                <h4 className="text-lg font-normal text-white mb-2">Internship Placements</h4>
+                                <p className="text-zinc-400 text-xs sm:text-sm font-light leading-relaxed">
+                                    Top-performing participants will be considered for direct internship opportunities with partner organizations and growing startups.
+                                </p>
+                            </div>
+                        </div>
+
+                        {/* Experts */}
+                        <div className="highlight-card-anim spotlight-card border border-zinc-800/80 bg-zinc-900/10 hover:border-zinc-700 rounded-3xl p-6 flex flex-col justify-between transition-all group">
+                            <div className="flex items-start justify-between">
+                                <div className="w-10 h-10 rounded-xl bg-zinc-800/40 border border-zinc-800 flex items-center justify-center group-hover:border-[#9dff00]/30 transition-all">
+                                    <Code className="w-5 h-5 text-zinc-300 group-hover:text-[#9dff00] transition-colors" />
+                                </div>
+                            </div>
+                            <div className="mt-8">
+                                <h4 className="text-lg font-normal text-white mb-2">Industry Expert Mentoring</h4>
+                                <p className="text-zinc-400 text-xs sm:text-sm font-light leading-relaxed">
+                                    Gain hands-on mentoring from industry leaders specializing in AI orchestration, cloud computing, and product design.
+                                </p>
+                            </div>
+                        </div>
+
+                        {/* Recruiters */}
+                        <div className="highlight-card-anim spotlight-card border border-zinc-800/80 bg-zinc-900/10 hover:border-zinc-700 rounded-3xl p-6 flex flex-col justify-between transition-all group">
+                            <div className="flex items-start justify-between">
+                                <div className="w-10 h-10 rounded-xl bg-zinc-800/40 border border-zinc-800 flex items-center justify-center group-hover:border-[#9dff00]/30 transition-all">
+                                    <Users2 className="w-5 h-5 text-zinc-300 group-hover:text-[#9dff00] transition-colors" />
+                                </div>
+                            </div>
+                            <div className="mt-8">
+                                <h4 className="text-lg font-normal text-white mb-2">Exposure to Recruiters</h4>
+                                <p className="text-zinc-400 text-xs sm:text-sm font-light leading-relaxed">
+                                    Present your builds directly to hiring managers, founders, and community leads seeking technical talent.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* 5. Why Participate Section */}
+            <section className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-12 py-20 md:py-28 border-t border-zinc-800/40 bg-black/10">
+                <div className="text-center mb-16">
+                    <h2 className="text-3xl md:text-5xl font-light text-white tracking-tight mb-4">
+                        Why <span className="text-[#9dff00] font-normal">Participate?</span>
+                    </h2>
+                    <p className="text-zinc-400 text-sm md:text-base font-light max-w-2xl mx-auto leading-relaxed">
+                        Form a team, build actual working solutions, and unlock exclusive rewards.
+                    </p>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 highlight-grid-anim">
+                    <div className="highlight-card-anim spotlight-card border border-zinc-800/80 bg-zinc-900/5 hover:border-zinc-700 rounded-2xl p-6 transition-all duration-300">
+                        <div className="w-8 h-8 rounded-lg bg-zinc-900 border border-zinc-800 flex items-center justify-center mb-4">
+                            <Sparkles className="w-4 h-4 text-[#9dff00]" />
+                        </div>
+                        <h4 className="text-base font-medium text-white mb-2">Solve Real Problems</h4>
+                        <p className="text-zinc-400 text-xs leading-relaxed">
+                            Develop localized products designed to optimize resource allocation for micro-businesses and public administrations.
+                        </p>
+                    </div>
+
+                    <div className="highlight-card-anim spotlight-card border border-zinc-800/80 bg-zinc-900/5 hover:border-zinc-700 rounded-2xl p-6 transition-all duration-300">
+                        <div className="w-8 h-8 rounded-lg bg-zinc-900 border border-zinc-800 flex items-center justify-center mb-4">
+                            <Code className="w-4 h-4 text-[#9dff00]" />
+                        </div>
+                        <h4 className="text-base font-medium text-white mb-2">Rapid Prototyping</h4>
+                        <p className="text-zinc-400 text-xs leading-relaxed">
+                            Learn the disciplines of rapid MVP creation, API mockups, and deployment pipelines during a 48-hour build sprint.
+                        </p>
+                    </div>
+
+                    <div className="highlight-card-anim spotlight-card border border-zinc-800/80 bg-zinc-900/5 hover:border-zinc-700 rounded-2xl p-6 transition-all duration-300">
+                        <div className="w-8 h-8 rounded-lg bg-zinc-900 border border-zinc-800 flex items-center justify-center mb-4">
+                            <Users2 className="w-4 h-4 text-[#9dff00]" />
+                        </div>
+                        <h4 className="text-base font-medium text-white mb-2">Collaborative Network</h4>
+                        <p className="text-zinc-400 text-xs leading-relaxed">
+                            Connect with fellow developers, UI designers, and startup innovators from multiple institutions across India.
+                        </p>
+                    </div>
+
+                    <div className="highlight-card-anim spotlight-card border border-zinc-800/80 bg-zinc-900/5 hover:border-zinc-700 rounded-2xl p-6 transition-all duration-300">
+                        <div className="w-8 h-8 rounded-lg bg-zinc-900 border border-zinc-800 flex items-center justify-center mb-4">
+                            <Gift className="w-4 h-4 text-[#9dff00]" />
+                        </div>
+                        <h4 className="text-base font-medium text-white mb-2">Exclusive Swag</h4>
+                        <p className="text-zinc-400 text-xs leading-relaxed">
+                            Acquire branded T-shirts, premium developer sticker packs, and limited edition community merchandise.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+
+
+            {/* 6. Registration Form Section */}
+            <section ref={formSectionRef} id="register" className="relative z-10 w-full max-w-[1440px] mx-auto px-6 md:px-12 py-20 md:py-28 border-t border-zinc-800/40">
+                <div className="text-center mb-12">
+                    <h2 className="text-3xl md:text-5xl font-light text-white tracking-tight mb-4">
+                        Secure Your <span className="text-[#9dff00] font-normal">Team Slot</span>
+                    </h2>
+                    <p className="text-zinc-400 text-sm md:text-base font-light max-w-2xl mx-auto leading-relaxed">
+                        Submit your details, select your domain track, describe your idea proposal, and complete payment verification.
+                    </p>
+                </div>
+
                 {/* Horizontal Top Stepper for Mobile/Tablet */}
-                <div className="lg:hidden w-full max-w-7xl mb-6 px-2 font-mono text-[10px] uppercase tracking-widest flex items-center justify-between">
+                <div className="lg:hidden w-full max-w-[1440px] mb-6 px-2 font-mono text-[10px] uppercase tracking-widest flex items-center justify-between">
                     {[
                         { num: '01.', label: 'PROFILE' },
-                        { num: '02.', label: 'Domain' },
-                        { num: '03.', label: 'Solution' },
+                        { num: '02.', label: 'MEMBERS' },
+                        { num: '03.', label: 'SOLUTION' },
                         { num: '04.', label: 'PAYMENT' }
                     ].map((s, idx) => {
                         const stepNum = idx + 1;
@@ -357,15 +1343,14 @@ export default function DigitalIndiaGSAPForm() {
                     })}
                 </div>
 
-                <div className="flex w-full flex-col lg:flex-row items-stretch justify-center gap-6 max-w-7xl h-auto lg:h-[600px] relative">
-
+                <div className="flex w-full flex-col lg:flex-row items-stretch justify-center gap-6 max-w-[1440px] h-auto lg:h-[600px] relative">
                     <div ref={containerRef} className="flex-1 flex flex-col lg:flex-row gap-4 w-full h-auto lg:h-full items-stretch select-none">
                         {/* Step 1 Card: PROFILE */}
                         <div
                             key="step-1"
                             ref={step1Ref}
                             onClick={() => activeStep > 1 && setActiveStep(1)}
-                            className={`relative border border-zinc-800/40 overflow-hidden flex-col justify-between h-auto lg:h-full w-full lg:w-auto bg-[#18181b] text-[#f4f4f5] rounded-[32px] p-6 sm:p-8 lg:p-10 ${activeStep === 1 ? 'flex' : 'hidden lg:flex'
+                            className={`relative border border-zinc-800/40 ${isTeamSizeOpen ? 'lg:overflow-visible' : 'overflow-hidden'} flex-col justify-between h-auto lg:h-full w-full lg:w-auto bg-[#18181b] text-[#f4f4f5] rounded-[32px] p-6 sm:p-8 lg:p-10 ${activeStep === 1 ? 'flex' : 'hidden lg:flex'
                                 } ${activeStep > 1 ? 'cursor-pointer' : ''
                                 }`}
                         >
@@ -375,82 +1360,155 @@ export default function DigitalIndiaGSAPForm() {
                             ) : (
                                 /* Expanded View */
                                 <div className="fade-in-content flex flex-col justify-between h-full w-full">
-                                    <div>
+                                    <div className="flex-1 flex flex-col min-h-0">
                                         <div className="text-xs font-bold text-zinc-500 font-mono mb-4">01.</div>
-                                        <h2 className="text-3xl font-light text-white mb-10 tracking-tight">Add your personal information.</h2>
+                                        <h2 className="text-3xl font-light text-[#9dff00] mb-6 tracking-tight font-sans">Add your personal information.</h2>
 
-                                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 mb-6 lg:mb-8">
-                                            <div>
-                                                <input
-                                                    type="text"
-                                                    value={firstName}
-                                                    onChange={(e) => {
-                                                        setFirstName(e.target.value)
-                                                        if (errors.firstName) setErrors(prev => ({ ...prev, firstName: undefined }))
-                                                    }}
-                                                    placeholder="First Name"
-                                                    className={`w-full text-xl sm:text-2xl font-light py-2.5 border-b ${errors.firstName ? 'border-red-400 focus:border-red-500' : 'border-zinc-800 focus:border-zinc-400'
-                                                        } outline-none bg-transparent text-white placeholder-zinc-700 transition-all`}
-                                                />
-                                                <span className="text-[10px] text-zinc-500 font-mono uppercase tracking-widest mt-1.5 block">First Name</span>
-                                                {errors.firstName && <p className="text-red-400 text-xs mt-1 font-mono">{errors.firstName}</p>}
+                                        <div className="flex-1 lg:overflow-visible overflow-y-auto pr-2 custom-scrollbar space-y-6 lg:space-y-8 mb-6">
+                                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
+                                                <div>
+                                                    <input
+                                                        type="text"
+                                                        value={leaderName}
+                                                        onChange={(e) => {
+                                                            setLeaderName(e.target.value)
+                                                            if (errors.leaderName) setErrors(prev => ({ ...prev, leaderName: undefined }))
+                                                        }}
+                                                        placeholder="Team Leader Name"
+                                                        className={`w-full text-xl sm:text-2xl font-light py-2.5 border-b ${errors.leaderName ? 'border-red-400 focus:border-red-500' : 'border-zinc-800 focus:border-zinc-400'
+                                                            } outline-none bg-transparent text-white placeholder-zinc-700 transition-all`}
+                                                    />
+                                                    <span className="text-[10px] text-zinc-500 font-mono uppercase tracking-widest mt-1.5 block">Team Leader Name</span>
+                                                    {errors.leaderName && <p className="text-red-400 text-xs mt-1 font-mono">{errors.leaderName}</p>}
+                                                </div>
+                                                <div>
+                                                    <input
+                                                        type="text"
+                                                        value={teamName}
+                                                        onChange={(e) => {
+                                                            setTeamName(e.target.value)
+                                                            if (errors.teamName) setErrors(prev => ({ ...prev, teamName: undefined }))
+                                                        }}
+                                                        placeholder="Team Name"
+                                                        className={`w-full text-xl sm:text-2xl font-light py-2.5 border-b ${errors.teamName ? 'border-red-400 focus:border-red-500' : 'border-zinc-800 focus:border-zinc-400'
+                                                            } outline-none bg-transparent text-white placeholder-zinc-700 transition-all`}
+                                                    />
+                                                    <span className="text-[10px] text-zinc-500 font-mono uppercase tracking-widest mt-1.5 block">Team Name</span>
+                                                    {errors.teamName && <p className="text-red-400 text-xs mt-1 font-mono">{errors.teamName}</p>}
+                                                </div>
                                             </div>
-                                            <div>
-                                                <input
-                                                    type="text"
-                                                    value={lastName}
-                                                    onChange={(e) => {
-                                                        setLastName(e.target.value)
-                                                        if (errors.lastName) setErrors(prev => ({ ...prev, lastName: undefined }))
-                                                    }}
-                                                    placeholder="Last Name"
-                                                    className={`w-full text-xl sm:text-2xl font-light py-2.5 border-b ${errors.lastName ? 'border-red-400 focus:border-red-500' : 'border-zinc-800 focus:border-zinc-400'
-                                                        } outline-none bg-transparent text-white placeholder-zinc-700 transition-all`}
-                                                />
-                                                <span className="text-[10px] text-zinc-500 font-mono uppercase tracking-widest mt-1.5 block">Last Name</span>
-                                                {errors.lastName && <p className="text-red-400 text-xs mt-1 font-mono">{errors.lastName}</p>}
-                                            </div>
-                                        </div>
 
-                                        <div className="space-y-6 lg:space-y-8 mb-6">
-                                            <div>
-                                                <input
-                                                    type="email"
-                                                    value={email}
-                                                    onChange={(e) => {
-                                                        setEmail(e.target.value)
-                                                        if (errors.email) setErrors(prev => ({ ...prev, email: undefined }))
-                                                    }}
-                                                    placeholder="Email"
-                                                    className={`w-full text-xl sm:text-2xl font-light py-2.5 border-b ${errors.email ? 'border-red-400 focus:border-red-500' : 'border-zinc-800 focus:border-zinc-400'
-                                                        } outline-none bg-transparent text-white placeholder-zinc-700 transition-all`}
-                                                />
-                                                <span className="text-[10px] text-zinc-500 font-mono uppercase tracking-widest mt-1.5 block">Email Address</span>
-                                                {errors.email && <p className="text-red-400 text-xs mt-1 font-mono">{errors.email}</p>}
+                                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
+                                                <div>
+                                                    <input
+                                                        type="email"
+                                                        value={email}
+                                                        onChange={(e) => {
+                                                            setEmail(e.target.value)
+                                                            if (errors.email) setErrors(prev => ({ ...prev, email: undefined }))
+                                                        }}
+                                                        placeholder="Email"
+                                                        className={`w-full text-xl sm:text-2xl font-light py-2.5 border-b ${errors.email ? 'border-red-400 focus:border-red-500' : 'border-zinc-800 focus:border-zinc-400'
+                                                            } outline-none bg-transparent text-white placeholder-zinc-700 transition-all`}
+                                                    />
+                                                    <span className="text-[10px] text-zinc-500 font-mono uppercase tracking-widest mt-1.5 block">Email Address</span>
+                                                    {errors.email && <p className="text-red-400 text-xs mt-1 font-mono">{errors.email}</p>}
+                                                </div>
+                                                <div>
+                                                    <input
+                                                        type="tel"
+                                                        value={phone}
+                                                        onChange={(e) => {
+                                                            setPhone(e.target.value)
+                                                            if (errors.phone) setErrors(prev => ({ ...prev, phone: undefined }))
+                                                        }}
+                                                        placeholder="00000 0000"
+                                                        className={`w-full text-xl sm:text-2xl font-light py-2.5 border-b ${errors.phone ? 'border-red-400 focus:border-red-500' : 'border-zinc-800 focus:border-zinc-400'
+                                                            } outline-none bg-transparent text-white placeholder-zinc-700 transition-all`}
+                                                    />
+                                                    <span className="text-[10px] text-zinc-500 font-mono uppercase tracking-widest mt-1.5 block">Phone Number</span>
+                                                    {errors.phone && <p className="text-red-400 text-xs mt-1 font-mono">{errors.phone}</p>}
+                                                </div>
                                             </div>
-                                            <div>
-                                                <input
-                                                    type="tel"
-                                                    value={phone}
-                                                    onChange={(e) => {
-                                                        setPhone(e.target.value)
-                                                        if (errors.phone) setErrors(prev => ({ ...prev, phone: undefined }))
-                                                    }}
-                                                    placeholder="00000 0000"
-                                                    className={`w-full text-xl sm:text-2xl font-light py-2.5 border-b ${errors.phone ? 'border-red-400 focus:border-red-500' : 'border-zinc-800 focus:border-zinc-400'
-                                                        } outline-none bg-transparent text-white placeholder-zinc-700 transition-all`}
-                                                />
-                                                <span className="text-[10px] text-zinc-500 font-mono uppercase tracking-widest mt-1.5 block">Phone Number</span>
-                                                {errors.phone && <p className="text-red-400 text-xs mt-1 font-mono">{errors.phone}</p>}
+
+                                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
+                                                <div>
+                                                    <input
+                                                        type="text"
+                                                        value={college}
+                                                        onChange={(e) => {
+                                                            setCollege(e.target.value)
+                                                            if (errors.college) setErrors(prev => ({ ...prev, college: undefined }))
+                                                        }}
+                                                        placeholder="College / Institution"
+                                                        className={`w-full text-xl sm:text-2xl font-light py-2.5 border-b ${errors.college ? 'border-red-400 focus:border-red-500' : 'border-zinc-800 focus:border-zinc-400'
+                                                            } outline-none bg-transparent text-white placeholder-zinc-700 transition-all`}
+                                                    />
+                                                    <span className="text-[10px] text-zinc-500 font-mono uppercase tracking-widest mt-1.5 block">College Name</span>
+                                                    {errors.college && <p className="text-red-400 text-xs mt-1 font-mono">{errors.college}</p>}
+                                                </div>
+                                                <div className="relative" ref={teamSizeDropdownRef}>
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => setIsTeamSizeOpen(!isTeamSizeOpen)}
+                                                        className="w-full text-xl sm:text-2xl font-light py-2.5 border-b border-zinc-800 hover:border-zinc-600 focus:border-zinc-400 outline-none bg-transparent text-white transition-all cursor-pointer flex justify-between items-center text-left"
+                                                    >
+                                                        <span>{teamSize === 1 ? '1 (Solo)' : `${teamSize} Members`}</span>
+                                                        <svg
+                                                            className={`w-5 h-5 text-zinc-500 transition-transform duration-300 ${isTeamSizeOpen ? 'rotate-180 text-white' : ''}`}
+                                                            fill="none"
+                                                            viewBox="0 0 24 24"
+                                                            stroke="currentColor"
+                                                        >
+                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                                        </svg>
+                                                    </button>
+                                                    <span className="text-[10px] text-zinc-500 font-mono uppercase tracking-widest mt-1.5 block">Team Size</span>
+                                                    {isTeamSizeOpen && (
+                                                        <div className="absolute left-0 right-0 top-full mt-2 bg-[#18181b] border border-zinc-800 rounded-2xl shadow-2xl z-[100] overflow-hidden team-size-dropdown">
+                                                            {[1, 2, 3, 4].map((size) => (
+                                                                <button
+                                                                    key={size}
+                                                                    type="button"
+                                                                    onClick={() => {
+                                                                        setTeamSize(size)
+                                                                        setTeamMembers((prev) => {
+                                                                            const newMembers = [...prev]
+                                                                            const targetLen = size - 1
+                                                                            if (newMembers.length < targetLen) {
+                                                                                while (newMembers.length < targetLen) {
+                                                                                    newMembers.push({ name: '', email: '' })
+                                                                                }
+                                                                            } else if (newMembers.length > targetLen) {
+                                                                                newMembers.splice(targetLen)
+                                                                            }
+                                                                            return newMembers
+                                                                        })
+                                                                        setIsTeamSizeOpen(false)
+                                                                    }}
+                                                                    className={`w-full text-left px-5 py-3.5 text-base sm:text-lg font-light transition-all flex items-center justify-between ${
+                                                                        teamSize === size
+                                                                            ? 'bg-zinc-800/60 text-[#9dff00] font-medium border-l-2 border-[#9dff00]'
+                                                                            : 'text-zinc-300 hover:bg-zinc-800 hover:text-white'
+                                                                    }`}
+                                                                >
+                                                                    <span>{size === 1 ? '1 (Solo)' : `${size} Members`}</span>
+                                                                    {teamSize === size && <Check className="w-4 h-4 text-[#9dff00]" />}
+                                                                </button>
+                                                            ))}
+                                                        </div>
+                                                    )}
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
 
-                                    <div className="flex justify-between items-center mt-6">
-                                        <div className="w-2.5 h-2.5 bg-[#9dff00] rounded-full animate-pulse shadow-[0_0_10px_rgba(157,255,0,0.4)]" />
+                                    <div className="flex justify-between items-center mt-6 pt-4 border-t border-zinc-800">
+                                        <div />
                                         <button
+                                            type="button"
                                             onClick={handleStep1Continue}
-                                            className="bg-[#9dff00] hover:bg-[#8ae000] text-zinc-950 py-3.5 px-8 rounded-full flex items-center gap-2 font-bold shadow-lg shadow-[#9dff00]/10 transition-all"
+                                            className="bg-[#9dff00] hover:bg-[#8ae000] text-zinc-950 py-3.5 px-8 rounded-full flex items-center gap-2 font-bold shadow-lg shadow-[#9dff00]/10 transition-all cursor-pointer"
                                         >
                                             Continue <ArrowRight className="w-4 h-4" />
                                         </button>
@@ -459,7 +1517,7 @@ export default function DigitalIndiaGSAPForm() {
                             )}
                         </div>
 
-                        {/* Step 2 Card: EXPERTISE / DOMAIN */}
+                        {/* Step 2 Card: MEMBERS */}
                         <div
                             key="step-2"
                             ref={step2Ref}
@@ -470,69 +1528,97 @@ export default function DigitalIndiaGSAPForm() {
                         >
                             {activeStep === 1 ? (
                                 /* Unopened Collapsed View */
-                                renderCollapsedCard('02.', 'Domain', activeStep > 2)
+                                renderCollapsedCard('02.', 'MEMBERS', activeStep > 2)
                             ) : activeStep > 2 ? (
                                 /* Completed Collapsed View */
-                                renderCollapsedCard('02.', 'Domain', activeStep > 2)
+                                renderCollapsedCard('02.', 'MEMBERS', activeStep > 2)
                             ) : (
                                 /* Expanded View */
                                 <div className="fade-in-content flex flex-col justify-between h-full w-full">
-                                    <div>
+                                    <div className="flex-1 flex flex-col min-h-0">
                                         <div className="text-xs font-bold text-zinc-500 font-mono mb-4">02.</div>
-                                        <h2 className="text-3xl font-light text-white mb-6 tracking-tight">Select the domain of your idea.</h2>
+                                        <h2 className="text-3xl font-light text-[#9dff00] mb-6 tracking-tight">Add your team members.</h2>
 
-                                        <div className="space-y-3 mb-6">
-                                            {domains.map((d) => (
-                                                <div
-                                                    key={d}
-                                                    onClick={() => {
-                                                        setDomain(d)
-                                                        if (errors.domain) setErrors(prev => ({ ...prev, domain: undefined }))
-                                                    }}
-                                                    className={`flex items-center gap-4 px-6 py-4 rounded-2xl border cursor-pointer transition-all ${domain === d
-                                                            ? 'bg-zinc-900/50 border-[#9dff00] text-white shadow-[0_0_15px_rgba(157,255,0,0.05)]'
-                                                            : 'bg-transparent border-zinc-800 hover:border-zinc-700 text-zinc-400 hover:text-zinc-200'
-                                                        }`}
-                                                >
-                                                    <div className={`w-5 h-5 rounded-full border flex items-center justify-center transition-all ${domain === d ? 'border-[#7ce000] bg-[#9dff00]' : 'border-zinc-700 bg-transparent'
-                                                        }`}>
-                                                        {domain === d && <Check className="w-3.5 h-3.5 text-zinc-950 stroke-[3]" />}
+                                        <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar mb-6">
+                                            {teamSize === 1 ? (
+                                                <div className="flex flex-col items-center justify-center py-16 text-center h-full">
+                                                    <div className="w-16 h-16 rounded-full bg-[#9dff00]/10 flex items-center justify-center mb-6 border border-[#9dff00]/20 shadow-[0_0_30px_rgba(157,255,0,0.15)]">
+                                                        <svg className="w-8 h-8 text-[#9dff00]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                                        </svg>
                                                     </div>
-                                                    <span className="text-base font-medium">{d}</span>
+                                                    <p className="text-xl font-light text-zinc-300 max-w-md leading-relaxed font-sans">
+                                                        You are participating as a solo participant.
+                                                    </p>
+                                                    <p className="text-sm text-zinc-500 mt-2 font-mono uppercase tracking-wider">
+                                                        Please proceed to the next step.
+                                                    </p>
                                                 </div>
-                                            ))}
-                                            {errors.domain && <p className="text-red-400 text-xs mt-1">{errors.domain}</p>}
-                                        </div>
-
-                                        <div className="mt-6">
-                                            <input
-                                                type="text"
-                                                value={college}
-                                                onChange={(e) => {
-                                                    setCollege(e.target.value)
-                                                    if (errors.college) setErrors(prev => ({ ...prev, college: undefined }))
-                                                }}
-                                                placeholder="College / Institution"
-                                                className={`w-full text-xl sm:text-2xl font-light py-2 border-b ${errors.college ? 'border-red-400 focus:border-red-500' : 'border-zinc-800 focus:border-zinc-400'
-                                                    } outline-none bg-transparent text-white placeholder-zinc-700 transition-all`}
-                                            />
-                                            <span className="text-[10px] text-zinc-500 font-mono uppercase tracking-widest mt-1.5 block">Your College Name</span>
-                                            {errors.college && <p className="text-red-400 text-xs mt-1 font-mono">{errors.college}</p>}
+                                            ) : (
+                                                <div className="space-y-6">
+                                                    {Array.from({ length: teamSize - 1 }).map((_, i) => (
+                                                        <div key={i} className="grid grid-cols-1 md:grid-cols-2 gap-6 pb-2">
+                                                            <div>
+                                                                <input
+                                                                    type="text"
+                                                                    value={teamMembers[i]?.name || ''}
+                                                                    onChange={(e) => {
+                                                                        const updated = [...teamMembers]
+                                                                        updated[i] = { ...updated[i], name: e.target.value }
+                                                                        setTeamMembers(updated)
+                                                                        if (errors[`teamMemberName_${i}`]) {
+                                                                            setErrors(prev => ({ ...prev, [`teamMemberName_${i}`]: undefined }))
+                                                                        }
+                                                                    }}
+                                                                    placeholder={`Member ${i + 2} Name`}
+                                                                    className={`w-full text-lg font-light py-2 border-b ${
+                                                                        errors[`teamMemberName_${i}`] ? 'border-red-400 focus:border-red-500' : 'border-zinc-800 focus:border-zinc-400'
+                                                                    } outline-none bg-transparent text-white placeholder-zinc-700 transition-all`}
+                                                                />
+                                                                <span className="text-[9px] text-zinc-500 font-mono uppercase tracking-widest mt-1 block">Member {i + 2} Name</span>
+                                                                {errors[`teamMemberName_${i}`] && <p className="text-red-400 text-xs mt-1 font-mono">{errors[`teamMemberName_${i}`]}</p>}
+                                                            </div>
+                                                            <div>
+                                                                <input
+                                                                    type="email"
+                                                                    value={teamMembers[i]?.email || ''}
+                                                                    onChange={(e) => {
+                                                                        const updated = [...teamMembers]
+                                                                        updated[i] = { ...updated[i], email: e.target.value }
+                                                                        setTeamMembers(updated)
+                                                                        if (errors[`teamMemberEmail_${i}`]) {
+                                                                            setErrors(prev => ({ ...prev, [`teamMemberEmail_${i}`]: undefined }))
+                                                                        }
+                                                                    }}
+                                                                    placeholder={`Member ${i + 2} Email`}
+                                                                    className={`w-full text-lg font-light py-2 border-b ${
+                                                                        errors[`teamMemberEmail_${i}`] ? 'border-red-400 focus:border-red-500' : 'border-zinc-800 focus:border-zinc-400'
+                                                                    } outline-none bg-transparent text-white placeholder-zinc-700 transition-all`}
+                                                                />
+                                                                <span className="text-[9px] text-zinc-500 font-mono uppercase tracking-widest mt-1 block">Member {i + 2} Email Address</span>
+                                                                {errors[`teamMemberEmail_${i}`] && <p className="text-red-400 text-xs mt-1 font-mono">{errors[`teamMemberEmail_${i}`]}</p>}
+                                                            </div>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            )}
                                         </div>
                                     </div>
 
-                                    <div className="flex justify-between items-center mt-6">
-                                        <div className="w-2.5 h-2.5 bg-[#9dff00] rounded-full animate-pulse shadow-[0_0_10px_rgba(157,255,0,0.4)]" />
+                                    <div className="flex justify-between items-center mt-6 pt-4 border-t border-zinc-800">
+                                        <div />
                                         <div className="flex gap-3">
                                             <button
+                                                type="button"
                                                 onClick={() => setActiveStep(1)}
-                                                className="text-zinc-400 hover:text-white font-medium px-4 py-2 text-sm transition-colors"
+                                                className="text-zinc-400 hover:text-white font-medium px-4 py-2 text-sm transition-colors cursor-pointer"
                                             >
                                                 Back
                                             </button>
                                             <button
+                                                type="button"
                                                 onClick={handleStep2Continue}
-                                                className="bg-[#9dff00] hover:bg-[#8ae000] text-zinc-950 py-3.5 px-8 rounded-full flex items-center gap-2 font-bold shadow-lg shadow-[#9dff00]/10 transition-all"
+                                                className="bg-[#9dff00] hover:bg-[#8ae000] text-zinc-950 py-3.5 px-8 rounded-full flex items-center gap-2 font-bold shadow-lg shadow-[#9dff00]/10 transition-all cursor-pointer"
                                             >
                                                 Continue <ArrowRight className="w-4 h-4" />
                                             </button>
@@ -547,53 +1633,105 @@ export default function DigitalIndiaGSAPForm() {
                             key="step-3"
                             ref={step3Ref}
                             onClick={() => activeStep > 3 && setActiveStep(3)}
-                            className={`relative border border-zinc-800/40 overflow-hidden flex-col justify-between h-auto lg:h-full w-full lg:w-auto bg-[#18181b] text-[#f4f4f5] rounded-[32px] p-6 sm:p-8 lg:p-10 ${activeStep === 3 ? 'flex' : 'hidden lg:flex'
+                            className={`relative border border-zinc-800/40 ${isDomainOpen ? 'lg:overflow-visible' : 'overflow-hidden'} flex-col justify-between h-auto lg:h-full w-full lg:w-auto bg-[#18181b] text-[#f4f4f5] rounded-[32px] p-6 sm:p-8 lg:p-10 ${activeStep === 3 ? 'flex' : 'hidden lg:flex'
                                 } ${activeStep > 3 ? 'cursor-pointer' : ''
                                 }`}
                         >
                             {activeStep < 3 ? (
                                 /* Unopened Collapsed View */
-                                renderCollapsedCard('03.', 'Solution', activeStep > 3)
+                                renderCollapsedCard('03.', 'SOLUTION', activeStep > 3)
                             ) : activeStep > 3 ? (
                                 /* Completed Collapsed View */
-                                renderCollapsedCard('03.', 'Solution', activeStep > 3)
+                                renderCollapsedCard('03.', 'SOLUTION', activeStep > 3)
                             ) : (
-                                /* Expanded View (Only Idea Description) */
+                                /* Expanded View */
                                 <div className="fade-in-content flex flex-col justify-between h-full w-full">
-                                    <div className="flex-1 flex flex-col justify-start">
+                                    <div className="flex-1 flex flex-col min-h-0">
                                         <div className="text-xs font-bold text-zinc-500 font-mono mb-4">03.</div>
-                                        <h2 className="text-3xl font-light text-white mb-6 tracking-tight">Describe your idea.</h2>
+                                        <h2 className="text-3xl font-light text-[#9dff00] mb-6 tracking-tight">Select domain & describe solution.</h2>
 
-                                        <div className="flex-1 flex flex-col min-h-[150px] lg:min-h-[220px]">
-                                            <textarea
-                                                value={idea}
-                                                onChange={(e) => setIdea(e.target.value)}
-                                                placeholder="Describe your innovative idea for the Digital India Ideathon. What problem real-world does it solve?  What impact does it make?..."
-                                                className={`w-full flex-1 text-xl font-light py-4 border-b ${errors.idea ? 'border-red-400 focus:border-red-500' : 'border-zinc-800 focus:border-zinc-400'
-                                                    } outline-none bg-transparent text-white placeholder-zinc-750 resize-none transition-all`}
-                                            />
-                                            <div className="flex justify-between items-center mt-2.5">
-                                                <span className="text-[10px] text-zinc-500 font-mono uppercase tracking-widest">Idea Proposal Details</span>
-                                                <span className={`text-[10px] font-mono ${idea.length < 50 ? 'text-zinc-500' : 'text-[#9dff00] font-semibold'}`}>
-                                                    {idea.length}/50 min characters
-                                                </span>
+                                        <div className="flex-1 lg:overflow-visible overflow-y-auto pr-2 custom-scrollbar space-y-6 mb-6">
+                                            <div className="relative" ref={domainDropdownRef}>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setIsDomainOpen(!isDomainOpen)}
+                                                    className="w-full text-xl sm:text-2xl font-light py-2.5 border-b border-zinc-800 hover:border-zinc-600 focus:border-zinc-400 outline-none bg-transparent text-white transition-all cursor-pointer flex justify-between items-center text-left"
+                                                >
+                                                    <span className={domain ? 'text-white' : 'text-zinc-700'}>
+                                                        {domain || 'Select Domain Track'}
+                                                    </span>
+                                                    <svg
+                                                        className={`w-5 h-5 text-zinc-500 transition-transform duration-300 ${isDomainOpen ? 'rotate-180 text-white' : ''}`}
+                                                        fill="none"
+                                                        viewBox="0 0 24 24"
+                                                        stroke="currentColor"
+                                                    >
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                                    </svg>
+                                                </button>
+                                                <span className="text-[10px] text-zinc-500 font-mono uppercase tracking-widest mt-1.5 block">Domain Track</span>
+                                                {errors.domain && <p className="text-red-400 text-xs mt-1 font-mono">{errors.domain}</p>}
+                                                {isDomainOpen && (
+                                                    <div className="absolute left-0 right-0 top-full mt-2 bg-[#18181b] border border-zinc-800 rounded-2xl shadow-2xl z-[100] max-h-60 overflow-y-auto custom-scrollbar domain-dropdown">
+                                                        {domains.map((d) => (
+                                                            <button
+                                                                key={d}
+                                                                type="button"
+                                                                onClick={() => {
+                                                                    setDomain(d)
+                                                                    if (errors.domain) setErrors(prev => ({ ...prev, domain: undefined }))
+                                                                    setIsDomainOpen(false)
+                                                                }}
+                                                                className={`w-full text-left px-5 py-3.5 text-base sm:text-lg font-light transition-all flex items-center justify-between ${
+                                                                    domain === d
+                                                                        ? 'bg-zinc-800/60 text-[#9dff00] font-medium border-l-2 border-[#9dff00]'
+                                                                        : 'text-zinc-300 hover:bg-zinc-800 hover:text-white'
+                                                                }`}
+                                                            >
+                                                                <span>{d}</span>
+                                                                {domain === d && <Check className="w-4 h-4 text-[#9dff00]" />}
+                                                            </button>
+                                                        ))}
+                                                    </div>
+                                                )}
                                             </div>
-                                            {errors.idea && <p className="text-red-400 text-xs mt-1">{errors.idea}</p>}
+
+                                            <div>
+                                                <textarea
+                                                    value={idea}
+                                                    onChange={(e) => {
+                                                        setIdea(e.target.value)
+                                                        if (errors.idea) setErrors(prev => ({ ...prev, idea: undefined }))
+                                                    }}
+                                                    placeholder="Describe your innovative idea for the Digital India Ideathon. What problem real-world does it solve? What impact does it make?..."
+                                                    className={`w-full text-xl font-light py-4 border-b ${errors.idea ? 'border-red-400 focus:border-red-500' : 'border-zinc-800 focus:border-zinc-400'
+                                                        } outline-none bg-transparent text-white placeholder-zinc-700 resize-none h-40 transition-all`}
+                                                />
+                                                <div className="flex justify-between items-center mt-2.5">
+                                                    <span className="text-[10px] text-zinc-500 font-mono uppercase tracking-widest">Idea Proposal Details</span>
+                                                    <span className={`text-[10px] font-mono ${idea.length < 150 ? 'text-zinc-500' : 'text-[#9dff00] font-semibold'}`}>
+                                                        {idea.length}/150 min characters
+                                                    </span>
+                                                </div>
+                                                {errors.idea && <p className="text-red-400 text-xs mt-1 font-mono">{errors.idea}</p>}
+                                            </div>
                                         </div>
                                     </div>
 
                                     <div className="flex justify-between items-center mt-6 pt-4 border-t border-zinc-800">
-                                        <div className="w-2.5 h-2.5 bg-[#9dff00] rounded-full animate-pulse shadow-[0_0_10px_rgba(157,255,0,0.4)]" />
+                                        <div />
                                         <div className="flex gap-3">
                                             <button
+                                                type="button"
                                                 onClick={() => setActiveStep(2)}
-                                                className="text-zinc-400 hover:text-white font-medium px-4 py-2 text-sm transition-colors"
+                                                className="text-zinc-400 hover:text-white font-medium px-4 py-2 text-sm transition-colors cursor-pointer"
                                             >
                                                 Back
                                             </button>
                                             <button
+                                                type="button"
                                                 onClick={handleStep3Continue}
-                                                className="bg-[#9dff00] hover:bg-[#8ae000] text-zinc-950 py-3.5 px-8 rounded-full flex items-center gap-2 font-bold shadow-lg shadow-[#9dff00]/10 transition-all"
+                                                className="bg-[#9dff00] hover:bg-[#8ae000] text-zinc-950 py-3.5 px-8 rounded-full flex items-center gap-2 font-bold shadow-lg shadow-[#9dff00]/10 transition-all cursor-pointer"
                                             >
                                                 Continue to Payment <ArrowRight className="w-4 h-4" />
                                             </button>
@@ -618,13 +1756,13 @@ export default function DigitalIndiaGSAPForm() {
                                 <div className="success-content fade-in-content flex flex-col justify-between h-full w-full">
                                     <div>
                                         <div className="text-xs font-bold text-zinc-500 font-mono mb-4">04.</div>
-                                        <h2 className="text-3xl font-light text-white mb-6 tracking-tight">Submission Confirmed</h2>
+                                        <h2 className="text-3xl font-light text-[#9dff00] mb-6 tracking-tight font-sans">Submission Confirmed</h2>
 
                                         <div className="bg-zinc-900/50 p-6 rounded-2xl border border-zinc-800 flex flex-col items-center justify-center text-center py-12">
                                             <div className="w-16 h-16 rounded-full bg-[#9dff00]/10 flex items-center justify-center mb-6 border border-[#9dff00]/20 shadow-[0_0_30px_rgba(157,255,0,0.15)]">
                                                 <Check className="w-8 h-8 text-[#9dff00]" />
                                             </div>
-                                            <p className="text-lg font-light text-zinc-300 leading-relaxed max-w-md">
+                                            <p className="text-lg font-light text-zinc-300 leading-relaxed max-w-md font-sans">
                                                 Thank you for your submission. Our team will contact you shortly about next steps.
                                             </p>
                                         </div>
@@ -634,7 +1772,7 @@ export default function DigitalIndiaGSAPForm() {
                                         <button
                                             type="button"
                                             onClick={() => router.push('/events')}
-                                            className="bg-[#9dff00] hover:bg-[#8ae000] text-zinc-950 rounded-full py-3.5 px-8 text-sm font-bold flex items-center gap-2 shadow-lg shadow-[#9dff00]/10 transition-all"
+                                            className="bg-[#9dff00] hover:bg-[#8ae000] text-zinc-950 rounded-full py-3.5 px-8 text-sm font-bold flex items-center gap-2 shadow-lg shadow-[#9dff00]/10 transition-all cursor-pointer"
                                         >
                                             Got It <Check className="w-4 h-4" />
                                         </button>
@@ -646,7 +1784,7 @@ export default function DigitalIndiaGSAPForm() {
                                     <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar space-y-5">
                                         <div>
                                             <div className="text-xs font-bold text-zinc-500 font-mono mb-2">04.</div>
-                                            <h2 className="text-3xl font-light text-white mb-4 tracking-tight">Complete payment verification.</h2>
+                                            <h2 className="text-3xl font-light text-[#9dff00] mb-4 tracking-tight">Complete payment verification.</h2>
                                         </div>
 
                                         {/* Payment details integration */}
@@ -666,7 +1804,7 @@ export default function DigitalIndiaGSAPForm() {
                                             <div className="flex justify-center items-center">
                                                 <div className="relative w-48 h-48 border border-zinc-800 bg-white rounded-2xl overflow-hidden p-3 shadow-sm">
                                                     <Image
-                                                        src="/assets/events/upi-qr.png"
+                                                        src="/assets/events/upi-qr-v2.png"
                                                         alt="UPI Payment QR Code"
                                                         fill
                                                         className="object-contain"
@@ -733,14 +1871,14 @@ export default function DigitalIndiaGSAPForm() {
                                                 type="button"
                                                 onClick={() => setActiveStep(3)}
                                                 disabled={isSubmitting}
-                                                className="text-zinc-400 hover:text-white font-medium px-4 py-2 text-sm disabled:opacity-50 transition-colors"
+                                                className="text-zinc-400 hover:text-white font-medium px-4 py-2 text-sm disabled:opacity-50 transition-colors cursor-pointer"
                                             >
                                                 Back
                                             </button>
                                             <button
                                                 type="submit"
                                                 disabled={isSubmitting}
-                                                className="bg-[#9dff00] hover:bg-[#8ae000] text-zinc-950 py-3.5 px-8 rounded-full flex items-center gap-2 font-bold shadow-lg shadow-[#9dff00]/10 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                                                className="bg-[#9dff00] hover:bg-[#8ae000] text-zinc-950 py-3.5 px-8 rounded-full flex items-center gap-2 font-bold shadow-lg shadow-[#9dff00]/10 transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
                                             >
                                                 {isSubmitting ? (
                                                     <>
@@ -759,10 +1897,76 @@ export default function DigitalIndiaGSAPForm() {
                         </div>
                     </div>
                 </div>
-            </main>
+            </section>
+
+            {/* Rules & FAQ Split Section */}
+            <section className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-12 py-20 md:py-28 border-t border-zinc-800/40">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+                    {/* Left: Rules & Guidelines */}
+                    <div>
+                        <h2 className="text-3xl font-light text-white tracking-tight mb-8">
+                            Rules & <span className="text-[#9dff00] font-normal">Regulations</span>
+                        </h2>
+                        
+                        <div className="space-y-4">
+                            {[
+                                { title: "Original Submissions Only", desc: "All developed work must be original and built during the offline hackathon. Copied templates result in immediate disqualification." },
+                                { title: "Jury Decision Finality", desc: "The decisions of the evaluation jury and organizing committee are final and binding in all cases." }
+                            ].map((rule, idx) => (
+                                <div key={idx} className="flex gap-4 items-start pb-4 border-b border-zinc-800/40 last:border-0 last:pb-0">
+                                    <div className="w-6 h-6 rounded-full bg-zinc-900 border border-zinc-800 flex items-center justify-center text-zinc-500 text-[10px] font-mono shrink-0 mt-0.5">
+                                        {idx + 1 < 10 ? `0${idx + 1}` : idx + 1}
+                                    </div>
+                                    <div>
+                                        <h4 className="text-white text-sm font-medium mb-1">{rule.title}</h4>
+                                        <p className="text-zinc-400 text-xs font-light leading-relaxed">
+                                            {rule.desc}
+                                        </p>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Right: FAQs Accordion */}
+                    <div>
+                        <h2 className="text-3xl font-light text-white tracking-tight mb-8">
+                            Frequently Asked <span className="text-[#9dff00] font-normal">Questions</span>
+                        </h2>
+
+                        <div className="space-y-3">
+                            {faqs.map((faq, idx) => {
+                                const isOpen = openFaq === idx;
+                                return (
+                                    <div key={idx} className="border border-zinc-800/80 bg-zinc-900/5 rounded-2xl overflow-hidden transition-all duration-300">
+                                        <button
+                                            type="button"
+                                            onClick={() => setOpenFaq(isOpen ? null : idx)}
+                                            className="w-full text-left px-5 py-4 flex items-center justify-between text-[#f4f4f5] hover:text-[#9dff00] transition-colors"
+                                        >
+                                            <span className="text-xs sm:text-sm font-medium pr-4">{faq.q}</span>
+                                            <ChevronDown className={`w-4 h-4 text-zinc-500 shrink-0 transition-transform duration-300 ${isOpen ? 'rotate-180 text-[#9dff00]' : ''}`} />
+                                        </button>
+                                        
+                                        <div className={`grid transition-all duration-300 ease-in-out ${
+                                            isOpen ? 'grid-rows-[1fr] opacity-100 border-t border-zinc-800/40' : 'grid-rows-[0fr] opacity-0 pointer-events-none'
+                                        }`}>
+                                            <div className="overflow-hidden">
+                                                <p className="px-5 py-4 text-zinc-400 text-xs sm:text-sm leading-relaxed font-light font-sans">
+                                                    {faq.a}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    </div>
+                </div>
+            </section>
 
             {/* Footer */}
-            <footer className="relative z-10 w-full max-w-7xl mx-auto mt-8 flex justify-between items-center text-xs text-zinc-500 font-mono uppercase tracking-widest">
+            <footer className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-12 py-12 flex justify-between items-center text-xs text-zinc-500 font-mono uppercase tracking-widest border-t border-zinc-800/40">
                 <div>CLOUD COMMUNITY CLUB</div>
                 <div>STUDENT DEVELOPERS COMMUNITY - SNIST</div>
             </footer>

@@ -8,7 +8,7 @@ export const metadata: Metadata = {
     openGraph: {
         title: 'Digital India Hackathon | Cloud Community Club',
         description: 'Submit bold, tech-driven ideas for India\'s digital transformation.',
-        images: [{ url: '/assets/events/digital-india-banner.png', width: 1200, height: 630, alt: 'Digital India Hackathon' }],
+        images: [{ url: '/assets/events/digital-india-banner-v2.png', width: 1200, height: 630, alt: 'Digital India Hackathon' }],
     },
 }
 
