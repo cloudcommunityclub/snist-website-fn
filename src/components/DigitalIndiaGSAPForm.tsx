@@ -799,8 +799,8 @@ export default function DigitalIndiaGSAPForm() {
             <section ref={heroRef} className="relative overflow-hidden z-10 w-full max-w-7xl mx-auto min-h-[95vh] flex flex-col lg:flex-row items-center justify-between px-6 md:px-12 pt-36 pb-16 gap-12">
                 <div className="flex-1 text-left max-w-3xl">
                     <h1 className="hero-animate-title text-5xl sm:text-7xl font-extralight text-white tracking-tight leading-[1.05] mb-6">
-                        Build for <span className="font-normal text-[#9dff00] block sm:inline">INDIA.</span> <br className="hidden sm:inline" />
-                        Innovate for <span className="font-normal text-white">IMPACT.</span>
+                        Digital <span className="font-normal text-[#9dff00] block sm:inline">INDIA.</span> <br className="hidden sm:inline" />
+                        <span className="font-normal text-white">Hackathon.</span>
                     </h1>
                     <p className="hero-animate-title text-zinc-400 text-base sm:text-lg font-light leading-relaxed mb-8 max-w-2xl">
                         A national innovation challenge where participants develop technology-driven solutions to real-world problems faced by millions of Indians—from local shopkeepers and street vendors to rural communities and public services.
