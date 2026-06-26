@@ -163,9 +163,9 @@ const upcomingEvents: Event[] = [
         id: "7",
         title: "Digital India – Hackathon",
         date: "July 9-11, 2026",
-        time: "48 Hours Hackathon",
+        time: "Workshop and 24 Hours",
         location: "Sreenidhi Institute of Science and Technology",
-        description: "Be a part of India's digital transformation! Join the Digital India Hackathon — a platform for students to pitch bold, tech-driven ideas that can reshape governance, education, healthcare, and public services. Whether it's an AI-powered solution, a cloud-native app, or a FOSS-based initiative, this is your chance to innovate for impact.\n\nSubmit your idea and compete for exciting prizes, mentorship, and a chance to present your solution to industry leaders!",
+        description: "Digital India Hackathon is a 24-hour innovation challenge designed to transform real Indian problems into practical, scalable solutions. Open to students and innovators from all backgrounds, including Engineering, Commerce, Management, Sciences, and Humanities, the hackathon focuses on identifying everyday challenges faced by citizens and developing impactful solutions across domains such as Digital Governance, Agritech, Fintech, Healthcare, Sustainability, Education, Smart Cities, and Open Innovation.",
         image: "/assets/events/digital-india-banner-v2.png",
         registrationLink: "/events/digitalindia",
         highlights: [
