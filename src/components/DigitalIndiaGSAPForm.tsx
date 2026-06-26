@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { gsap } from 'gsap'
 import { 
     Check, ArrowRight, Upload, CreditCard, Loader2,
-    Trophy, Award, Gift, Sparkles, Code, Brain, Users2, ChevronDown
+    Trophy, Award, Gift, Sparkles, Code, Brain, Users2, ChevronDown, Copy
 } from 'lucide-react'
 import Image from 'next/image'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
@@ -29,8 +29,8 @@ interface FormErrors {
 
 const faqs = [
     {
-        q: "Can I participate solo?",
-        a: "Yes. Individual participation is allowed. If you register with team size 1 (solo), you are considered a solo participant."
+        q: "What is the team size requirement?",
+        a: "Teams must consist of 3 to 4 members to participate in the hackathon. Solo or duo participations are not permitted."
     },
     {
         q: "Can team members be from different colleges?",
@@ -68,14 +68,18 @@ export default function DigitalIndiaGSAPForm() {
     const [isSubmitted, setIsSubmitted] = useState(false)
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [apiError, setApiError] = useState<string | null>(null)
+    const [copied, setCopied] = useState(false)
 
     // Form fields state
     const [leaderName, setLeaderName] = useState('')
     const [email, setEmail] = useState('')
     const [phone, setPhone] = useState('')
     const [college, setCollege] = useState('')
-    const [teamSize, setTeamSize] = useState<number>(1)
-    const [teamMembers, setTeamMembers] = useState<{ name: string; email: string }[]>([])
+    const [teamSize, setTeamSize] = useState<number>(3)
+    const [teamMembers, setTeamMembers] = useState<{ name: string; email: string }[]>([
+        { name: '', email: '' },
+        { name: '', email: '' }
+    ])
     const [domain, setDomain] = useState('')
     const [teamName, setTeamName] = useState('')
     const [idea, setIdea] = useState('')
@@ -112,8 +116,18 @@ export default function DigitalIndiaGSAPForm() {
     const svgWrapRef = useRef<HTMLDivElement>(null)
 
     // UPI configurations
-    const upiId = process.env.NEXT_PUBLIC_UPI_ID || 'c3club@upi'
+    const upiId = process.env.NEXT_PUBLIC_UPI_ID || '8008151542@pthdfc'
     const upiAmount = '99'
+
+    const handleCopyUPI = async () => {
+        try {
+            await navigator.clipboard.writeText(upiId)
+            setCopied(true)
+            setTimeout(() => setCopied(false), 2000)
+        } catch (err) {
+            console.error('Failed to copy text: ', err)
+        }
+    }
 
     // Detect screen width
     useEffect(() => {
@@ -840,11 +854,11 @@ export default function DigitalIndiaGSAPForm() {
                             <div className="text-zinc-500 text-[10px] font-mono uppercase tracking-wider mt-1">Shortlisted</div>
                         </div>
                         <div>
-                            <div className="text-3xl font-light text-white font-mono">1–4</div>
+                            <div className="text-3xl font-light text-white font-mono">3–4</div>
                             <div className="text-zinc-500 text-[10px] font-mono uppercase tracking-wider mt-1">Team Size</div>
                         </div>
                         <div>
-                            <div className="text-3xl font-light text-[#9dff00] font-mono">48H</div>
+                            <div className="text-3xl font-light text-[#9dff00] font-mono">24H</div>
                             <div className="text-zinc-500 text-[10px] font-mono uppercase tracking-wider mt-1">Offline Build</div>
                         </div>
                     </div>
@@ -1040,7 +1054,7 @@ export default function DigitalIndiaGSAPForm() {
                         <div className="text-2xl font-bold font-mono text-[#9dff00] mb-4">01.</div>
                         <h4 className="text-lg font-medium text-white mb-2">Submit Proposal</h4>
                         <p className="text-zinc-400 text-xs sm:text-sm font-light leading-relaxed">
-                            Form a team of 1–4 members, select a domain track, and submit your abstract detailing the solution before 5 July.
+                            Form a team of 3–4 members, select a domain track, and submit your abstract detailing the solution before 5 July.
                         </p>
                     </div>
 
@@ -1067,7 +1081,7 @@ export default function DigitalIndiaGSAPForm() {
                         <div className="text-2xl font-bold font-mono text-[#9dff00] mb-4">04.</div>
                         <h4 className="text-lg font-medium text-white mb-2">Build & Compete</h4>
                         <p className="text-zinc-400 text-xs sm:text-sm font-light leading-relaxed">
-                            Develop your idea into a working software application during the 48-hour build sprint on 10–11 July and present to judges.
+                            Develop your idea into a working software application during the 24-hour build sprint on 10–11 July and present to judges.
                         </p>
                     </div>
                 </div>
@@ -1115,7 +1129,7 @@ export default function DigitalIndiaGSAPForm() {
                             <div className="hidden md:block w-[10%]" />
                             <div className="timeline-content pl-12 md:pl-0 md:w-[45%] text-left">
                                 <div className="text-xs font-mono text-[#9dff00] mb-2 uppercase tracking-wider">9 JULY</div>
-                                <h3 className="text-xl font-medium text-white mb-2">AI & Development Workshop</h3>
+                                <h3 className="text-xl font-medium text-white mb-2">Development Workshop</h3>
                                 <p className="text-zinc-400 text-sm font-light leading-relaxed mb-3">
                                     A hands-on physical workshop designed to prepare teams. We cover cloud APIs, FOSS implementation, smart automation integrations, and rapid deployment frameworks.
                                 </p>
@@ -1134,7 +1148,7 @@ export default function DigitalIndiaGSAPForm() {
                             </div>
                             <div className="timeline-content pl-12 md:pl-0 md:w-[45%] text-left md:text-right">
                                 <div className="text-xs font-mono text-[#9dff00] mb-2 uppercase tracking-wider">10–11 JULY</div>
-                                <h3 className="text-xl font-medium text-white mb-2">48-Hour Offline Hackathon</h3>
+                                <h3 className="text-xl font-medium text-white mb-2">24-Hour Offline Hackathon</h3>
                                 <p className="text-zinc-400 text-sm font-light leading-relaxed">
                                     Sprint physically at SNIST to transform your proposal into a fully working software solution. Collaborate with on-site mentors and industry evaluators.
                                 </p>
@@ -1264,7 +1278,7 @@ export default function DigitalIndiaGSAPForm() {
                         </div>
                         <h4 className="text-base font-medium text-white mb-2">Rapid Prototyping</h4>
                         <p className="text-zinc-400 text-xs leading-relaxed">
-                            Learn the disciplines of rapid MVP creation, API mockups, and deployment pipelines during a 48-hour build sprint.
+                            Learn the disciplines of rapid MVP creation, API mockups, and deployment pipelines during a 24-hour build sprint.
                         </p>
                     </div>
 
@@ -1350,7 +1364,7 @@ export default function DigitalIndiaGSAPForm() {
                             key="step-1"
                             ref={step1Ref}
                             onClick={() => activeStep > 1 && setActiveStep(1)}
-                            className={`relative border border-zinc-800/40 ${isTeamSizeOpen ? 'lg:overflow-visible' : 'overflow-hidden'} flex-col justify-between h-auto lg:h-full w-full lg:w-auto bg-[#18181b] text-[#f4f4f5] rounded-[32px] p-6 sm:p-8 lg:p-10 ${activeStep === 1 ? 'flex' : 'hidden lg:flex'
+                            className={`relative border border-zinc-800/40 ${isTeamSizeOpen ? 'overflow-visible' : 'overflow-hidden'} flex-col justify-between h-auto lg:h-full w-full lg:w-auto bg-[#18181b] text-[#f4f4f5] rounded-[32px] p-6 sm:p-8 lg:p-10 ${activeStep === 1 ? 'flex' : 'hidden lg:flex'
                                 } ${activeStep > 1 ? 'cursor-pointer' : ''
                                 }`}
                         >
@@ -1364,7 +1378,7 @@ export default function DigitalIndiaGSAPForm() {
                                         <div className="text-xs font-bold text-zinc-500 font-mono mb-4">01.</div>
                                         <h2 className="text-3xl font-light text-[#9dff00] mb-6 tracking-tight font-sans">Add your personal information.</h2>
 
-                                        <div className="flex-1 lg:overflow-visible overflow-y-auto pr-2 custom-scrollbar space-y-6 lg:space-y-8 mb-6">
+                                        <div className="flex-1 overflow-visible pr-2 space-y-6 lg:space-y-8 mb-6">
                                             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
                                                 <div>
                                                     <input
@@ -1453,7 +1467,7 @@ export default function DigitalIndiaGSAPForm() {
                                                         onClick={() => setIsTeamSizeOpen(!isTeamSizeOpen)}
                                                         className="w-full text-xl sm:text-2xl font-light py-2.5 border-b border-zinc-800 hover:border-zinc-600 focus:border-zinc-400 outline-none bg-transparent text-white transition-all cursor-pointer flex justify-between items-center text-left"
                                                     >
-                                                        <span>{teamSize === 1 ? '1 (Solo)' : `${teamSize} Members`}</span>
+                                                        <span>{teamSize} Members</span>
                                                         <svg
                                                             className={`w-5 h-5 text-zinc-500 transition-transform duration-300 ${isTeamSizeOpen ? 'rotate-180 text-white' : ''}`}
                                                             fill="none"
@@ -1466,7 +1480,7 @@ export default function DigitalIndiaGSAPForm() {
                                                     <span className="text-[10px] text-zinc-500 font-mono uppercase tracking-widest mt-1.5 block">Team Size</span>
                                                     {isTeamSizeOpen && (
                                                         <div className="absolute left-0 right-0 top-full mt-2 bg-[#18181b] border border-zinc-800 rounded-2xl shadow-2xl z-[100] overflow-hidden team-size-dropdown">
-                                                            {[1, 2, 3, 4].map((size) => (
+                                                            {[3, 4].map((size) => (
                                                                 <button
                                                                     key={size}
                                                                     type="button"
@@ -1492,7 +1506,7 @@ export default function DigitalIndiaGSAPForm() {
                                                                             : 'text-zinc-300 hover:bg-zinc-800 hover:text-white'
                                                                     }`}
                                                                 >
-                                                                    <span>{size === 1 ? '1 (Solo)' : `${size} Members`}</span>
+                                                                    <span>{size} Members</span>
                                                                     {teamSize === size && <Check className="w-4 h-4 text-[#9dff00]" />}
                                                                 </button>
                                                             ))}
@@ -1540,68 +1554,52 @@ export default function DigitalIndiaGSAPForm() {
                                         <h2 className="text-3xl font-light text-[#9dff00] mb-6 tracking-tight">Add your team members.</h2>
 
                                         <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar mb-6">
-                                            {teamSize === 1 ? (
-                                                <div className="flex flex-col items-center justify-center py-16 text-center h-full">
-                                                    <div className="w-16 h-16 rounded-full bg-[#9dff00]/10 flex items-center justify-center mb-6 border border-[#9dff00]/20 shadow-[0_0_30px_rgba(157,255,0,0.15)]">
-                                                        <svg className="w-8 h-8 text-[#9dff00]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                                                        </svg>
-                                                    </div>
-                                                    <p className="text-xl font-light text-zinc-300 max-w-md leading-relaxed font-sans">
-                                                        You are participating as a solo participant.
-                                                    </p>
-                                                    <p className="text-sm text-zinc-500 mt-2 font-mono uppercase tracking-wider">
-                                                        Please proceed to the next step.
-                                                    </p>
-                                                </div>
-                                            ) : (
-                                                <div className="space-y-6">
-                                                    {Array.from({ length: teamSize - 1 }).map((_, i) => (
-                                                        <div key={i} className="grid grid-cols-1 md:grid-cols-2 gap-6 pb-2">
-                                                            <div>
-                                                                <input
-                                                                    type="text"
-                                                                    value={teamMembers[i]?.name || ''}
-                                                                    onChange={(e) => {
-                                                                        const updated = [...teamMembers]
-                                                                        updated[i] = { ...updated[i], name: e.target.value }
-                                                                        setTeamMembers(updated)
-                                                                        if (errors[`teamMemberName_${i}`]) {
-                                                                            setErrors(prev => ({ ...prev, [`teamMemberName_${i}`]: undefined }))
-                                                                        }
-                                                                    }}
-                                                                    placeholder={`Member ${i + 2} Name`}
-                                                                    className={`w-full text-lg font-light py-2 border-b ${
-                                                                        errors[`teamMemberName_${i}`] ? 'border-red-400 focus:border-red-500' : 'border-zinc-800 focus:border-zinc-400'
-                                                                    } outline-none bg-transparent text-white placeholder-zinc-700 transition-all`}
-                                                                />
-                                                                <span className="text-[9px] text-zinc-500 font-mono uppercase tracking-widest mt-1 block">Member {i + 2} Name</span>
-                                                                {errors[`teamMemberName_${i}`] && <p className="text-red-400 text-xs mt-1 font-mono">{errors[`teamMemberName_${i}`]}</p>}
-                                                            </div>
-                                                            <div>
-                                                                <input
-                                                                    type="email"
-                                                                    value={teamMembers[i]?.email || ''}
-                                                                    onChange={(e) => {
-                                                                        const updated = [...teamMembers]
-                                                                        updated[i] = { ...updated[i], email: e.target.value }
-                                                                        setTeamMembers(updated)
-                                                                        if (errors[`teamMemberEmail_${i}`]) {
-                                                                            setErrors(prev => ({ ...prev, [`teamMemberEmail_${i}`]: undefined }))
-                                                                        }
-                                                                    }}
-                                                                    placeholder={`Member ${i + 2} Email`}
-                                                                    className={`w-full text-lg font-light py-2 border-b ${
-                                                                        errors[`teamMemberEmail_${i}`] ? 'border-red-400 focus:border-red-500' : 'border-zinc-800 focus:border-zinc-400'
-                                                                    } outline-none bg-transparent text-white placeholder-zinc-700 transition-all`}
-                                                                />
-                                                                <span className="text-[9px] text-zinc-500 font-mono uppercase tracking-widest mt-1 block">Member {i + 2} Email Address</span>
-                                                                {errors[`teamMemberEmail_${i}`] && <p className="text-red-400 text-xs mt-1 font-mono">{errors[`teamMemberEmail_${i}`]}</p>}
-                                                            </div>
+                                            <div className="space-y-6">
+                                                {Array.from({ length: teamSize - 1 }).map((_, i) => (
+                                                    <div key={i} className="grid grid-cols-1 md:grid-cols-2 gap-6 pb-2">
+                                                        <div>
+                                                            <input
+                                                                type="text"
+                                                                value={teamMembers[i]?.name || ''}
+                                                                onChange={(e) => {
+                                                                    const updated = [...teamMembers]
+                                                                    updated[i] = { ...updated[i], name: e.target.value }
+                                                                    setTeamMembers(updated)
+                                                                    if (errors[`teamMemberName_${i}`]) {
+                                                                        setErrors(prev => ({ ...prev, [`teamMemberName_${i}`]: undefined }))
+                                                                    }
+                                                                }}
+                                                                placeholder={`Member ${i + 2} Name`}
+                                                                className={`w-full text-lg font-light py-2 border-b ${
+                                                                    errors[`teamMemberName_${i}`] ? 'border-red-400 focus:border-red-500' : 'border-zinc-800 focus:border-zinc-400'
+                                                                } outline-none bg-transparent text-white placeholder-zinc-700 transition-all`}
+                                                            />
+                                                            <span className="text-[9px] text-zinc-500 font-mono uppercase tracking-widest mt-1 block">Member {i + 2} Name</span>
+                                                            {errors[`teamMemberName_${i}`] && <p className="text-red-400 text-xs mt-1 font-mono">{errors[`teamMemberName_${i}`]}</p>}
                                                         </div>
-                                                    ))}
-                                                </div>
-                                            )}
+                                                        <div>
+                                                            <input
+                                                                type="email"
+                                                                value={teamMembers[i]?.email || ''}
+                                                                onChange={(e) => {
+                                                                    const updated = [...teamMembers]
+                                                                    updated[i] = { ...updated[i], email: e.target.value }
+                                                                    setTeamMembers(updated)
+                                                                    if (errors[`teamMemberEmail_${i}`]) {
+                                                                        setErrors(prev => ({ ...prev, [`teamMemberEmail_${i}`]: undefined }))
+                                                                    }
+                                                                }}
+                                                                placeholder={`Member ${i + 2} Email`}
+                                                                className={`w-full text-lg font-light py-2 border-b ${
+                                                                    errors[`teamMemberEmail_${i}`] ? 'border-red-400 focus:border-red-500' : 'border-zinc-800 focus:border-zinc-400'
+                                                                } outline-none bg-transparent text-white placeholder-zinc-700 transition-all`}
+                                                            />
+                                                            <span className="text-[9px] text-zinc-500 font-mono uppercase tracking-widest mt-1 block">Member {i + 2} Email Address</span>
+                                                            {errors[`teamMemberEmail_${i}`] && <p className="text-red-400 text-xs mt-1 font-mono">{errors[`teamMemberEmail_${i}`]}</p>}
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </div>
                                         </div>
                                     </div>
 
@@ -1633,7 +1631,7 @@ export default function DigitalIndiaGSAPForm() {
                             key="step-3"
                             ref={step3Ref}
                             onClick={() => activeStep > 3 && setActiveStep(3)}
-                            className={`relative border border-zinc-800/40 ${isDomainOpen ? 'lg:overflow-visible' : 'overflow-hidden'} flex-col justify-between h-auto lg:h-full w-full lg:w-auto bg-[#18181b] text-[#f4f4f5] rounded-[32px] p-6 sm:p-8 lg:p-10 ${activeStep === 3 ? 'flex' : 'hidden lg:flex'
+                            className={`relative border border-zinc-800/40 ${isDomainOpen ? 'overflow-visible' : 'overflow-hidden'} flex-col justify-between h-auto lg:h-full w-full lg:w-auto bg-[#18181b] text-[#f4f4f5] rounded-[32px] p-6 sm:p-8 lg:p-10 ${activeStep === 3 ? 'flex' : 'hidden lg:flex'
                                 } ${activeStep > 3 ? 'cursor-pointer' : ''
                                 }`}
                         >
@@ -1650,7 +1648,7 @@ export default function DigitalIndiaGSAPForm() {
                                         <div className="text-xs font-bold text-zinc-500 font-mono mb-4">03.</div>
                                         <h2 className="text-3xl font-light text-[#9dff00] mb-6 tracking-tight">Select domain & describe solution.</h2>
 
-                                        <div className="flex-1 lg:overflow-visible overflow-y-auto pr-2 custom-scrollbar space-y-6 mb-6">
+                                        <div className="flex-1 overflow-visible pr-2 space-y-6 mb-6">
                                             <div className="relative" ref={domainDropdownRef}>
                                                 <button
                                                     type="button"
@@ -1797,8 +1795,28 @@ export default function DigitalIndiaGSAPForm() {
                                                 <p className="text-xs text-zinc-400 leading-relaxed mb-4">
                                                     Please scan the UPI QR code to complete your payment of ₹{upiAmount}. Note your UPI Transaction ID/UTR once finished.
                                                 </p>
-                                                <div className="text-xs font-mono bg-black/60 p-2.5 rounded-xl border border-zinc-800 text-zinc-300 select-all break-all shadow-sm">
-                                                    UPI ID: {upiId}
+                                                <div className="flex items-center gap-2">
+                                                    <div className="flex-1 text-xs font-mono bg-black/60 p-2.5 rounded-xl border border-zinc-800 text-zinc-300 select-all break-all shadow-sm flex items-center justify-between">
+                                                        <span>UPI ID: {upiId}</span>
+                                                        <button
+                                                            type="button"
+                                                            onClick={handleCopyUPI}
+                                                            className="text-zinc-500 hover:text-[#9dff00] p-1.5 rounded-lg hover:bg-zinc-800/50 transition-colors flex items-center gap-1 cursor-pointer font-sans text-[10px]"
+                                                            title="Copy UPI ID"
+                                                        >
+                                                            {copied ? (
+                                                                <>
+                                                                    <Check className="w-3.5 h-3.5 text-[#9dff00]" />
+                                                                    <span className="text-[#9dff00] font-medium">Copied!</span>
+                                                                </>
+                                                            ) : (
+                                                                <>
+                                                                    <Copy className="w-3.5 h-3.5 text-zinc-400" />
+                                                                    <span>Copy</span>
+                                                                </>
+                                                            )}
+                                                        </button>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div className="flex justify-center items-center">
