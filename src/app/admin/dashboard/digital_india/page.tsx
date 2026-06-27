@@ -433,9 +433,14 @@ export default function DigitalIndiaAdminDashboard() {
                                         >
                                             <td className="px-4 py-3">
                                                 <div className="flex flex-col gap-1">
+                                                    {sub.teamName && (
+                                                        <div className="mb-0.5">
+                                                            <span className="text-[#bd93f9] font-mono font-bold text-sm tracking-wide">{sub.teamName}</span>
+                                                        </div>
+                                                    )}
                                                     <div>
                                                         <span className="text-[#f8f8f2] font-medium">{sub.name}</span>
-                                                        <span className="ml-1.5 text-[9px] font-mono bg-[#bd93f9]/15 text-[#bd93f9] px-1.5 py-0.5 rounded-full uppercase tracking-wider font-semibold">Leader</span>
+                                                        <span className="ml-1.5 text-[9px] font-mono bg-[#6272a4]/20 text-[#f8f8f2]/60 px-1.5 py-0.5 rounded-full uppercase tracking-wider font-semibold">Leader</span>
                                                     </div>
                                                     <div className="text-[#8be9fd] font-mono text-xs max-w-[220px] truncate" title={sub.email}>{sub.email}</div>
                                                     <div className="text-[#6272a4] text-xs font-mono">{sub.phone}</div>
