@@ -166,8 +166,8 @@ export async function POST(request: Request) {
           <tr>
             <td align="center" style="padding: 30px; background-color: #09090b; border-top: 1px solid #27272a;">
                <p style="margin: 0; color: #52525b; font-size: 12px; line-height: 1.5;">
-                 © 2026 <strong>Cloud Community Club (C³)</strong>.<br>
-                 Sreenidhi Institute of Science and Technology.
+                 This email was sent automatically to confirm your registration for <strong>Digital India Hackathon 2026</strong>.<br><br>
+                 © 2026 <strong>Cloud Community Club (C³)</strong> & <strong>Student Developers Community (SDC) – SNIST</strong>.
                </p>
             </td>
           </tr>
@@ -181,7 +181,7 @@ export async function POST(request: Request) {
 
       await sendEmail(
         submission.email,
-        '🎉 Shortlisted Announcement: Digital India Hackathon',
+        'Shortlisted Announcement: Digital India Hackathon',
         htmlBody
       )
       console.log(`✅ Acceptance email sent successfully to ${submission.email}`)
