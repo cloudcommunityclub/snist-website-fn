@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import dbConnect from '@/lib/db'
 import DigitalIndiaSubmission from '@/models/DigitalIndiaSubmission'
 import DigitalIndiaAccepted from '@/models/DigitalIndiaAccepted'
+import DigitalIndiaReferral from '@/models/DigitalIndiaReferral'
 import { escHtml, sendEmail } from '@/lib/mail'
 
 export async function POST(request: Request) {
@@ -36,6 +37,15 @@ export async function POST(request: Request) {
       idea: submission.idea,
       utrId: submission.utrId,
       paymentScreenshotUrl: submission.paymentScreenshotUrl,
+      // copy new referral & team fields
+      teamName: submission.teamName,
+      domain: submission.domain,
+      teamSize: submission.teamSize,
+      teamMembers: submission.teamMembers,
+      referralCode: submission.referralCode,
+      referredByCode: submission.referredByCode,
+      referralPoints: submission.referralPoints,
+      lastPointEarnedAt: submission.lastPointEarnedAt || submission.createdAt,
       acceptedAt: new Date(),
       acceptedBy: 'Admin',
     })
@@ -44,6 +54,24 @@ export async function POST(request: Request) {
 
     // Delete from submissions table
     await DigitalIndiaSubmission.findByIdAndDelete(id)
+
+    // Update referral records to use the new accepted participant ObjectId
+    try {
+      // 1. If this team was referred by someone, update their referredTeamId
+      await DigitalIndiaReferral.updateOne(
+        { referredEmail: submission.email },
+        { referredTeamId: acceptedParticipant._id }
+      )
+
+      // 2. If this team referred other teams, update their referrerTeamId
+      await DigitalIndiaReferral.updateMany(
+        { referrerEmail: submission.email },
+        { referrerTeamId: acceptedParticipant._id }
+      )
+    } catch (refUpdateErr) {
+      console.error('❌ Failed to update referral ObjectIds on accept:', refUpdateErr)
+    }
+
 
     // Send shortlisted SMTP mail
     try {

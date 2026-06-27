@@ -1,9 +1,34 @@
 import { NextResponse } from 'next/server'
 import dbConnect from '@/lib/db'
 import DigitalIndiaSubmission from '@/models/DigitalIndiaSubmission'
+import DigitalIndiaAccepted from '@/models/DigitalIndiaAccepted'
+import DigitalIndiaReferral from '@/models/DigitalIndiaReferral'
 import { r2Client, R2_BUCKET_NAME, R2_PUBLIC_URL } from '@/lib/r2'
 import { PutObjectCommand } from '@aws-sdk/client-s3'
 import { escHtml, sendEmail } from '@/lib/mail'
+
+function escapeRegex(str: string): string {
+  return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+}
+
+async function generateUniqueReferralCode(): Promise<string> {
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+  let code = ''
+  let attempts = 0
+  while (attempts < 20) {
+    code = ''
+    for (let i = 0; i < 6; i++) {
+      code += chars.charAt(Math.floor(Math.random() * chars.length))
+    }
+    const existsSub = await DigitalIndiaSubmission.findOne({ referralCode: code })
+    const existsAcc = await DigitalIndiaAccepted.findOne({ referralCode: code })
+    if (!existsSub && !existsAcc) {
+      return code
+    }
+    attempts++
+  }
+  throw new Error('Could not generate a unique referral code after multiple attempts.')
+}
 
 export async function POST(request: Request) {
   try {
@@ -17,7 +42,14 @@ export async function POST(request: Request) {
     const utrId = formData.get('utrId') as string
     const screenshot = formData.get('screenshot') as File | null
 
-    if (!name || !college || !email || !phone || !idea || !utrId || !screenshot) {
+    // New Team Details
+    const teamName = formData.get('teamName') as string
+    const domain = formData.get('domain') as string
+    const teamSize = formData.get('teamSize') as string
+    const teamMembersJson = formData.get('teamMembers') as string
+    const referredByRaw = formData.get('referredBy') as string | null
+
+    if (!name || !college || !email || !phone || !idea || !utrId || !screenshot || !teamName || !domain || !teamSize) {
       return NextResponse.json(
         { success: false, message: 'All fields are required.' },
         { status: 400 }
@@ -50,24 +82,61 @@ export async function POST(request: Request) {
 
     await dbConnect()
 
-    // Check duplicates
+    // Check duplicates (email and UTR) across both collections
     const normalizedEmail = email.trim().toLowerCase()
     const normalizedUtr = utrId.trim()
+    const normalizedTeamName = teamName.trim()
 
-    const existingEmail = await DigitalIndiaSubmission.findOne({ email: normalizedEmail })
-    if (existingEmail) {
+    const existingEmailSub = await DigitalIndiaSubmission.findOne({ email: normalizedEmail })
+    const existingEmailAcc = await DigitalIndiaAccepted.findOne({ email: normalizedEmail })
+    if (existingEmailSub || existingEmailAcc) {
       return NextResponse.json(
         { success: false, message: 'A submission with this email already exists.' },
         { status: 400 }
       )
     }
 
-    const existingUtr = await DigitalIndiaSubmission.findOne({ utrId: normalizedUtr })
-    if (existingUtr) {
+    const existingUtrSub = await DigitalIndiaSubmission.findOne({ utrId: normalizedUtr })
+    const existingUtrAcc = await DigitalIndiaAccepted.findOne({ utrId: normalizedUtr })
+    if (existingUtrSub || existingUtrAcc) {
       return NextResponse.json(
         { success: false, message: 'A submission with this UTR ID already exists.' },
         { status: 400 }
       )
+    }
+
+    // Check team name duplicate across both collections (case insensitive)
+    const existingTeamNameSub = await DigitalIndiaSubmission.findOne({ teamName: new RegExp(`^${escapeRegex(normalizedTeamName)}$`, 'i') })
+    const existingTeamNameAcc = await DigitalIndiaAccepted.findOne({ teamName: new RegExp(`^${escapeRegex(normalizedTeamName)}$`, 'i') })
+    if (existingTeamNameSub || existingTeamNameAcc) {
+      return NextResponse.json(
+        { success: false, message: 'A team with this name already exists.' },
+        { status: 400 }
+      )
+    }
+
+    // Validate referral code if provided
+    let referredByCode = referredByRaw ? referredByRaw.trim().toUpperCase() : null
+    let referrerDoc: any = null
+
+    if (referredByCode) {
+      referrerDoc = await DigitalIndiaAccepted.findOne({ referralCode: referredByCode }) ||
+                    await DigitalIndiaSubmission.findOne({ referralCode: referredByCode })
+
+      if (!referrerDoc) {
+        return NextResponse.json(
+          { success: false, message: 'Invalid referral code.' },
+          { status: 400 }
+        )
+      }
+
+      // Check self referral
+      if (referrerDoc.email === normalizedEmail || referrerDoc.phone === phone.trim()) {
+        return NextResponse.json(
+          { success: false, message: 'Self-referrals are not allowed.' },
+          { status: 400 }
+        )
+      }
     }
 
     // Upload screenshot to Cloudflare R2
@@ -92,6 +161,17 @@ export async function POST(request: Request) {
       : R2_PUBLIC_URL
     const paymentScreenshotUrl = `${publicUrlBase}/${key}`
 
+    // Generate unique referral code for the new team
+    const referralCode = await generateUniqueReferralCode()
+
+    // Parse team members
+    let teamMembers = []
+    try {
+      teamMembers = JSON.parse(teamMembersJson || '[]')
+    } catch (e) {
+      console.error('Error parsing team members:', e)
+    }
+
     // Create database record
     const newSubmission = new DigitalIndiaSubmission({
       name: name.trim(),
@@ -102,11 +182,43 @@ export async function POST(request: Request) {
       utrId: normalizedUtr,
       paymentScreenshotUrl,
       paymentVerified: false,
+      teamName: normalizedTeamName,
+      domain: domain.trim(),
+      teamSize: Number(teamSize),
+      teamMembers,
+      referralCode,
+      referredByCode: referredByCode || undefined,
+      referralPoints: 0,
+      lastPointEarnedAt: new Date(),
     })
 
     await newSubmission.save()
 
     console.log(`✅ Digital India Submission recorded for ${normalizedEmail}`)
+
+    // If referral exists, award point immediately and log referral record
+    if (referrerDoc) {
+      try {
+        const referralExists = await DigitalIndiaReferral.findOne({ referredEmail: normalizedEmail })
+        if (!referralExists) {
+          const referralRecord = new DigitalIndiaReferral({
+            referrerTeamId: referrerDoc._id,
+            referredTeamId: newSubmission._id,
+            referrerEmail: referrerDoc.email,
+            referredEmail: normalizedEmail,
+          })
+          await referralRecord.save()
+
+          await referrerDoc.updateOne({
+            $inc: { referralPoints: 1 },
+            $set: { lastPointEarnedAt: new Date() }
+          })
+          console.log(`🎉 Referral point successfully awarded to ${referrerDoc.email}`)
+        }
+      } catch (refErr) {
+        console.error('❌ Failed to award referral points:', refErr)
+      }
+    }
 
     // Send confirmation email
     try {
@@ -168,7 +280,11 @@ export async function POST(request: Request) {
                   <td style="padding: 24px;">
                     <table width="100%" border="0" cellpadding="0" cellspacing="0">
                       <tr>
-                        <td width="35%" style="padding-bottom: 12px; color: #71717a; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; font-family: monospace;">Name</td>
+                        <td width="35%" style="padding-bottom: 12px; color: #71717a; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; font-family: monospace;">Team Name</td>
+                        <td style="padding-bottom: 12px; color: #ffffff; font-size: 14px; font-weight: 600;">${escHtml(normalizedTeamName)}</td>
+                      </tr>
+                      <tr>
+                        <td width="35%" style="padding-bottom: 12px; color: #71717a; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; font-family: monospace;">Leader Name</td>
                         <td style="padding-bottom: 12px; color: #ffffff; font-size: 14px; font-weight: 600;">${escHtml(name.trim())}</td>
                       </tr>
                       <tr>
@@ -182,6 +298,10 @@ export async function POST(request: Request) {
                       <tr>
                         <td width="35%" style="padding-bottom: 12px; color: #71717a; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; font-family: monospace;">UTR ID</td>
                         <td style="padding-bottom: 12px; color: #9dff00; font-size: 14px; font-weight: bold; font-family: monospace;">${escHtml(normalizedUtr)}</td>
+                      </tr>
+                      <tr>
+                        <td width="35%" style="padding-bottom: 12px; color: #71717a; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; font-family: monospace;">Referral Code</td>
+                        <td style="padding-bottom: 12px; color: #9dff00; font-size: 14px; font-weight: bold; font-family: monospace;">${escHtml(referralCode)}</td>
                       </tr>
                       <tr>
                         <td width="35%" style="color: #71717a; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; vertical-align: top; font-family: monospace;">Idea Abstract</td>
@@ -208,8 +328,8 @@ export async function POST(request: Request) {
                     <div style="background-color: #27272a; color: #9dff00; font-weight: bold; font-size: 12px; width: 20px; height: 20px; border-radius: 50%; text-align: center; line-height: 20px; font-family: monospace;">1</div>
                   </td>
                   <td style="padding-bottom: 20px; color: #a1a1aa; font-size: 14px; line-height: 1.4;">
-                    <strong style="color: #ffffff;">Payment Verification</strong><br>
-                    Our team validates your UTR ID against bank statements (takes 24-48 hours).
+                    <strong style="color: #ffffff;">Share & Earn Rewards</strong><br>
+                    Share your referral code <strong style="color:#9dff00;">${referralCode}</strong>. Get 10 successful referrals to qualify for FREE hackathon passes!
                   </td>
                 </tr>
                 <tr>
@@ -217,8 +337,8 @@ export async function POST(request: Request) {
                     <div style="background-color: #27272a; color: #9dff00; font-weight: bold; font-size: 12px; width: 20px; height: 20px; border-radius: 50%; text-align: center; line-height: 20px; font-family: monospace;">2</div>
                   </td>
                   <td style="padding-bottom: 20px; color: #a1a1aa; font-size: 14px; line-height: 1.4;">
-                    <strong style="color: #ffffff;">Abstract Evaluation</strong><br>
-                    Evaluators review your idea's feasibility, innovation, and localized impact.
+                    <strong style="color: #ffffff;">Payment Verification</strong><br>
+                    Our team validates your UTR ID against bank statements (takes 24-48 hours).
                   </td>
                 </tr>
                 <tr>
@@ -240,7 +360,7 @@ export async function POST(request: Request) {
                  This email was sent automatically to confirm your registration.<br>
                  © 2026 <strong>Cloud Community Club (C³)</strong> & <strong>SNIST</strong>.<br>
                  Sreenidhi Institute of Science and Technology.
-               </p>
+              </p>
             </td>
           </tr>
         </table>
@@ -263,6 +383,7 @@ export async function POST(request: Request) {
     return NextResponse.json({
       success: true,
       message: 'Registration submitted successfully!',
+      referralCode,
     })
   } catch (error) {
     console.error('Digital India Submission Error:', error)

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Suspense } from 'react'
 import DigitalIndiaGSAPForm from '@/components/DigitalIndiaGSAPForm'
 import { Metadata } from 'next'
 
@@ -13,5 +13,14 @@ export const metadata: Metadata = {
 }
 
 export default function DigitalIndiaIdeathonPage() {
-    return <DigitalIndiaGSAPForm />
+    return (
+        <Suspense fallback={
+            <div className="min-h-screen bg-[#09090b] flex items-center justify-center font-mono text-zinc-500 text-xs">
+                LOADING EXPERIENCE...
+            </div>
+        }>
+            <DigitalIndiaGSAPForm />
+        </Suspense>
+    )
 }
+
