@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert';
-import { getAllProjects, getProjectByName, projects, PROJECT_CATEGORIES } from './projects';
+import { getAllProjects, getProjectByName, projects, PROJECT_CATEGORIES } from './projects.ts';
 
 
 test('projects object structure', () => {
