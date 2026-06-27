@@ -1,11 +1,11 @@
 'use client'
 
 import React, { useState, useRef, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { gsap } from 'gsap'
 import { 
     Check, ArrowRight, Upload, CreditCard, Loader2,
-    Trophy, Award, Gift, Sparkles, Code, Brain, Users2, ChevronDown, Copy
+    Trophy, Award, Gift, Sparkles, Code, Brain, Users2, ChevronDown, Copy, Search, Medal, Calendar, MapPin
 } from 'lucide-react'
 import Image from 'next/image'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
@@ -13,6 +13,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 if (typeof window !== 'undefined') {
     gsap.registerPlugin(ScrollTrigger)
 }
+
 
 interface FormErrors {
     leaderName?: string
@@ -64,6 +65,9 @@ const faqs = [
 
 export default function DigitalIndiaGSAPForm() {
     const router = useRouter()
+    const searchParams = useSearchParams()
+    const refParam = searchParams ? searchParams.get('ref') : null
+
     const [activeStep, setActiveStep] = useState<1 | 2 | 3 | 4>(1)
     const [isSubmitted, setIsSubmitted] = useState(false)
     const [isSubmitting, setIsSubmitting] = useState(false)
@@ -87,6 +91,91 @@ export default function DigitalIndiaGSAPForm() {
     const [screenshot, setScreenshot] = useState<File | null>(null)
     const [screenshotPreview, setScreenshotPreview] = useState<string | null>(null)
 
+    // Referral System States
+    const [referredBy, setReferredBy] = useState('')
+    const [myReferralCode, setMyReferralCode] = useState('')
+    const [dashboardEmail, setDashboardEmail] = useState('')
+    const [dashboardData, setDashboardData] = useState<any>(null)
+    const [dashboardLoading, setDashboardLoading] = useState(false)
+    const [dashboardError, setDashboardError] = useState<string | null>(null)
+
+    // Leaderboard States
+    const [leaderboardSearch, setLeaderboardSearch] = useState('')
+    const [leaderboardData, setLeaderboardData] = useState<any[]>([])
+    const [leaderboardLoading, setLeaderboardLoading] = useState(false)
+
+    const fetchDashboardStats = async (emailToFetch: string) => {
+        setDashboardLoading(true)
+        setDashboardError(null)
+        try {
+            const res = await fetch(`/api/digital-india/referrals/stats?email=${encodeURIComponent(emailToFetch.trim())}`)
+            const result = await res.json()
+            if (res.ok && result.success) {
+                setDashboardData(result.data)
+                setDashboardEmail(emailToFetch)
+            } else {
+                setDashboardError(result.message || 'Failed to load referral details.')
+            }
+        } catch (err) {
+            console.error('Error fetching referral stats:', err)
+            setDashboardError('Failed to fetch dashboard. Please try again.')
+        } finally {
+            setDashboardLoading(false)
+        }
+    }
+
+    const handleDashboardLookup = (e: React.FormEvent) => {
+        e.preventDefault()
+        if (!dashboardEmail.trim()) {
+            setDashboardError('Please enter a registered email address.')
+            return
+        }
+        fetchDashboardStats(dashboardEmail)
+        localStorage.setItem('c3_digital_india_registered_email', dashboardEmail.trim().toLowerCase())
+    }
+
+    const handleLogoutDashboard = () => {
+        setDashboardData(null)
+        setDashboardEmail('')
+        setDashboardError(null)
+        localStorage.removeItem('c3_digital_india_registered_email')
+    }
+
+    const fetchLeaderboard = async (search = '') => {
+        setLeaderboardLoading(true)
+        try {
+            const res = await fetch(`/api/digital-india/referrals/leaderboard?search=${encodeURIComponent(search)}`)
+            const result = await res.json()
+            if (res.ok && result.success) {
+                setLeaderboardData(result.data || [])
+            }
+        } catch (err) {
+            console.error('Failed to fetch leaderboard:', err)
+        } finally {
+            setLeaderboardLoading(false)
+        }
+    }
+
+    // Load URL parameter and localStorage on mount
+    useEffect(() => {
+        if (refParam) {
+            setReferredBy(refParam.toUpperCase())
+        }
+
+        const storedEmail = localStorage.getItem('c3_digital_india_registered_email')
+        if (storedEmail) {
+            fetchDashboardStats(storedEmail)
+        }
+    }, [refParam])
+
+    // Fetch leaderboard with debounced search
+    useEffect(() => {
+        const delayDebounce = setTimeout(() => {
+            fetchLeaderboard(leaderboardSearch)
+        }, 300)
+        return () => clearTimeout(delayDebounce)
+    }, [leaderboardSearch])
+
     // Custom dropdown states
     const [isTeamSizeOpen, setIsTeamSizeOpen] = useState(false)
     const [isDomainOpen, setIsDomainOpen] = useState(false)
@@ -94,6 +183,7 @@ export default function DigitalIndiaGSAPForm() {
     const [errors, setErrors] = useState<FormErrors>({})
     const [isDesktop, setIsDesktop] = useState(false)
     const isFirstRender = useRef(true)
+
 
     // DOM Refs for animations
     const containerRef = useRef<HTMLDivElement>(null)
@@ -647,6 +737,7 @@ export default function DigitalIndiaGSAPForm() {
             submitData.append('teamSize', String(teamSize))
             submitData.append('teamMembers', JSON.stringify(teamMembers))
             submitData.append('utrId', utrId)
+            submitData.append('referredBy', referredBy)
             if (screenshot) {
                 submitData.append('screenshot', screenshot)
             }
@@ -659,6 +750,14 @@ export default function DigitalIndiaGSAPForm() {
             const result = await response.json()
 
             if (response.ok && result.success) {
+                // Store email in localStorage
+                localStorage.setItem('c3_digital_india_registered_email', email.trim().toLowerCase())
+                setMyReferralCode(result.referralCode || '')
+                
+                // Fetch stats and leaderboard
+                await fetchDashboardStats(email)
+                fetchLeaderboard()
+
                 setIsSubmitted(true)
                 // Celebrate with custom GSAP scale up on success content
                 setTimeout(() => {
@@ -677,6 +776,7 @@ export default function DigitalIndiaGSAPForm() {
             setIsSubmitting(false)
         }
     }
+
 
     const domains = [
         'Digital Governance & Public Services',
@@ -1033,6 +1133,126 @@ export default function DigitalIndiaGSAPForm() {
                                 <circle cx="250" cy="250" r="6" fill="#9dff00" filter="url(#glow-neon)" />
                             </g>
                         </svg>
+                    </div>
+                </div>
+            </section>
+
+            {/* 1.5 About Section */}
+            <section className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-12 py-24 border-t border-zinc-800/40">
+                <div className="text-center mb-16">
+                    <span className="text-xs font-mono text-[#9dff00] uppercase tracking-widest block mb-3">ABOUT THE HACKATHON</span>
+                    <h2 className="text-3xl md:text-5xl font-light text-white tracking-tight mb-4">
+                        More than a <span className="text-[#9dff00] font-normal">Competition</span>, an <span className="text-white font-normal">Ecosystem.</span>
+                    </h2>
+                    <p className="text-zinc-400 text-sm md:text-base font-light max-w-2xl mx-auto leading-relaxed font-sans">
+                        Digital India 2026 is designed to identify and support promising builds that solve localized problems at scale, fostering a continuous growth network.
+                    </p>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
+                    {/* Bento Box Card 1: Large Main Mission */}
+                    <div className="lg:col-span-2 bg-[#18181b]/60 border border-zinc-800/80 rounded-[32px] p-8 md:p-10 flex flex-col justify-between spotlight-card relative overflow-hidden group hover:border-[#9dff00]/25 transition-all duration-300">
+                        <div className="absolute top-0 right-0 w-64 h-64 bg-[#9dff00]/[0.02] rounded-full blur-3xl pointer-events-none" />
+                        <div>
+                            <span className="text-[10px] font-mono text-[#9dff00] uppercase tracking-widest block mb-6">ORGANIZED BY C3 & SDC AT SNIST</span>
+                            <h3 className="text-2xl md:text-3xl font-light text-white tracking-tight leading-snug mb-6">
+                                Turn innovative ideas into <br />
+                                <span className="font-semibold text-[#9dff00]">impactful, real-world solutions</span>
+                            </h3>
+                            <p className="text-zinc-300 text-sm md:text-base font-light leading-relaxed font-sans mb-6">
+                                Join a 24-hour national offline hackathon organized by the <span className="text-white font-semibold">Cloud Community Club (C3)</span> and <span className="text-white font-semibold">Student Developers Community (SDC)</span> at <span className="text-white font-semibold">Sreenidhi Institute of Science & Technology (SNIST), Hyderabad</span>.
+                            </p>
+                            <p className="text-zinc-400 text-xs sm:text-sm font-light leading-relaxed font-sans">
+                                We aim to build an ecosystem where promising tech proposals do not end with the hackathon. Deserving ideas receive resources, mentoring, and support to grow into deployable tools.
+                            </p>
+                        </div>
+                        <div className="mt-8 pt-6 border-t border-zinc-800/50 flex flex-wrap gap-x-6 gap-y-3 items-center text-[11px] font-mono text-zinc-500">
+                            <span className="flex items-center gap-2"><Calendar className="w-3.5 h-3.5 text-[#9dff00]" /> 10-11 JULY 2026</span>
+                            <span className="hidden sm:inline text-zinc-700">•</span>
+                            <span className="flex items-center gap-2"><MapPin className="w-3.5 h-3.5 text-[#9dff00]" /> SNIST, HYDERABAD</span>
+                            <span className="hidden sm:inline text-zinc-700">•</span>
+                            <span className="flex items-center gap-2"><Trophy className="w-3.5 h-3.5 text-[#9dff00]" /> ₹2,50,000 PRIZE POOL</span>
+                        </div>
+                    </div>
+
+                    {/* Bento Box Card 2: Beyond the Top 3 */}
+                    <div className="bg-[#18181b]/35 border border-zinc-800/80 rounded-[32px] p-8 flex flex-col justify-between spotlight-card hover:border-[#9dff00]/25 hover:bg-zinc-900/10 transition-all duration-300 group">
+                        <div>
+                            <div className="w-10 h-10 rounded-2xl bg-[#9dff00]/10 border border-[#9dff00]/20 flex items-center justify-center mb-8 transition-colors group-hover:bg-[#9dff00]/20">
+                                <Award className="w-5 h-5 text-[#9dff00]" />
+                            </div>
+                            <h4 className="text-lg font-medium text-white mb-3">Beyond the Top 3</h4>
+                            <p className="text-zinc-400 text-xs sm:text-sm font-light leading-relaxed font-sans">
+                                Recognition is not limited to the top three winners. Multiple teams receive awards and opportunities based on the quality, innovation, technical execution, and impact of their solutions.
+                            </p>
+                        </div>
+                        <div className="mt-6 text-[10px] font-mono text-zinc-500 uppercase tracking-widest">Performance-based awards</div>
+                    </div>
+
+                    {/* Bento Box Card 3: Idea to Product */}
+                    <div className="bg-[#18181b]/35 border border-zinc-800/80 rounded-[32px] p-8 flex flex-col justify-between spotlight-card hover:border-[#9dff00]/25 hover:bg-zinc-900/10 transition-all duration-300 group">
+                        <div>
+                            <div className="w-10 h-10 rounded-2xl bg-[#9dff00]/10 border border-[#9dff00]/20 flex items-center justify-center mb-8 transition-colors group-hover:bg-[#9dff00]/20">
+                                <Code className="w-5 h-5 text-[#9dff00]" />
+                            </div>
+                            <h4 className="text-lg font-medium text-white mb-3">Idea to Product</h4>
+                            <p className="text-zinc-400 text-xs sm:text-sm font-light leading-relaxed font-sans">
+                                Our objective is to ensure that promising ideas do not end with the hackathon. Selected projects will continue to receive support to evolve into real-world products and deployable solutions.
+                            </p>
+                        </div>
+                        <div className="mt-6 text-[10px] font-mono text-zinc-500 uppercase tracking-widest">Active post-event incubation</div>
+                    </div>
+
+                    {/* Bento Box Card 4: Post-Hackathon Mentorship */}
+                    <div className="bg-[#18181b]/35 border border-zinc-800/80 rounded-[32px] p-8 flex flex-col justify-between spotlight-card hover:border-[#9dff00]/25 hover:bg-zinc-900/10 transition-all duration-300 group">
+                        <div>
+                            <div className="w-10 h-10 rounded-2xl bg-[#9dff00]/10 border border-[#9dff00]/20 flex items-center justify-center mb-8 transition-colors group-hover:bg-[#9dff00]/20">
+                                <Brain className="w-5 h-5 text-[#9dff00]" />
+                            </div>
+                            <h4 className="text-lg font-medium text-white mb-3">Post-Hackathon Mentorship</h4>
+                            <p className="text-zinc-400 text-xs sm:text-sm font-light leading-relaxed font-sans">
+                                High-potential teams will be connected with industry experts, mentors, and the Cloud Community Club (C3) ecosystem for continued guidance and product development.
+                            </p>
+                        </div>
+                        <div className="mt-6 text-[10px] font-mono text-zinc-500 uppercase tracking-widest">C3 Community support</div>
+                    </div>
+
+                    {/* Bento Box Card 5: Opportunities for Every Team */}
+                    <div className="bg-[#18181b]/35 border border-zinc-800/80 rounded-[32px] p-8 flex flex-col justify-between spotlight-card hover:border-[#9dff00]/25 hover:bg-zinc-900/10 transition-all duration-300 group">
+                        <div>
+                            <div className="w-10 h-10 rounded-2xl bg-[#9dff00]/10 border border-[#9dff00]/20 flex items-center justify-center mb-8 transition-colors group-hover:bg-[#9dff00]/20">
+                                <Trophy className="w-5 h-5 text-[#9dff00]" />
+                            </div>
+                            <h4 className="text-lg font-medium text-white mb-3">Opportunities for All</h4>
+                            <p className="text-zinc-400 text-xs sm:text-sm font-light leading-relaxed font-sans">
+                                Apart from the ₹2,50,000 prize pool, participants will have opportunities for internships, mentorship, networking, certificates, special recognitions, and ecosystem support.
+                            </p>
+                        </div>
+                        <div className="mt-6 text-[10px] font-mono text-zinc-500 uppercase tracking-widest">Prize Pool & Internships</div>
+                    </div>
+
+                    {/* Bento Box Card 6: Long-Term Impact (Full width bottom layout) */}
+                    <div className="lg:col-span-3 bg-[#18181b]/60 border border-zinc-800/80 rounded-[32px] p-8 md:p-10 flex flex-col md:flex-row md:items-center justify-between gap-6 spotlight-card hover:border-[#9dff00]/25 transition-all duration-300 group relative overflow-hidden">
+                        <div className="absolute top-0 left-1/2 w-64 h-64 bg-[#9dff00]/[0.01] rounded-full blur-3xl pointer-events-none" />
+                        <div className="flex-1 max-w-2xl">
+                            <div className="w-10 h-10 rounded-2xl bg-[#9dff00]/10 border border-[#9dff00]/20 flex items-center justify-center mb-6 transition-colors group-hover:bg-[#9dff00]/20">
+                                <Sparkles className="w-5 h-5 text-[#9dff00]" />
+                            </div>
+                            <h4 className="text-xl font-medium text-white mb-3">Long-Term Impact</h4>
+                            <p className="text-zinc-400 text-xs sm:text-sm font-light leading-relaxed font-sans">
+                                We aim to create an ecosystem where innovative solutions continue to grow even after the event, contributing directly to India's digital transformation.
+                            </p>
+                        </div>
+                        <div className="flex items-center gap-2 self-start md:self-center shrink-0">
+                            <div className="px-5 py-3 rounded-2xl bg-zinc-950/50 border border-zinc-900 text-center font-mono">
+                                <div className="text-xs text-zinc-500">PRIZE POOL</div>
+                                <div className="text-lg font-bold text-white">₹2,50,000</div>
+                            </div>
+                            <div className="px-5 py-3 rounded-2xl bg-zinc-950/50 border border-zinc-900 text-center font-mono">
+                                <div className="text-xs text-zinc-500">BUILD TRACKS</div>
+                                <div className="text-lg font-bold text-[#9dff00]">6 Domains</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -1514,6 +1734,19 @@ export default function DigitalIndiaGSAPForm() {
                                                     )}
                                                 </div>
                                             </div>
+
+                                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
+                                                <div>
+                                                    <input
+                                                        type="text"
+                                                        value={referredBy}
+                                                        onChange={(e) => setReferredBy(e.target.value.toUpperCase())}
+                                                        placeholder="Code (Optional)"
+                                                        className="w-full text-xl sm:text-2xl font-light py-2.5 border-b border-zinc-800 focus:border-zinc-400 outline-none bg-transparent text-white placeholder-zinc-700 transition-all"
+                                                    />
+                                                    <span className="text-[10px] text-zinc-500 font-mono uppercase tracking-widest mt-1.5 block">Referral Code (Optional)</span>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
 
@@ -1752,27 +1985,116 @@ export default function DigitalIndiaGSAPForm() {
                             ) : isSubmitted ? (
                                 /* Success View inside the card */
                                 <div className="success-content fade-in-content flex flex-col justify-between h-full w-full">
-                                    <div>
-                                        <div className="text-xs font-bold text-zinc-500 font-mono mb-4">04.</div>
-                                        <h2 className="text-3xl font-light text-[#9dff00] mb-6 tracking-tight font-sans">Submission Confirmed</h2>
+                                    <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar">
+                                        <div className="text-xs font-bold text-zinc-500 font-mono mb-2">04.</div>
+                                        <h2 className="text-2xl font-light text-[#9dff00] mb-4 tracking-tight font-sans">Registration Confirmed!</h2>
 
-                                        <div className="bg-zinc-900/50 p-6 rounded-2xl border border-zinc-800 flex flex-col items-center justify-center text-center py-12">
-                                            <div className="w-16 h-16 rounded-full bg-[#9dff00]/10 flex items-center justify-center mb-6 border border-[#9dff00]/20 shadow-[0_0_30px_rgba(157,255,0,0.15)]">
-                                                <Check className="w-8 h-8 text-[#9dff00]" />
+                                        <div className="bg-zinc-900/40 border border-zinc-800 p-5 rounded-2xl space-y-4">
+                                            <div className="flex items-center justify-center gap-3 py-3 border-b border-zinc-800/60">
+                                                <div className="w-10 h-10 rounded-full bg-[#9dff00]/10 flex items-center justify-center border border-[#9dff00]/25">
+                                                    <Check className="w-5 h-5 text-[#9dff00]" />
+                                                </div>
+                                                <div>
+                                                    <h4 className="text-white text-sm font-semibold">Your team is registered!</h4>
+                                                    <p className="text-[10px] text-zinc-500 font-mono uppercase">Unique code: {myReferralCode}</p>
+                                                </div>
                                             </div>
-                                            <p className="text-lg font-light text-zinc-300 leading-relaxed max-w-md font-sans">
-                                                Thank you for your submission. Our team will contact you shortly about next steps.
-                                            </p>
+
+                                            <div className="grid grid-cols-3 gap-2">
+                                                <div className="bg-black/40 border border-zinc-900 p-3 rounded-xl text-center">
+                                                    <div className="text-zinc-500 text-[8px] font-mono uppercase tracking-wider mb-0.5">Points</div>
+                                                    <div className="text-sm font-bold font-mono text-white">{dashboardData?.referralPoints ?? 0}</div>
+                                                </div>
+                                                <div className="bg-black/40 border border-zinc-900 p-3 rounded-xl text-center">
+                                                    <div className="text-zinc-500 text-[8px] font-mono uppercase tracking-wider mb-0.5">Rank</div>
+                                                    <div className="text-sm font-bold font-mono text-[#9dff00]">#{dashboardData?.currentRank ?? '-'}</div>
+                                                </div>
+                                                <div className="bg-black/40 border border-zinc-900 p-3 rounded-xl text-center">
+                                                    <div className="text-zinc-500 text-[8px] font-mono uppercase tracking-wider mb-0.5">Referrals</div>
+                                                    <div className="text-sm font-bold font-mono text-white">{dashboardData?.successfulReferrals?.length ?? 0}</div>
+                                                </div>
+                                            </div>
+
+                                            <div className="space-y-1.5 pt-2">
+                                                <label className="text-[9px] text-zinc-500 font-mono uppercase tracking-widest block">Your Referral Link</label>
+                                                <div className="text-[10px] font-mono bg-black/60 p-2.5 rounded-xl border border-zinc-800 text-zinc-300 break-all select-all flex items-center justify-between">
+                                                    <span>{typeof window !== 'undefined' ? `${window.location.origin}/events/digitalindia?ref=${myReferralCode}` : `https://domain.com/events/digitalindia?ref=${myReferralCode}`}</span>
+                                                </div>
+                                                <div className="flex gap-2 mt-2">
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => {
+                                                            const link = typeof window !== 'undefined' ? `${window.location.origin}/events/digitalindia?ref=${myReferralCode}` : `https://domain.com/events/digitalindia?ref=${myReferralCode}`
+                                                            navigator.clipboard.writeText(link)
+                                                            alert('Referral link copied to clipboard!')
+                                                        }}
+                                                        className="bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 px-3 py-1.5 rounded-lg text-[10px] font-semibold flex-1 cursor-pointer transition-colors"
+                                                    >
+                                                        Copy Link
+                                                    </button>
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => {
+                                                            navigator.clipboard.writeText(myReferralCode)
+                                                            alert('Referral code copied to clipboard!')
+                                                        }}
+                                                        className="bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 px-3 py-1.5 rounded-lg text-[10px] font-semibold flex-1 cursor-pointer transition-colors"
+                                                    >
+                                                        Copy Code
+                                                    </button>
+                                                </div>
+                                            </div>
+
+                                            <div className="pt-2 border-t border-zinc-900/60">
+                                                <div className="text-[9px] font-mono text-zinc-500 mb-1.5 uppercase tracking-wide">Share Link</div>
+                                                <div className="flex gap-1.5 flex-wrap">
+                                                    {(() => {
+                                                        const link = typeof window !== 'undefined' ? `${window.location.origin}/events/digitalindia?ref=${myReferralCode}` : `https://domain.com/events/digitalindia?ref=${myReferralCode}`
+                                                        const shareText = `Build for India! Join my team at the Digital India Hackathon. Use my referral code "${myReferralCode}" to register:`
+                                                        
+                                                        const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareText + ' ' + link)}`
+                                                        const telegramUrl = `https://t.me/share/url?url=${encodeURIComponent(link)}&text=${encodeURIComponent(shareText)}`
+                                                        const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(link)}`
+                                                        const linkedinUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(link)}`
+
+                                                        return (
+                                                            <>
+                                                                <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="bg-green-600 hover:bg-green-700 text-white px-2.5 py-1 rounded text-[10px] font-semibold transition-colors">
+                                                                    WhatsApp
+                                                                </a>
+                                                                <a href={telegramUrl} target="_blank" rel="noopener noreferrer" className="bg-sky-600 hover:bg-sky-700 text-white px-2.5 py-1 rounded text-[10px] font-semibold transition-colors">
+                                                                    Telegram
+                                                                </a>
+                                                                <a href={twitterUrl} target="_blank" rel="noopener noreferrer" className="bg-neutral-900 hover:bg-neutral-800 border border-neutral-800 text-white px-2.5 py-1 rounded text-[10px] font-semibold transition-colors">
+                                                                    X
+                                                                </a>
+                                                                <a href={linkedinUrl} target="_blank" rel="noopener noreferrer" className="bg-blue-700 hover:bg-blue-800 text-white px-2.5 py-1 rounded text-[10px] font-semibold transition-colors">
+                                                                    LinkedIn
+                                                                </a>
+                                                            </>
+                                                        )
+                                                    })()}
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
 
-                                    <div className="flex justify-end items-center mt-6 pt-4 border-t border-zinc-800">
+                                    <div className="flex justify-between items-center mt-6 pt-4 border-t border-zinc-800">
+                                        <button
+                                            type="button"
+                                            onClick={() => {
+                                                document.getElementById('leaderboard')?.scrollIntoView({ behavior: 'smooth' })
+                                            }}
+                                            className="text-[#9dff00] hover:underline text-xs font-mono font-semibold"
+                                        >
+                                            View Leaderboard
+                                        </button>
                                         <button
                                             type="button"
                                             onClick={() => router.push('/events')}
-                                            className="bg-[#9dff00] hover:bg-[#8ae000] text-zinc-950 rounded-full py-3.5 px-8 text-sm font-bold flex items-center gap-2 shadow-lg shadow-[#9dff00]/10 transition-all cursor-pointer"
+                                            className="bg-[#9dff00] hover:bg-[#8ae000] text-zinc-950 rounded-full py-3 px-6 text-xs font-bold flex items-center gap-1 shadow-lg shadow-[#9dff00]/10 transition-all cursor-pointer"
                                         >
-                                            Got It <Check className="w-4 h-4" />
+                                            Got It <Check className="w-3.5 h-3.5" />
                                         </button>
                                     </div>
                                 </div>
@@ -1917,6 +2239,268 @@ export default function DigitalIndiaGSAPForm() {
                 </div>
             </section>
 
+            {/* Referral Dashboard lookup */}
+            <section id="referral-dashboard" className="relative z-10 w-full max-w-5xl mx-auto px-6 py-12 md:py-16 border-t border-zinc-800/40">
+                <div className="bg-zinc-900/30 border border-zinc-800/80 rounded-[32px] p-6 md:p-10 spotlight-card">
+                    <h2 className="text-3xl font-light text-white tracking-tight mb-4 flex items-center gap-2">
+                        <Users2 className="text-[#9dff00] w-8 h-8" />
+                        Referral <span className="text-[#9dff00] font-normal">Program Dashboard</span>
+                    </h2>
+                    <p className="text-zinc-400 text-xs sm:text-sm font-light leading-relaxed mb-8 max-w-2xl font-sans">
+                        Track your successful referrals, view your rank on the leaderboard, and claim your free passes once you reach 10 successful referrals!
+                    </p>
+
+                    {dashboardData ? (
+                        /* Loaded Dashboard View */
+                        <div className="space-y-8">
+                            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                <div className="bg-zinc-900/60 border border-zinc-800/50 p-5 rounded-2xl text-center">
+                                    <div className="text-zinc-500 text-[10px] font-mono uppercase tracking-wider mb-1">Referral Code</div>
+                                    <div className="text-2xl font-bold font-mono text-[#9dff00]">{dashboardData.referralCode}</div>
+                                </div>
+                                <div className="bg-zinc-900/60 border border-zinc-800/50 p-5 rounded-2xl text-center">
+                                    <div className="text-zinc-500 text-[10px] font-mono uppercase tracking-wider mb-1">Referral Points</div>
+                                    <div className="text-2xl font-bold font-mono text-white">{dashboardData.referralPoints}</div>
+                                </div>
+                                <div className="bg-zinc-900/60 border border-zinc-800/50 p-5 rounded-2xl text-center">
+                                    <div className="text-zinc-500 text-[10px] font-mono uppercase tracking-wider mb-1">Current Rank</div>
+                                    <div className="text-2xl font-bold font-mono text-[#9dff00]">#{dashboardData.currentRank}</div>
+                                </div>
+                                <div className="bg-zinc-900/60 border border-zinc-800/50 p-5 rounded-2xl text-center">
+                                    <div className="text-zinc-500 text-[10px] font-mono uppercase tracking-wider mb-1">Successful Referrals</div>
+                                    <div className="text-2xl font-bold font-mono text-white">{dashboardData.successfulReferrals?.length || 0}</div>
+                                </div>
+                            </div>
+
+                            <div className="bg-zinc-950/40 border border-zinc-900 p-6 rounded-2xl space-y-4">
+                                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                                    <div className="flex-1">
+                                        <label className="text-[9px] text-zinc-500 font-mono uppercase tracking-widest block mb-1">Your Unique Referral Link</label>
+                                        <div className="text-xs font-mono bg-black/60 p-3 rounded-xl border border-zinc-800 text-zinc-300 break-all select-all">
+                                            {typeof window !== 'undefined' ? `${window.location.origin}/events/digitalindia?ref=${dashboardData.referralCode}` : `https://domain.com/events/digitalindia?ref=${dashboardData.referralCode}`}
+                                        </div>
+                                    </div>
+                                    <div className="flex items-center gap-2 mt-auto">
+                                        <button
+                                            type="button"
+                                            onClick={() => {
+                                                const link = typeof window !== 'undefined' ? `${window.location.origin}/events/digitalindia?ref=${dashboardData.referralCode}` : `https://domain.com/events/digitalindia?ref=${dashboardData.referralCode}`
+                                                navigator.clipboard.writeText(link)
+                                                alert('Referral link copied to clipboard!')
+                                            }}
+                                            className="bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 px-4 py-2.5 rounded-xl text-xs font-semibold cursor-pointer transition-colors"
+                                        >
+                                            Copy Link
+                                        </button>
+                                        <button
+                                            type="button"
+                                            onClick={() => {
+                                                navigator.clipboard.writeText(dashboardData.referralCode)
+                                                alert('Referral code copied to clipboard!')
+                                            }}
+                                            className="bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 px-4 py-2.5 rounded-xl text-xs font-semibold cursor-pointer transition-colors"
+                                        >
+                                            Copy Code
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div className="pt-2 border-t border-zinc-900/60">
+                                    <div className="text-xs font-mono text-zinc-400 mb-2 uppercase tracking-wide">Share on Social Media</div>
+                                    <div className="flex flex-wrap gap-2">
+                                        {(() => {
+                                            const link = typeof window !== 'undefined' ? `${window.location.origin}/events/digitalindia?ref=${dashboardData.referralCode}` : `https://domain.com/events/digitalindia?ref=${dashboardData.referralCode}`
+                                            const shareText = `Build for India! Join my team at the Digital India Hackathon. Use my referral code "${dashboardData.referralCode}" to register:`
+                                            
+                                            const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareText + ' ' + link)}`
+                                            const telegramUrl = `https://t.me/share/url?url=${encodeURIComponent(link)}&text=${encodeURIComponent(shareText)}`
+                                            const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(link)}`
+                                            const linkedinUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(link)}`
+
+                                            return (
+                                                <>
+                                                    <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="bg-green-650 hover:bg-green-700 text-white px-3.5 py-2 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-colors">
+                                                        WhatsApp
+                                                    </a>
+                                                    <a href={telegramUrl} target="_blank" rel="noopener noreferrer" className="bg-sky-600 hover:bg-sky-700 text-white px-3.5 py-2 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-colors">
+                                                        Telegram
+                                                    </a>
+                                                    <a href={twitterUrl} target="_blank" rel="noopener noreferrer" className="bg-neutral-900 hover:bg-neutral-800 border border-neutral-800 text-white px-3.5 py-2 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-colors">
+                                                        X
+                                                    </a>
+                                                    <a href={linkedinUrl} target="_blank" rel="noopener noreferrer" className="bg-blue-700 hover:bg-blue-800 text-white px-3.5 py-2 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-colors">
+                                                        LinkedIn
+                                                    </a>
+                                                </>
+                                            )
+                                        })()}
+                                    </div>
+                                </div>
+                            </div>
+
+                            {dashboardData.successfulReferrals && dashboardData.successfulReferrals.length > 0 && (
+                                <div className="mt-6">
+                                    <h4 className="text-xs font-mono text-zinc-400 mb-2 uppercase tracking-wide">Your Referrals ({dashboardData.successfulReferrals.length})</h4>
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-40 overflow-y-auto pr-2 custom-scrollbar">
+                                        {dashboardData.successfulReferrals.map((refTeam: any, index: number) => (
+                                            <div key={index} className="bg-zinc-950/30 border border-zinc-900/60 p-3 rounded-xl flex justify-between items-center text-xs font-sans">
+                                                <span className="text-white font-medium">{refTeam.teamName}</span>
+                                                <span className="text-zinc-500 text-[10px] font-mono">
+                                                    {new Date(refTeam.registeredAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' })}
+                                                </span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
+                            <div className="flex justify-end pt-4 border-t border-zinc-900/60">
+                                <button
+                                    type="button"
+                                    onClick={handleLogoutDashboard}
+                                    className="text-zinc-500 hover:text-red-400 text-xs font-mono flex items-center gap-1 transition-colors"
+                                >
+                                    Use Different Email
+                                </button>
+                            </div>
+                        </div>
+                    ) : (
+                        /* Lookup Form View */
+                        <form onSubmit={handleDashboardLookup} className="max-w-md">
+                            <div className="flex flex-col sm:flex-row gap-3">
+                                <div className="flex-1">
+                                    <input
+                                        type="email"
+                                        placeholder="Enter team leader's email"
+                                        value={dashboardEmail}
+                                        onChange={(e) => {
+                                            setDashboardEmail(e.target.value)
+                                            setDashboardError(null)
+                                        }}
+                                        className="w-full bg-zinc-950/60 border border-zinc-800 focus:border-[#9dff00] rounded-xl px-4 py-3 text-sm text-white placeholder-zinc-650 outline-none transition-all font-sans"
+                                    />
+                                </div>
+                                <button
+                                    type="submit"
+                                    disabled={dashboardLoading}
+                                    className="bg-[#9dff00] hover:bg-[#8ae000] text-zinc-950 px-6 py-3 rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 disabled:opacity-50 transition-all shrink-0 cursor-pointer"
+                                >
+                                    {dashboardLoading ? 'Searching...' : 'View Dashboard'}
+                                    <ArrowRight className="w-3.5 h-3.5 text-zinc-950" />
+                                </button>
+                            </div>
+                            {dashboardError && (
+                                <p className="text-red-400 text-xs mt-2 font-mono">{dashboardError}</p>
+                            )}
+                        </form>
+                    )}
+                </div>
+            </section>
+
+            {/* Referral Leaderboard */}
+            <section id="leaderboard" className="relative z-10 w-full max-w-5xl mx-auto px-6 py-12 md:py-16 border-t border-zinc-800/40">
+                <div className="bg-zinc-900/30 border border-zinc-800/80 rounded-[32px] p-6 md:p-10">
+                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
+                        <div>
+                            <h2 className="text-3xl font-light text-white tracking-tight mb-2 flex items-center gap-2">
+                                <Trophy className="text-[#9dff00] w-8 h-8" />
+                                Referral <span className="text-[#9dff00] font-normal">Leaderboard</span>
+                            </h2>
+                            <p className="text-zinc-500 text-xs font-mono uppercase tracking-widest">Compete and earn free hackathon passes</p>
+                        </div>
+                        
+                        <div className="relative max-w-xs w-full bg-[#18181b] border border-zinc-800 rounded-xl px-3.5 py-2 flex items-center gap-2 shadow-sm">
+                            <Search className="w-4 h-4 text-zinc-500 shrink-0" />
+                            <input
+                                type="text"
+                                placeholder="Search by team name..."
+                                value={leaderboardSearch}
+                                onChange={(e) => setLeaderboardSearch(e.target.value)}
+                                className="bg-transparent outline-none text-white text-xs placeholder:text-zinc-600 flex-1 font-mono"
+                            />
+                        </div>
+                    </div>
+
+                    {/* Banner */}
+                    <div className="bg-[#9dff00]/10 border border-[#9dff00]/20 rounded-2xl p-4 mb-6 text-center shadow-[0_0_20px_rgba(157,255,0,0.05)]">
+                        <p className="text-xs sm:text-sm font-semibold text-[#9dff00] flex items-center justify-center gap-2 font-sans">
+                            <Trophy className="w-4 h-4 text-[#9dff00] shrink-0" /> Reach 10 Successful Referrals and Earn FREE Hackathon Passes!
+                        </p>
+                    </div>
+
+                    {/* Table */}
+                    <div className="border border-zinc-800 rounded-2xl overflow-hidden bg-zinc-950/20">
+                        <table className="w-full text-left border-collapse text-xs sm:text-sm font-sans">
+                            <thead>
+                                <tr className="bg-zinc-900/50 border-b border-zinc-800/80">
+                                    <th className="px-6 py-4 text-zinc-400 font-mono text-xs uppercase tracking-wider">Rank</th>
+                                    <th className="px-6 py-4 text-zinc-400 font-mono text-xs uppercase tracking-wider">Team Name</th>
+                                    <th className="px-6 py-4 text-zinc-400 font-mono text-xs uppercase tracking-wider text-right">Referral Points</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {leaderboardLoading && leaderboardData.length === 0 ? (
+                                    Array.from({ length: 3 }).map((_, idx) => (
+                                        <tr key={idx} className="border-b border-zinc-900/40">
+                                            <td className="px-6 py-4"><div className="h-4 w-8 bg-zinc-800 rounded animate-pulse" /></td>
+                                            <td className="px-6 py-4"><div className="h-4 w-32 bg-zinc-800 rounded animate-pulse" /></td>
+                                            <td className="px-6 py-4 text-right"><div className="h-4 w-12 bg-zinc-800 rounded animate-pulse ml-auto" /></td>
+                                        </tr>
+                                    ))
+                                ) : leaderboardData.length === 0 ? (
+                                    <tr>
+                                        <td colSpan={3} className="px-6 py-8 text-center text-zinc-500 font-mono text-xs">
+                                            No teams found on the leaderboard.
+                                        </td>
+                                    </tr>
+                                ) : (
+                                    leaderboardData.map((team) => {
+                                        const isTop10 = team.rank <= 10
+                                        const isGold = team.rank === 1
+                                        const isSilver = team.rank === 2
+                                        const isBronze = team.rank === 3
+
+                                        return (
+                                            <tr
+                                                key={team.teamName}
+                                                className={`border-b border-zinc-900/40 hover:bg-zinc-900/20 transition-all duration-300 ${
+                                                    isTop10 ? 'bg-[#9dff00]/[0.015]' : ''
+                                                }`}
+                                            >
+                                                <td className="px-6 py-4 font-mono font-bold">
+                                                    {isGold ? (
+                                                        <span className="inline-flex items-center gap-1.5 text-yellow-500"><Medal className="w-4 h-4 text-yellow-550 shrink-0" /> <span className="text-yellow-500/80">#1</span></span>
+                                                    ) : isSilver ? (
+                                                        <span className="inline-flex items-center gap-1.5 text-slate-300"><Medal className="w-4 h-4 text-slate-300 shrink-0" /> <span className="text-slate-300/80">#2</span></span>
+                                                    ) : isBronze ? (
+                                                        <span className="inline-flex items-center gap-1.5 text-amber-600"><Medal className="w-4 h-4 text-amber-600 shrink-0" /> <span className="text-amber-600/80">#3</span></span>
+                                                    ) : (
+                                                        <span className={isTop10 ? 'text-[#9dff00]' : 'text-zinc-500'}>
+                                                            #{team.rank}
+                                                        </span>
+                                                    )}
+                                                </td>
+                                                <td className={`px-6 py-4 font-sans font-medium ${isTop10 ? 'text-white' : 'text-zinc-400'}`}>
+                                                    {team.teamName}
+                                                    {isTop10 && (
+                                                        <span className="ml-2 text-[9px] font-mono bg-[#9dff00]/15 text-[#9dff00] px-2 py-0.5 rounded-full uppercase tracking-wider font-semibold">
+                                                            Top 10
+                                                        </span>
+                                                    )}
+                                                </td>
+                                                <td className="px-6 py-4 text-right font-mono font-bold text-base text-white">
+                                                    {team.referralPoints}
+                                                </td>
+                                            </tr>
+                                        )
+                                    })
+                                )}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
             {/* Rules & FAQ Split Section */}
             <section className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-12 py-20 md:py-28 border-t border-zinc-800/40">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
@@ -1925,7 +2509,6 @@ export default function DigitalIndiaGSAPForm() {
                         <h2 className="text-3xl font-light text-white tracking-tight mb-8">
                             Rules & <span className="text-[#9dff00] font-normal">Regulations</span>
                         </h2>
-                        
                         <div className="space-y-4">
                             {[
                                 { title: "Original Submissions Only", desc: "All developed work must be original and built during the offline hackathon. Copied templates result in immediate disqualification." },
@@ -1936,8 +2519,8 @@ export default function DigitalIndiaGSAPForm() {
                                         {idx + 1 < 10 ? `0${idx + 1}` : idx + 1}
                                     </div>
                                     <div>
-                                        <h4 className="text-white text-sm font-medium mb-1">{rule.title}</h4>
-                                        <p className="text-zinc-400 text-xs font-light leading-relaxed">
+                                        <h4 className="text-white text-sm font-medium mb-1 font-sans">{rule.title}</h4>
+                                        <p className="text-zinc-400 text-xs font-light leading-relaxed font-sans">
                                             {rule.desc}
                                         </p>
                                     </div>
