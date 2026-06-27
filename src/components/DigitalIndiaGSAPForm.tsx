@@ -1538,6 +1538,16 @@ export default function DigitalIndiaGSAPForm() {
 
             {/* 4. Prize Pool & Highlights Section */}
             <section className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-12 py-20 md:py-28 border-t border-zinc-800/40">
+                <div className="text-center mb-16">
+                    <span className="text-xs font-mono text-[#9dff00] uppercase tracking-widest block mb-3">EXCITING REWARDS</span>
+                    <h2 className="text-3xl md:text-5xl font-light text-white tracking-tight mb-4">
+                        Prizes & <span className="text-[#9dff00] font-normal">Incentives</span>
+                    </h2>
+                    <p className="text-zinc-400 text-sm md:text-base font-light max-w-2xl mx-auto leading-relaxed font-sans">
+                        Compete for a grand prize pool, secure valuable internship opportunities, and receive guidance from industry mentors.
+                    </p>
+                </div>
+
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch highlight-grid-anim">
                     {/* Grand Prize Card */}
                     <div className="highlight-card-anim spotlight-card lg:col-span-1 border border-[#9dff00]/25 bg-gradient-to-b from-[#18181b] to-[#0d0d0e] rounded-3xl p-8 flex flex-col justify-between shadow-[0_0_40px_rgba(157,255,0,0.03)] relative overflow-hidden group">
