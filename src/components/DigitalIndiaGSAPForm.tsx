@@ -211,7 +211,7 @@ export default function DigitalIndiaGSAPForm() {
 
     // UPI configurations
     const upiId = process.env.NEXT_PUBLIC_UPI_ID || '8008151542@pthdfc'
-    const upiAmount = '99'
+    const upiAmount = '100'
 
     const handleCopyUPI = async () => {
         try {
