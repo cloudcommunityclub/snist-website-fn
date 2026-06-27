@@ -39,7 +39,11 @@ const faqs = [
     },
     {
         q: "Is there a registration fee?",
-        a: "Yes. There is a nominal registration fee of ₹99 for verification. Further details regarding the final hackathon will be shared with the shortlisted participants."
+        a: "Yes. The registration fee is ₹100 per team submission for the Stage 1 Online Ideathon. For teams shortlisted for the Stage 2 Offline Hackathon, there is a participation fee of ₹300 per participant."
+    },
+    {
+        q: "Is there a referral reward?",
+        a: "Yes! If your team registers and gets 10 successful referrals using your unique referral code, your team will get FREE passes (participation fee waived) for the Stage 2 Offline Hackathon."
     },
     {
         q: "Can we modify our idea after submission?",
@@ -207,7 +211,7 @@ export default function DigitalIndiaGSAPForm() {
 
     // UPI configurations
     const upiId = process.env.NEXT_PUBLIC_UPI_ID || '8008151542@pthdfc'
-    const upiAmount = '99'
+    const upiAmount = '100'
 
     const handleCopyUPI = async () => {
         try {
@@ -511,6 +515,22 @@ export default function DigitalIndiaGSAPForm() {
                     stagger: 0.1,
                     scrollTrigger: {
                         trigger: '.selection-grid-anim',
+                        start: 'top 85%',
+                        toggleActions: 'play none none none'
+                    }
+                }
+            )
+
+            // Registration & Selection Process scroll triggers
+            gsap.fromTo('.process-card-anim',
+                { opacity: 0, y: 30 },
+                {
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.5,
+                    stagger: 0.1,
+                    scrollTrigger: {
+                        trigger: '.process-grid-anim',
                         start: 'top 85%',
                         toggleActions: 'play none none none'
                     }
@@ -1151,32 +1171,34 @@ export default function DigitalIndiaGSAPForm() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
                     {/* Bento Box Card 1: Large Main Mission */}
-                    <div className="lg:col-span-2 bg-[#18181b]/60 border border-zinc-800/80 rounded-[32px] p-8 md:p-10 flex flex-col justify-between spotlight-card relative overflow-hidden group hover:border-[#9dff00]/25 transition-all duration-300">
-                        <div className="absolute top-0 right-0 w-64 h-64 bg-[#9dff00]/[0.02] rounded-full blur-3xl pointer-events-none" />
-                        <div>
-                            <span className="text-[10px] font-mono text-[#9dff00] uppercase tracking-widest block mb-6">ORGANIZED BY C3 & SDC AT SNIST</span>
-                            <h3 className="text-2xl md:text-3xl font-light text-white tracking-tight leading-snug mb-6">
-                                Turn innovative ideas into <br />
-                                <span className="font-semibold text-[#9dff00]">impactful, real-world solutions</span>
-                            </h3>
-                            <p className="text-zinc-300 text-sm md:text-base font-light leading-relaxed font-sans mb-6">
-                                Join a 24-hour national offline hackathon organized by the <span className="text-white font-semibold">Cloud Community Club (C3)</span> and <span className="text-white font-semibold">Student Developers Community (SDC)</span> at <span className="text-white font-semibold">Sreenidhi Institute of Science & Technology (SNIST), Hyderabad</span>.
-                            </p>
-                            <p className="text-zinc-400 text-xs sm:text-sm font-light leading-relaxed font-sans">
-                                We aim to build an ecosystem where promising tech proposals do not end with the hackathon. Deserving ideas receive resources, mentoring, and support to grow into deployable tools.
-                            </p>
-                        </div>
-                        <div className="mt-8 pt-6 border-t border-zinc-800/50 flex flex-wrap gap-x-6 gap-y-3 items-center text-[11px] font-mono text-zinc-500">
-                            <span className="flex items-center gap-2"><Calendar className="w-3.5 h-3.5 text-[#9dff00]" /> 10-11 JULY 2026</span>
-                            <span className="hidden sm:inline text-zinc-700">•</span>
-                            <span className="flex items-center gap-2"><MapPin className="w-3.5 h-3.5 text-[#9dff00]" /> SNIST, HYDERABAD</span>
-                            <span className="hidden sm:inline text-zinc-700">•</span>
-                            <span className="flex items-center gap-2"><Trophy className="w-3.5 h-3.5 text-[#9dff00]" /> ₹2,50,000 PRIZE POOL</span>
+                    <div className="lg:col-span-2 bg-[#18181b]/60 border border-zinc-800/80 rounded-[32px] p-8 md:p-10 flex flex-col spotlight-card relative overflow-hidden group hover:border-[#9dff00]/25 transition-all duration-300">
+                        
+                        <div className="flex flex-col justify-between h-full">
+                            <div>
+                                <span className="text-[10px] font-mono text-[#9dff00] uppercase tracking-widest block mb-6">ORGANIZED BY C3 & SDC AT SNIST</span>
+                                <h3 className="text-2xl md:text-3xl font-light text-white tracking-tight leading-snug mb-6">
+                                    Turn innovative ideas into <br />
+                                    <span className="font-semibold text-[#9dff00]">impactful, real-world solutions</span>
+                                </h3>
+                                <p className="text-zinc-300 text-sm md:text-base font-light leading-relaxed font-sans mb-6">
+                                    Join a 24-hour national offline hackathon organized by the <span className="text-white font-semibold">Cloud Community Club (C3)</span> and <span className="text-white font-semibold">Student Developers Community (SDC)</span> at <span className="text-white font-semibold">Sreenidhi Institute of Science & Technology (SNIST), Hyderabad</span>.
+                                </p>
+                                <p className="text-zinc-400 text-xs sm:text-sm font-light leading-relaxed font-sans">
+                                    We aim to build an ecosystem where promising tech proposals do not end with the hackathon. Deserving ideas receive resources, mentoring, and support to grow into deployable tools.
+                                </p>
+                            </div>
+                            <div className="mt-8 pt-6 border-t border-zinc-800/50 flex flex-wrap gap-x-6 gap-y-3 items-center text-[11px] font-mono text-zinc-500">
+                                <span className="flex items-center gap-2"><Calendar className="w-3.5 h-3.5 text-[#9dff00]" /> 10-11 JULY 2026</span>
+                                <span className="hidden sm:inline text-zinc-700">•</span>
+                                <span className="flex items-center gap-2"><MapPin className="w-3.5 h-3.5 text-[#9dff00]" /> SNIST, HYDERABAD</span>
+                                <span className="hidden sm:inline text-zinc-700">•</span>
+                                <span className="flex items-center gap-2"><Trophy className="w-3.5 h-3.5 text-[#9dff00]" /> ₹2,50,000 PRIZE POOL</span>
+                            </div>
                         </div>
                     </div>
 
                     {/* Bento Box Card 2: Beyond the Top 3 */}
-                    <div className="bg-[#18181b]/35 border border-zinc-800/80 rounded-[32px] p-8 flex flex-col justify-between spotlight-card hover:border-[#9dff00]/25 hover:bg-zinc-900/10 transition-all duration-300 group">
+                    <div className="bg-[#18181b]/35 border border-zinc-800/80 rounded-[32px] p-8 flex flex-col spotlight-card hover:border-[#9dff00]/25 hover:bg-zinc-900/10 transition-all duration-300 group">
                         <div>
                             <div className="w-10 h-10 rounded-2xl bg-[#9dff00]/10 border border-[#9dff00]/20 flex items-center justify-center mb-8 transition-colors group-hover:bg-[#9dff00]/20">
                                 <Award className="w-5 h-5 text-[#9dff00]" />
@@ -1185,12 +1207,12 @@ export default function DigitalIndiaGSAPForm() {
                             <p className="text-zinc-400 text-xs sm:text-sm font-light leading-relaxed font-sans">
                                 Recognition is not limited to the top three winners. Multiple teams receive awards and opportunities based on the quality, innovation, technical execution, and impact of their solutions.
                             </p>
+                            <div className="mt-6 text-[10px] font-mono text-zinc-500 uppercase tracking-widest">Performance-based awards</div>
                         </div>
-                        <div className="mt-6 text-[10px] font-mono text-zinc-500 uppercase tracking-widest">Performance-based awards</div>
                     </div>
 
                     {/* Bento Box Card 3: Idea to Product */}
-                    <div className="bg-[#18181b]/35 border border-zinc-800/80 rounded-[32px] p-8 flex flex-col justify-between spotlight-card hover:border-[#9dff00]/25 hover:bg-zinc-900/10 transition-all duration-300 group">
+                    <div className="bg-[#18181b]/35 border border-zinc-800/80 rounded-[32px] p-8 flex flex-col spotlight-card hover:border-[#9dff00]/25 hover:bg-zinc-900/10 transition-all duration-300 group">
                         <div>
                             <div className="w-10 h-10 rounded-2xl bg-[#9dff00]/10 border border-[#9dff00]/20 flex items-center justify-center mb-8 transition-colors group-hover:bg-[#9dff00]/20">
                                 <Code className="w-5 h-5 text-[#9dff00]" />
@@ -1199,12 +1221,12 @@ export default function DigitalIndiaGSAPForm() {
                             <p className="text-zinc-400 text-xs sm:text-sm font-light leading-relaxed font-sans">
                                 Our objective is to ensure that promising ideas do not end with the hackathon. Selected projects will continue to receive support to evolve into real-world products and deployable solutions.
                             </p>
+                            <div className="mt-6 text-[10px] font-mono text-zinc-500 uppercase tracking-widest">Active post-event incubation</div>
                         </div>
-                        <div className="mt-6 text-[10px] font-mono text-zinc-500 uppercase tracking-widest">Active post-event incubation</div>
                     </div>
 
                     {/* Bento Box Card 4: Post-Hackathon Mentorship */}
-                    <div className="bg-[#18181b]/35 border border-zinc-800/80 rounded-[32px] p-8 flex flex-col justify-between spotlight-card hover:border-[#9dff00]/25 hover:bg-zinc-900/10 transition-all duration-300 group">
+                    <div className="bg-[#18181b]/35 border border-zinc-800/80 rounded-[32px] p-8 flex flex-col spotlight-card hover:border-[#9dff00]/25 hover:bg-zinc-900/10 transition-all duration-300 group">
                         <div>
                             <div className="w-10 h-10 rounded-2xl bg-[#9dff00]/10 border border-[#9dff00]/20 flex items-center justify-center mb-8 transition-colors group-hover:bg-[#9dff00]/20">
                                 <Brain className="w-5 h-5 text-[#9dff00]" />
@@ -1213,12 +1235,12 @@ export default function DigitalIndiaGSAPForm() {
                             <p className="text-zinc-400 text-xs sm:text-sm font-light leading-relaxed font-sans">
                                 High-potential teams will be connected with industry experts, mentors, and the Cloud Community Club (C3) ecosystem for continued guidance and product development.
                             </p>
+                            <div className="mt-6 text-[10px] font-mono text-zinc-500 uppercase tracking-widest">C3 Community support</div>
                         </div>
-                        <div className="mt-6 text-[10px] font-mono text-zinc-500 uppercase tracking-widest">C3 Community support</div>
                     </div>
 
                     {/* Bento Box Card 5: Opportunities for Every Team */}
-                    <div className="bg-[#18181b]/35 border border-zinc-800/80 rounded-[32px] p-8 flex flex-col justify-between spotlight-card hover:border-[#9dff00]/25 hover:bg-zinc-900/10 transition-all duration-300 group">
+                    <div className="bg-[#18181b]/35 border border-zinc-800/80 rounded-[32px] p-8 flex flex-col spotlight-card hover:border-[#9dff00]/25 hover:bg-zinc-900/10 transition-all duration-300 group">
                         <div>
                             <div className="w-10 h-10 rounded-2xl bg-[#9dff00]/10 border border-[#9dff00]/20 flex items-center justify-center mb-8 transition-colors group-hover:bg-[#9dff00]/20">
                                 <Trophy className="w-5 h-5 text-[#9dff00]" />
@@ -1227,13 +1249,13 @@ export default function DigitalIndiaGSAPForm() {
                             <p className="text-zinc-400 text-xs sm:text-sm font-light leading-relaxed font-sans">
                                 Apart from the ₹2,50,000 prize pool, participants will have opportunities for internships, mentorship, networking, certificates, special recognitions, and ecosystem support.
                             </p>
+                            <div className="mt-6 text-[10px] font-mono text-zinc-500 uppercase tracking-widest">Prize Pool & Internships</div>
                         </div>
-                        <div className="mt-6 text-[10px] font-mono text-zinc-500 uppercase tracking-widest">Prize Pool & Internships</div>
                     </div>
 
                     {/* Bento Box Card 6: Long-Term Impact (Full width bottom layout) */}
                     <div className="lg:col-span-3 bg-[#18181b]/60 border border-zinc-800/80 rounded-[32px] p-8 md:p-10 flex flex-col md:flex-row md:items-center justify-between gap-6 spotlight-card hover:border-[#9dff00]/25 transition-all duration-300 group relative overflow-hidden">
-                        <div className="absolute top-0 left-1/2 w-64 h-64 bg-[#9dff00]/[0.01] rounded-full blur-3xl pointer-events-none" />
+                        
                         <div className="flex-1 max-w-2xl">
                             <div className="w-10 h-10 rounded-2xl bg-[#9dff00]/10 border border-[#9dff00]/20 flex items-center justify-center mb-6 transition-colors group-hover:bg-[#9dff00]/20">
                                 <Sparkles className="w-5 h-5 text-[#9dff00]" />
@@ -1303,6 +1325,140 @@ export default function DigitalIndiaGSAPForm() {
                         <p className="text-zinc-400 text-xs sm:text-sm font-light leading-relaxed">
                             Develop your idea into a working software application during the 24-hour build sprint on 10–11 July and present to judges.
                         </p>
+                    </div>
+                </div>
+            </section>
+
+            {/* 2.5 Registration & Selection Process Section */}
+            <section className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-12 py-20 md:py-28 border-t border-zinc-800/40">
+                <div className="text-center mb-16">
+                    <span className="text-xs font-mono text-[#9dff00] uppercase tracking-widest block mb-3">STAGES & FEES</span>
+                    <h2 className="text-3xl md:text-5xl font-light text-white tracking-tight mb-4">
+                        Registration & <span className="text-[#9dff00] font-normal">Selection Process</span>
+                    </h2>
+                    <p className="text-zinc-400 text-sm md:text-base font-light max-w-2xl mx-auto leading-relaxed">
+                        The Digital India Hackathon 2026 consists of two stages designed to discover and scale impactful tech solutions.
+                    </p>
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch process-grid-anim">
+                    {/* Stage 1 Card */}
+                    <div className="process-card-anim spotlight-card border border-zinc-800 bg-[#18181b]/35 hover:border-[#9dff00]/25 rounded-[32px] p-8 flex flex-col justify-between transition-all duration-300 group">
+                        <div>
+                            <div className="flex items-center justify-between mb-6">
+                                <span className="text-xs font-mono text-[#9dff00] uppercase tracking-wider">STAGE 1</span>
+                                <div className="px-3 py-1 rounded-full bg-[#9dff00]/10 border border-[#9dff00]/20 text-[#9dff00] text-[10px] font-mono font-bold">ONLINE</div>
+                            </div>
+                            <h3 className="text-2xl font-light text-white mb-4">Online Ideathon</h3>
+                            <ul className="space-y-4 text-zinc-400 text-sm font-light">
+                                <li className="flex items-start gap-3">
+                                    <span className="text-[#9dff00] mt-1.5">•</span>
+                                    <span>Registration Fee: <strong className="text-white">₹100 per team submission</strong></span>
+                                </li>
+                                <li className="flex items-start gap-3">
+                                    <span className="text-[#9dff00] mt-1.5">•</span>
+                                    <span>Teams submit their idea through the online portal before the submission deadline.</span>
+                                </li>
+                                <li className="flex items-start gap-3">
+                                    <span className="text-[#9dff00] mt-1.5">•</span>
+                                    <span>All submissions will be evaluated by the judging panel.</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div className="mt-8 pt-6 border-t border-zinc-800/40 text-[11px] font-mono text-zinc-500">
+                            Evaluated on feasibility and localization
+                        </div>
+                    </div>
+
+                    {/* Stage 2 Card */}
+                    <div className="process-card-anim spotlight-card border border-zinc-800 bg-[#18181b]/35 hover:border-[#9dff00]/25 rounded-[32px] p-8 flex flex-col justify-between transition-all duration-300 group">
+                        <div>
+                            <div className="flex items-center justify-between mb-6">
+                                <span className="text-xs font-mono text-[#9dff00] uppercase tracking-wider">STAGE 2</span>
+                                <div className="px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-[10px] font-mono font-bold">OFFLINE</div>
+                            </div>
+                            <h3 className="text-2xl font-light text-white mb-4">Offline Hackathon</h3>
+                            <ul className="space-y-4 text-zinc-400 text-sm font-light">
+                                <li className="flex items-start gap-3">
+                                    <span className="text-blue-400 mt-1.5">•</span>
+                                    <span>Participation Fee: <strong className="text-white">₹300 per participant</strong> (only for shortlisted teams).</span>
+                                </li>
+                                <li className="flex items-start gap-3">
+                                    <span className="text-blue-400 mt-1.5">•</span>
+                                    <span>Duration: <strong className="text-white">2 Days</strong></span>
+                                </li>
+                                <li className="flex items-start gap-3">
+                                    <span className="text-blue-400 mt-1.5">•</span>
+                                    <span>Venue: <strong className="text-white">Sreenidhi Institute of Science and Technology (SNIST), Hyderabad</strong></span>
+                                </li>
+                                <li className="flex items-start gap-3">
+                                    <span className="text-blue-400 mt-1.5">•</span>
+                                    <span>Shortlisted participants must complete the payment to confirm participation.</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div className="mt-8 pt-6 border-t border-zinc-800/40 text-[11px] font-mono text-zinc-500">
+                            Includes meals, venue access & mentorship
+                        </div>
+                    </div>
+
+                    {/* Shortlisting & Fee Summary Card */}
+                    <div className="process-card-anim spotlight-card border border-[#9dff00]/20 bg-gradient-to-b from-[#18181b] to-[#09090b] hover:border-[#9dff00]/40 rounded-[32px] p-8 flex flex-col justify-between transition-all duration-300 group shadow-[0_0_30px_rgba(157,255,0,0.02)]">
+                        <div>
+                            <div className="flex items-center justify-between mb-6">
+                                <span className="text-xs font-mono text-[#9dff00] uppercase tracking-wider">SUMMARY</span>
+                                <Award className="w-5 h-5 text-[#9dff00]" />
+                            </div>
+                            <h3 className="text-2xl font-light text-white mb-4">Shortlisting & Fees</h3>
+                            <div className="space-y-6">
+                                <div className="p-4 rounded-2xl bg-zinc-950/50 border border-zinc-900">
+                                    <div className="text-xs text-[#9dff00] font-mono uppercase tracking-wider mb-1">Shortlisting Criterion</div>
+                                    <p className="text-zinc-300 text-xs font-light leading-relaxed">
+                                        <strong>Top 100 teams</strong> will be shortlisted to participate in the offline hackathon at <strong>Sreenidhi Institute of Science and Technology (SNIST)</strong>. Shortlisted teams will be notified via email.
+                                    </p>
+                                </div>
+                                <div className="space-y-3">
+                                    <div className="text-xs text-zinc-500 font-mono uppercase tracking-wider">Fee Breakdown</div>
+                                    <div className="flex items-center justify-between text-xs border-b border-zinc-800 pb-2">
+                                        <span className="text-zinc-400">Online Ideathon (per team)</span>
+                                        <span className="text-white font-mono font-bold">₹100</span>
+                                    </div>
+                                    <div className="flex items-center justify-between text-xs pt-1">
+                                        <span className="text-zinc-400">Offline Hackathon (per participant)</span>
+                                        <span className="text-white font-mono font-bold">₹300</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Full-width Referral Benefit Horizontal Card */}
+                <div className="process-card-anim spotlight-card border border-[#9dff00]/25 bg-gradient-to-r from-[#18181b] to-[#09090b] hover:border-[#9dff00]/45 rounded-[32px] p-8 md:p-10 shadow-[0_0_30px_rgba(157,255,0,0.03)] relative overflow-hidden mt-8 text-left">
+                   
+                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">
+                        <div className="flex-1 max-w-3xl text-left">
+                            <div className="flex items-center justify-start gap-2 mb-4">
+                                <Gift className="w-5 h-5 text-[#9dff00]" />
+                                <span className="text-xs font-mono text-[#9dff00] uppercase tracking-widest">REFERRAL PROGRAM</span>
+                            </div>
+                            <h3 className="text-xl md:text-2xl font-light text-white mb-3">
+                                Refer & Get <span className="text-[#9dff00] font-normal">Free Hackathon Passes</span>
+                            </h3>
+                            <p className="text-zinc-400 text-sm font-light leading-relaxed font-sans">
+                                Share your unique referral code (generated upon registration) with other innovators. Teams that secure <strong className="text-white">10 successful referrals</strong> will receive <strong className="text-[#9dff00]">FREE passes</strong> (the offline participation fee will be waived entirely for the whole team).
+                            </p>
+                        </div>
+                        <div className="flex items-center gap-4 self-start md:self-center shrink-0">
+                            <div className="px-5 py-3 rounded-2xl bg-zinc-950/50 border border-zinc-900 text-center font-mono">
+                                <div className="text-xs text-zinc-500">REFERRALS NEEDED</div>
+                                <div className="text-lg font-bold text-white">10 Teams</div>
+                            </div>
+                            <div className="px-5 py-3 rounded-2xl bg-[#9dff00]/10 border border-[#9dff00]/20 text-center font-mono">
+                                <div className="text-xs text-[#9dff00]">REWARD</div>
+                                <div className="text-lg font-bold text-[#9dff00]">Free Pass</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -1382,6 +1538,16 @@ export default function DigitalIndiaGSAPForm() {
 
             {/* 4. Prize Pool & Highlights Section */}
             <section className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-12 py-20 md:py-28 border-t border-zinc-800/40">
+                <div className="text-center mb-16">
+                    <span className="text-xs font-mono text-[#9dff00] uppercase tracking-widest block mb-3">EXCITING REWARDS</span>
+                    <h2 className="text-3xl md:text-5xl font-light text-white tracking-tight mb-4">
+                        Prizes & <span className="text-[#9dff00] font-normal">Incentives</span>
+                    </h2>
+                    <p className="text-zinc-400 text-sm md:text-base font-light max-w-2xl mx-auto leading-relaxed font-sans">
+                        Compete for a grand prize pool, secure valuable internship opportunities, and receive guidance from industry mentors.
+                    </p>
+                </div>
+
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch highlight-grid-anim">
                     {/* Grand Prize Card */}
                     <div className="highlight-card-anim spotlight-card lg:col-span-1 border border-[#9dff00]/25 bg-gradient-to-b from-[#18181b] to-[#0d0d0e] rounded-3xl p-8 flex flex-col justify-between shadow-[0_0_40px_rgba(157,255,0,0.03)] relative overflow-hidden group">
