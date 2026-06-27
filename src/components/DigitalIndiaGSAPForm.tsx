@@ -39,7 +39,7 @@ const faqs = [
     },
     {
         q: "Is there a registration fee?",
-        a: "Yes. The registration fee is ₹100 per team submission for the Stage 1 Online Ideathon. For teams shortlisted for the Stage 2 Offline Hackathon, there is a participation fee of ₹300 per participant."
+        a: "Yes. The registration fee is ₹99 per team submission for the Stage 1 Online Ideathon. For teams shortlisted for the Stage 2 Offline Hackathon, there is a participation fee of ₹300 per participant."
     },
     {
         q: "Is there a referral reward?",
@@ -1353,7 +1353,7 @@ export default function DigitalIndiaGSAPForm() {
                             <ul className="space-y-4 text-zinc-400 text-sm font-light">
                                 <li className="flex items-start gap-3">
                                     <span className="text-[#9dff00] mt-1.5">•</span>
-                                    <span>Registration Fee: <strong className="text-white">₹100 per team submission</strong></span>
+                                    <span>Registration Fee: <strong className="text-white">₹99 per team submission</strong></span>
                                 </li>
                                 <li className="flex items-start gap-3">
                                     <span className="text-[#9dff00] mt-1.5">•</span>
@@ -1421,7 +1421,7 @@ export default function DigitalIndiaGSAPForm() {
                                     <div className="text-xs text-zinc-500 font-mono uppercase tracking-wider">Fee Breakdown</div>
                                     <div className="flex items-center justify-between text-xs border-b border-zinc-800 pb-2">
                                         <span className="text-zinc-400">Online Ideathon (per team)</span>
-                                        <span className="text-white font-mono font-bold">₹100</span>
+                                        <span className="text-white font-mono font-bold">₹99</span>
                                     </div>
                                     <div className="flex items-center justify-between text-xs pt-1">
                                         <span className="text-zinc-400">Offline Hackathon (per participant)</span>
