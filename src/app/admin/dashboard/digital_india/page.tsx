@@ -31,6 +31,11 @@ interface Submission {
     createdAt: string
     acceptedAt?: string
     acceptedBy?: string
+    // Referral & Team fields
+    teamName: string
+    domain: string
+    teamSize: number
+    teamMembers: Array<{ name: string; email: string }>
 }
 
 interface Pagination {
@@ -374,7 +379,7 @@ export default function DigitalIndiaAdminDashboard() {
                                         <th className="text-left px-4 py-3 text-[#6272a4] font-mono text-xs uppercase tracking-wider">Candidate</th>
                                         <th className="text-left px-4 py-3 text-[#6272a4] font-mono text-xs uppercase tracking-wider">College</th>
                                         <th className="text-left px-4 py-3 text-[#6272a4] font-mono text-xs uppercase tracking-wider">UTR ID</th>
-                                        <th className="text-left px-4 py-3 text-[#6272a4] font-mono text-xs uppercase tracking-wider">Idea</th>
+                                        <th className="text-left px-4 py-3 text-[#6272a4] font-mono text-xs uppercase tracking-wider">Track / Idea</th>
                                         <th className="text-left px-4 py-3 text-[#6272a4] font-mono text-xs uppercase tracking-wider">Proof</th>
                                         {activeSubTab === 'submissions' ? (
                                             <>
@@ -427,22 +432,47 @@ export default function DigitalIndiaAdminDashboard() {
                                             className={`border-b border-[#6272a4]/10 hover:bg-[#1e1f29]/60 transition-colors ${i % 2 === 0 ? 'bg-transparent' : 'bg-[#1e1f29]/20'}`}
                                         >
                                             <td className="px-4 py-3">
-                                                <div className="text-[#f8f8f2] font-medium">{sub.name}</div>
-                                                <div className="text-[#8be9fd] font-mono text-xs max-w-[180px] truncate">{sub.email}</div>
-                                                <div className="text-[#6272a4] text-xs">{sub.phone}</div>
+                                                <div className="flex flex-col gap-1">
+                                                    <div>
+                                                        <span className="text-[#f8f8f2] font-medium">{sub.name}</span>
+                                                        <span className="ml-1.5 text-[9px] font-mono bg-[#bd93f9]/15 text-[#bd93f9] px-1.5 py-0.5 rounded-full uppercase tracking-wider font-semibold">Leader</span>
+                                                    </div>
+                                                    <div className="text-[#8be9fd] font-mono text-xs max-w-[220px] truncate" title={sub.email}>{sub.email}</div>
+                                                    <div className="text-[#6272a4] text-xs font-mono">{sub.phone}</div>
+                                                    
+                                                    {sub.teamMembers && sub.teamMembers.length > 0 && (
+                                                        <div className="mt-2 pt-2 border-t border-[#6272a4]/10 space-y-1">
+                                                            <div className="text-[10px] text-[#6272a4] font-mono uppercase tracking-wider">Members ({sub.teamMembers.length})</div>
+                                                            {sub.teamMembers.map((m, idx) => (
+                                                                <div key={idx} className="text-xs leading-normal">
+                                                                    <span className="text-[#f8f8f2]/90">{m.name}</span>
+                                                                    <span className="text-[#6272a4] mx-1 font-mono">•</span>
+                                                                    <span className="text-[#8be9fd]/70 font-mono text-[11px]" title={m.email}>{m.email}</span>
+                                                                </div>
+                                                            ))}
+                                                        </div>
+                                                    )}
+                                                </div>
                                             </td>
                                             <td className="px-4 py-3 text-[#f8f8f2] text-xs max-w-[150px] truncate" title={sub.college}>
                                                 {sub.college}
                                             </td>
                                             <td className="px-4 py-3 text-[#f1fa8c] font-mono text-xs">{sub.utrId}</td>
                                             <td className="px-4 py-3">
-                                                <button
-                                                    onClick={() => setSelectedIdea(sub.idea)}
-                                                    className="flex items-center gap-1.5 text-xs text-[#bd93f9] hover:underline"
-                                                >
-                                                    <Eye size={12} />
-                                                    View Idea
-                                                </button>
+                                                <div className="flex flex-col gap-1.5 items-start">
+                                                    {sub.domain && (
+                                                        <span className="text-[10px] font-mono bg-[#8be9fd]/10 text-[#8be9fd] border border-[#8be9fd]/20 px-2 py-0.5 rounded-md font-semibold tracking-wide" title={sub.domain}>
+                                                            {sub.domain}
+                                                        </span>
+                                                    )}
+                                                    <button
+                                                        onClick={() => setSelectedIdea(sub.idea)}
+                                                        className="flex items-center gap-1.5 text-xs text-[#bd93f9] hover:underline"
+                                                    >
+                                                        <Eye size={12} />
+                                                        View Idea
+                                                    </button>
+                                                </div>
                                             </td>
                                             <td className="px-4 py-3">
                                                 <button
