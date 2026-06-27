@@ -2050,7 +2050,7 @@ export default function DigitalIndiaGSAPForm() {
                                                 <div className="flex gap-1.5 flex-wrap">
                                                     {(() => {
                                                         const link = typeof window !== 'undefined' ? `${window.location.origin}/events/digitalindia?ref=${myReferralCode}` : `https://domain.com/events/digitalindia?ref=${myReferralCode}`
-                                                        const shareText = `Build for India! Join my team at the Digital India Hackathon. Use my referral code "${myReferralCode}" to register:`
+                                                        const shareText = `Build for India! Join the Digital India Hackathon. Use my referral code "${myReferralCode}" to register:`
                                                         
                                                         const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareText + ' ' + link)}`
                                                         const telegramUrl = `https://t.me/share/url?url=${encodeURIComponent(link)}&text=${encodeURIComponent(shareText)}`
@@ -2310,7 +2310,7 @@ export default function DigitalIndiaGSAPForm() {
                                     <div className="flex flex-wrap gap-2">
                                         {(() => {
                                             const link = typeof window !== 'undefined' ? `${window.location.origin}/events/digitalindia?ref=${dashboardData.referralCode}` : `https://domain.com/events/digitalindia?ref=${dashboardData.referralCode}`
-                                            const shareText = `Build for India! Join my team at the Digital India Hackathon. Use my referral code "${dashboardData.referralCode}" to register:`
+                                            const shareText = `Build for India! Join the Digital India Hackathon. Use my referral code "${dashboardData.referralCode}" to register:`
                                             
                                             const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareText + ' ' + link)}`
                                             const telegramUrl = `https://t.me/share/url?url=${encodeURIComponent(link)}&text=${encodeURIComponent(shareText)}`
