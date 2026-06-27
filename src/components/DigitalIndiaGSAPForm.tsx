@@ -31,7 +31,7 @@ interface FormErrors {
 const faqs = [
     {
         q: "What is the team size requirement?",
-        a: "Teams must consist of 3 to 4 members to participate in the hackathon. Solo or duo participations are not permitted."
+        a: "Teams must consist of 1 to 4 members to participate in the hackathon. Solo or duo participations are permitted."
     },
     {
         q: "Can team members be from different colleges?",
@@ -954,7 +954,7 @@ export default function DigitalIndiaGSAPForm() {
                             <div className="text-zinc-500 text-[10px] font-mono uppercase tracking-wider mt-1">Shortlisted</div>
                         </div>
                         <div>
-                            <div className="text-3xl font-light text-white font-mono">3–4</div>
+                            <div className="text-3xl font-light text-white font-mono">1–4</div>
                             <div className="text-zinc-500 text-[10px] font-mono uppercase tracking-wider mt-1">Team Size</div>
                         </div>
                         <div>
@@ -1274,7 +1274,7 @@ export default function DigitalIndiaGSAPForm() {
                         <div className="text-2xl font-bold font-mono text-[#9dff00] mb-4">01.</div>
                         <h4 className="text-lg font-medium text-white mb-2">Submit Proposal</h4>
                         <p className="text-zinc-400 text-xs sm:text-sm font-light leading-relaxed">
-                            Form a team of 3–4 members, select a domain track, and submit your abstract detailing the solution before 5 July.
+                            Form a team of 1–4 members, select a domain track, and submit your abstract detailing the solution before 5 July.
                         </p>
                     </div>
 
@@ -1687,7 +1687,7 @@ export default function DigitalIndiaGSAPForm() {
                                                         onClick={() => setIsTeamSizeOpen(!isTeamSizeOpen)}
                                                         className="w-full text-xl sm:text-2xl font-light py-2.5 border-b border-zinc-800 hover:border-zinc-600 focus:border-zinc-400 outline-none bg-transparent text-white transition-all cursor-pointer flex justify-between items-center text-left"
                                                     >
-                                                        <span>{teamSize} Members</span>
+                                                        <span>{teamSize === 1 ? '1 Member' : `${teamSize} Members`}</span>
                                                         <svg
                                                             className={`w-5 h-5 text-zinc-500 transition-transform duration-300 ${isTeamSizeOpen ? 'rotate-180 text-white' : ''}`}
                                                             fill="none"
@@ -1700,7 +1700,7 @@ export default function DigitalIndiaGSAPForm() {
                                                     <span className="text-[10px] text-zinc-500 font-mono uppercase tracking-widest mt-1.5 block">Team Size</span>
                                                     {isTeamSizeOpen && (
                                                         <div className="absolute left-0 right-0 top-full mt-2 bg-[#18181b] border border-zinc-800 rounded-2xl shadow-2xl z-[100] overflow-hidden team-size-dropdown">
-                                                            {[3, 4].map((size) => (
+                                                            {[1, 2, 3, 4].map((size) => (
                                                                 <button
                                                                     key={size}
                                                                     type="button"
@@ -1726,7 +1726,7 @@ export default function DigitalIndiaGSAPForm() {
                                                                             : 'text-zinc-300 hover:bg-zinc-800 hover:text-white'
                                                                     }`}
                                                                 >
-                                                                    <span>{size} Members</span>
+                                                                    <span>{size === 1 ? '1 Member' : `${size} Members`}</span>
                                                                     {teamSize === size && <Check className="w-4 h-4 text-[#9dff00]" />}
                                                                 </button>
                                                             ))}
@@ -1788,50 +1788,60 @@ export default function DigitalIndiaGSAPForm() {
 
                                         <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar mb-6">
                                             <div className="space-y-6">
-                                                {Array.from({ length: teamSize - 1 }).map((_, i) => (
-                                                    <div key={i} className="grid grid-cols-1 md:grid-cols-2 gap-6 pb-2">
-                                                        <div>
-                                                            <input
-                                                                type="text"
-                                                                value={teamMembers[i]?.name || ''}
-                                                                onChange={(e) => {
-                                                                    const updated = [...teamMembers]
-                                                                    updated[i] = { ...updated[i], name: e.target.value }
-                                                                    setTeamMembers(updated)
-                                                                    if (errors[`teamMemberName_${i}`]) {
-                                                                        setErrors(prev => ({ ...prev, [`teamMemberName_${i}`]: undefined }))
-                                                                    }
-                                                                }}
-                                                                placeholder={`Member ${i + 2} Name`}
-                                                                className={`w-full text-lg font-light py-2 border-b ${
-                                                                    errors[`teamMemberName_${i}`] ? 'border-red-400 focus:border-red-500' : 'border-zinc-800 focus:border-zinc-400'
-                                                                } outline-none bg-transparent text-white placeholder-zinc-700 transition-all`}
-                                                            />
-                                                            <span className="text-[9px] text-zinc-500 font-mono uppercase tracking-widest mt-1 block">Member {i + 2} Name</span>
-                                                            {errors[`teamMemberName_${i}`] && <p className="text-red-400 text-xs mt-1 font-mono">{errors[`teamMemberName_${i}`]}</p>}
-                                                        </div>
-                                                        <div>
-                                                            <input
-                                                                type="email"
-                                                                value={teamMembers[i]?.email || ''}
-                                                                onChange={(e) => {
-                                                                    const updated = [...teamMembers]
-                                                                    updated[i] = { ...updated[i], email: e.target.value }
-                                                                    setTeamMembers(updated)
-                                                                    if (errors[`teamMemberEmail_${i}`]) {
-                                                                        setErrors(prev => ({ ...prev, [`teamMemberEmail_${i}`]: undefined }))
-                                                                    }
-                                                                }}
-                                                                placeholder={`Member ${i + 2} Email`}
-                                                                className={`w-full text-lg font-light py-2 border-b ${
-                                                                    errors[`teamMemberEmail_${i}`] ? 'border-red-400 focus:border-red-500' : 'border-zinc-800 focus:border-zinc-400'
-                                                                } outline-none bg-transparent text-white placeholder-zinc-700 transition-all`}
-                                                            />
-                                                            <span className="text-[9px] text-zinc-500 font-mono uppercase tracking-widest mt-1 block">Member {i + 2} Email Address</span>
-                                                            {errors[`teamMemberEmail_${i}`] && <p className="text-red-400 text-xs mt-1 font-mono">{errors[`teamMemberEmail_${i}`]}</p>}
-                                                        </div>
+                                                {teamSize === 1 ? (
+                                                    <div className="flex flex-col items-center justify-center py-12 text-center border border-dashed border-zinc-800 rounded-2xl p-6 bg-zinc-950/20">
+                                                        <Users2 className="w-12 h-12 text-zinc-650 mb-4" />
+                                                        <h4 className="text-zinc-300 text-sm font-medium mb-1">Solo Participation</h4>
+                                                        <p className="text-zinc-500 text-xs max-w-xs leading-relaxed font-sans">
+                                                            You have selected a team size of 1. You don't need to add any other members. Click Continue to proceed.
+                                                        </p>
                                                     </div>
-                                                ))}
+                                                ) : (
+                                                    Array.from({ length: teamSize - 1 }).map((_, i) => (
+                                                        <div key={i} className="grid grid-cols-1 md:grid-cols-2 gap-6 pb-2">
+                                                            <div>
+                                                                <input
+                                                                    type="text"
+                                                                    value={teamMembers[i]?.name || ''}
+                                                                    onChange={(e) => {
+                                                                        const updated = [...teamMembers]
+                                                                        updated[i] = { ...updated[i], name: e.target.value }
+                                                                        setTeamMembers(updated)
+                                                                        if (errors[`teamMemberName_${i}`]) {
+                                                                            setErrors(prev => ({ ...prev, [`teamMemberName_${i}`]: undefined }))
+                                                                        }
+                                                                    }}
+                                                                    placeholder={`Member ${i + 2} Name`}
+                                                                    className={`w-full text-lg font-light py-2 border-b ${
+                                                                        errors[`teamMemberName_${i}`] ? 'border-red-400 focus:border-red-500' : 'border-zinc-800 focus:border-zinc-400'
+                                                                    } outline-none bg-transparent text-white placeholder-zinc-700 transition-all`}
+                                                                />
+                                                                <span className="text-[9px] text-zinc-500 font-mono uppercase tracking-widest mt-1 block">Member {i + 2} Name</span>
+                                                                {errors[`teamMemberName_${i}`] && <p className="text-red-400 text-xs mt-1 font-mono">{errors[`teamMemberName_${i}`]}</p>}
+                                                            </div>
+                                                            <div>
+                                                                <input
+                                                                    type="email"
+                                                                    value={teamMembers[i]?.email || ''}
+                                                                    onChange={(e) => {
+                                                                        const updated = [...teamMembers]
+                                                                        updated[i] = { ...updated[i], email: e.target.value }
+                                                                        setTeamMembers(updated)
+                                                                        if (errors[`teamMemberEmail_${i}`]) {
+                                                                            setErrors(prev => ({ ...prev, [`teamMemberEmail_${i}`]: undefined }))
+                                                                        }
+                                                                    }}
+                                                                    placeholder={`Member ${i + 2} Email`}
+                                                                    className={`w-full text-lg font-light py-2 border-b ${
+                                                                        errors[`teamMemberEmail_${i}`] ? 'border-red-400 focus:border-red-500' : 'border-zinc-800 focus:border-zinc-400'
+                                                                    } outline-none bg-transparent text-white placeholder-zinc-700 transition-all`}
+                                                                />
+                                                                <span className="text-[9px] text-zinc-500 font-mono uppercase tracking-widest mt-1 block">Member {i + 2} Email Address</span>
+                                                                {errors[`teamMemberEmail_${i}`] && <p className="text-red-400 text-xs mt-1 font-mono">{errors[`teamMemberEmail_${i}`]}</p>}
+                                                            </div>
+                                                        </div>
+                                                    ))
+                                                )}
                                             </div>
                                         </div>
                                     </div>
