@@ -8,29 +8,38 @@ export async function PATCH(request: Request) {
         const { id, verified } = body
 
         if (!id) {
-            return NextResponse.json({ success: false, message: 'Submission ID is required.' }, { status: 400 })
+            return NextResponse.json(
+                { success: false, message: 'Submission ID is required.' },
+                { status: 400 }
+            )
         }
 
         await dbConnect()
 
-        const updatedSubmission = await DigitalIndiaSubmission.findByIdAndUpdate(
-            id,
-            {
-                $set: {
-                    paymentVerified: !!verified,
-                    verifiedAt: verified ? new Date() : undefined,
-                    verifiedBy: verified ? 'Admin' : undefined,
-                    updatedAt: new Date(),
+        const updatedSubmission =
+            await DigitalIndiaSubmission.findByIdAndUpdate(
+                id,
+                {
+                    $set: {
+                        paymentVerified: !!verified,
+                        verifiedAt: verified ? new Date() : undefined,
+                        verifiedBy: verified ? 'Admin' : undefined,
+                        updatedAt: new Date(),
+                    },
                 },
-            },
-            { new: true }
-        )
+                { new: true }
+            )
 
         if (!updatedSubmission) {
-            return NextResponse.json({ success: false, message: 'Submission not found.' }, { status: 404 })
+            return NextResponse.json(
+                { success: false, message: 'Submission not found.' },
+                { status: 404 }
+            )
         }
 
-        console.log(`✅ Digital India submission ${id} verification updated to ${verified}`)
+        console.log(
+            `✅ Digital India submission ${id} verification updated to ${verified}`
+        )
 
         return NextResponse.json({
             success: true,
@@ -39,6 +48,9 @@ export async function PATCH(request: Request) {
         })
     } catch (error) {
         console.error('Verify error:', error)
-        return NextResponse.json({ success: false, message: 'Internal Server Error' }, { status: 500 })
+        return NextResponse.json(
+            { success: false, message: 'Internal Server Error' },
+            { status: 500 }
+        )
     }
 }

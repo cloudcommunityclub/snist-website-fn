@@ -11,8 +11,19 @@ export interface IDigitalIndiaReferral {
 const DigitalIndiaReferralSchema = new Schema({
     referrerTeamId: { type: Schema.Types.ObjectId, required: true },
     referredTeamId: { type: Schema.Types.ObjectId, required: true },
-    referrerEmail: { type: String, required: true, lowercase: true, trim: true },
-    referredEmail: { type: String, required: true, lowercase: true, trim: true, unique: true },
+    referrerEmail: {
+        type: String,
+        required: true,
+        lowercase: true,
+        trim: true,
+    },
+    referredEmail: {
+        type: String,
+        required: true,
+        lowercase: true,
+        trim: true,
+        unique: true,
+    },
     createdAt: { type: Date, default: Date.now },
 })
 

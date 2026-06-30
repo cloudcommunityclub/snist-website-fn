@@ -8,12 +8,7 @@ import { useSound } from 'use-sound'
 
 import Image from 'next/image'
 
-import {
-    SiLinktree,
-    SiGithub,
-    SiInstagram,
-    SiDiscord,
-} from 'react-icons/si'
+import { SiLinktree, SiGithub, SiInstagram, SiDiscord } from 'react-icons/si'
 import { FaNetworkWired, FaQuoteLeft } from 'react-icons/fa'
 import { FaLinkedin } from 'react-icons/fa6'
 
@@ -74,11 +69,24 @@ const MajorLeaderCard: React.FC<props_MajorLeaderCard> = ({
                 setIsAnimating(false)
             }}
             onMouseEnter={() => playSfx_hoverThunk()}
-            initial={{ opacity: 0, transform: 'perspective(500px) translateZ(55px) translateX(60%)' }}
+            initial={{
+                opacity: 0,
+                transform:
+                    'perspective(500px) translateZ(55px) translateX(60%)',
+            }}
             animate={
-                isInView ? { opacity: 1, transform: 'translateZ(0px) translateX(0%)' } : ''
+                isInView
+                    ? {
+                          opacity: 1,
+                          transform: 'translateZ(0px) translateX(0%)',
+                      }
+                    : ''
             }
-            transition={{ duration: 1.25, delay: index * 0.15, ease: 'easeOut' }}
+            transition={{
+                duration: 1.25,
+                delay: index * 0.15,
+                ease: 'easeOut',
+            }}
             className={`${isAnimating && 'pointer-events-none'} hover:z-20 sm:hover:mx-4 w-[160px] sm:w-[200px] ring-2 ring-gold-deep relative group/majorcard sm:hover:!scale-[115%] transition-all duration-500 select-none rounded-t-xl rounded-b-lg bg-gradient-to-t from-[#040404] via-gold-deep to-gold-deep shadow-md hover:shadow-2xl shadow-neutral-600 hover:shadow-gold`}
             key={leaderName}
         >
@@ -106,7 +114,10 @@ const MajorLeaderCard: React.FC<props_MajorLeaderCard> = ({
                             duration: 1.5,
                         }}
                     >
-                        <FaQuoteLeft size={26} className='p-1 sm:p-0 m-2 sm:m-4' />
+                        <FaQuoteLeft
+                            size={26}
+                            className='p-1 sm:p-0 m-2 sm:m-4'
+                        />
                     </motion.div>
 
                     <div className='aspect-square w-full flex items-center px-1 sm:px-6 font-semibold text-shadow-lg shadow-black'>
@@ -137,7 +148,9 @@ const MajorLeaderCard: React.FC<props_MajorLeaderCard> = ({
 
             {/* Leader Name and Role */}
             <div className='rounded-xl p-2 py-3 group-hover/majorcard:pb-0'>
-                <div className='absolute text-[10px] sm:text-[16px]'>{majorLeaderDetails.icon}</div>
+                <div className='absolute text-[10px] sm:text-[16px]'>
+                    {majorLeaderDetails.icon}
+                </div>
                 <h1 className='title-main text-[16px] sm:text-[19px] font-semibold text-center group-hover/majorcard:drop-shadow-[0_0_6px_rgba(255,255,255,0.8)] duration-300 group-hover/majorcard:animate-pulse'>
                     {leaderName}
                 </h1>
@@ -250,7 +263,10 @@ const MinorLeaderCard: React.FC<props_MinorLeaderCard> = ({
     const minorLeaderDetails = leadership.minor[roleName] as MinorLeaderDetails
 
     return (
-        <div key={roleName + index} className="relative h-[280px] w-[200px] sm:w-[240px] flex items-center justify-center">
+        <div
+            key={roleName + index}
+            className='relative h-[280px] w-[200px] sm:w-[240px] flex items-center justify-center'
+        >
             <motion.div
                 ref={ref}
                 onAnimationStart={() => {
@@ -260,11 +276,24 @@ const MinorLeaderCard: React.FC<props_MinorLeaderCard> = ({
                     setIsAnimating(false)
                 }}
                 onMouseEnter={() => playSfx_hoverThunk()}
-                initial={{ opacity: 0, transform: 'perspective(500px) translateZ(55px) translateX(60%)' }}
+                initial={{
+                    opacity: 0,
+                    transform:
+                        'perspective(500px) translateZ(55px) translateX(60%)',
+                }}
                 animate={
-                    isInView ? { opacity: 1, transform: 'translateZ(0px) translateX(0%)' } : ''
+                    isInView
+                        ? {
+                              opacity: 1,
+                              transform: 'translateZ(0px) translateX(0%)',
+                          }
+                        : ''
                 }
-                transition={{ duration: 1.25, delay: index * 0.15, ease: 'easeOut' }}
+                transition={{
+                    duration: 1.25,
+                    delay: index * 0.15,
+                    ease: 'easeOut',
+                }}
                 className={`${isAnimating && 'pointer-events-none'} 
                     hover:z-20
                     w-[160px] sm:w-[200px]
@@ -311,7 +340,10 @@ const MinorLeaderCard: React.FC<props_MinorLeaderCard> = ({
                                 duration: 1.5,
                             }}
                         >
-                            <FaQuoteLeft size={26} className='p-1 sm:p-0 m-2 sm:m-4 text-[#ff6f61]' />
+                            <FaQuoteLeft
+                                size={26}
+                                className='p-1 sm:p-0 m-2 sm:m-4 text-[#ff6f61]'
+                            />
                         </motion.div>
 
                         <div className='aspect-square w-full flex items-center px-1 sm:px-6 font-semibold text-shadow-lg shadow-black'>
@@ -339,7 +371,9 @@ const MinorLeaderCard: React.FC<props_MinorLeaderCard> = ({
 
                 {/* Leader Name and Role */}
                 <div className='rounded-xl p-2 py-3 group-hover/minorcard:pb-0'>
-                    <div className='absolute text-[10px] sm:text-[16px] text-[#ff6f61]'>{minorLeaderDetails.icon}</div>
+                    <div className='absolute text-[10px] sm:text-[16px] text-[#ff6f61]'>
+                        {minorLeaderDetails.icon}
+                    </div>
                     <h1 className='title-main text-[16px] sm:text-[19px] font-semibold text-center group-hover/minorcard:drop-shadow-[0_0_6px_rgba(255,255,255,0.8)] duration-300 group-hover/minorcard:animate-pulse'>
                         {minorLeaderDetails.label}
                     </h1>
@@ -372,7 +406,9 @@ const MinorLeaderCard: React.FC<props_MinorLeaderCard> = ({
                             rel='noreferrer'
                         >
                             <SiDiscord
-                                onMouseUp={() => playSfx_discorda && playSfx_discorda()}
+                                onMouseUp={() =>
+                                    playSfx_discorda && playSfx_discorda()
+                                }
                                 size={'3vh'}
                                 className='h-10'
                             />

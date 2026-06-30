@@ -2,7 +2,6 @@ import { NextResponse } from 'next/server'
 import dbConnect from '@/lib/db'
 import Registration2026 from '@/models/Registration2026'
 
-
 const MAX_SEARCH_LENGTH = 100
 
 function escapeRegex(str: string): string {
@@ -22,7 +21,10 @@ export async function GET(request: Request) {
         const emailSent = searchParams.get('emailSent') || ''
 
         if (search.length > MAX_SEARCH_LENGTH) {
-            return NextResponse.json({ message: 'Search query too long' }, { status: 400 })
+            return NextResponse.json(
+                { message: 'Search query too long' },
+                { status: 400 }
+            )
         }
 
         const pageNum = Math.max(1, parseInt(page, 10) || 1)
@@ -65,6 +67,9 @@ export async function GET(request: Request) {
         })
     } catch (error) {
         console.error('Admin members list error:', error)
-        return NextResponse.json({ message: 'Failed to fetch members' }, { status: 500 })
+        return NextResponse.json(
+            { message: 'Failed to fetch members' },
+            { status: 500 }
+        )
     }
 }

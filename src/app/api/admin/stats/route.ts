@@ -30,10 +30,14 @@ export async function GET() {
             Registration2026.countDocuments({ emailSent: true }),
             Recruitment.countDocuments(),
             Recruitment.countDocuments({ createdAt: { $gte: last24h } }),
-            Recruitment.countDocuments({ problemUnlocked: { $exists: true, $ne: null } }),
+            Recruitment.countDocuments({
+                problemUnlocked: { $exists: true, $ne: null },
+            }),
             Recruitment.countDocuments({ submittedSolution: true }),
             DigitalIndiaSubmission.countDocuments(),
-            DigitalIndiaSubmission.countDocuments({ createdAt: { $gte: last24h } }),
+            DigitalIndiaSubmission.countDocuments({
+                createdAt: { $gte: last24h },
+            }),
             DigitalIndiaSubmission.countDocuments({ paymentVerified: true }),
             DigitalIndiaAccepted.countDocuments(),
         ])
@@ -61,7 +65,9 @@ export async function GET() {
         })
     } catch (error) {
         console.error('Admin stats error:', error)
-        return NextResponse.json({ message: 'Failed to fetch stats' }, { status: 500 })
+        return NextResponse.json(
+            { message: 'Failed to fetch stats' },
+            { status: 500 }
+        )
     }
 }
-

@@ -2,7 +2,6 @@ import { NextResponse } from 'next/server'
 import dbConnect from '@/lib/db'
 import Recruitment from '@/models/Recruitment'
 
-
 const MAX_SEARCH_LENGTH = 100
 
 function escapeRegex(str: string): string {
@@ -21,7 +20,10 @@ export async function GET(request: Request) {
         const unlocked = searchParams.get('unlocked') || ''
 
         if (search.length > MAX_SEARCH_LENGTH) {
-            return NextResponse.json({ message: 'Search query too long' }, { status: 400 })
+            return NextResponse.json(
+                { message: 'Search query too long' },
+                { status: 400 }
+            )
         }
 
         const pageNum = Math.max(1, parseInt(page, 10) || 1)
@@ -40,7 +42,12 @@ export async function GET(request: Request) {
         } else if (unlocked === 'false') {
             filter.$and = [
                 ...(filter.$and || []),
-                { $or: [{ problemUnlocked: { $exists: false } }, { problemUnlocked: null }] },
+                {
+                    $or: [
+                        { problemUnlocked: { $exists: false } },
+                        { problemUnlocked: null },
+                    ],
+                },
             ]
         }
 
@@ -65,6 +72,9 @@ export async function GET(request: Request) {
         })
     } catch (error) {
         console.error('Admin recruitment list error:', error)
-        return NextResponse.json({ message: 'Failed to fetch recruitment data' }, { status: 500 })
+        return NextResponse.json(
+            { message: 'Failed to fetch recruitment data' },
+            { status: 500 }
+        )
     }
 }

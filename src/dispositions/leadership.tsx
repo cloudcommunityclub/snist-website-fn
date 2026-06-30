@@ -62,7 +62,7 @@ export const leadership = {
             website: 'https://vinaykumarvangala.github.io/',
             icon: <CgCrown />,
         },
-        'Shruthi': {
+        Shruthi: {
             role: 'General Secretary',
             imgSrc: pfp_shruthi,
             quote: <p>Build. Lead. Scale.</p>,
@@ -70,21 +70,17 @@ export const leadership = {
             linkedin: 'https://www.linkedin.com/in/rshruthiyadav',
             icon: <PiFeatherDuotone />,
         },
-        'Vaman': {
+        Vaman: {
             role: 'Community Manager',
             imgSrc: pfp_vamanakhil,
-            quote: (
-                <p>
-                    "Building bridges between ideas and innovation."
-                </p>
-            ),
+            quote: <p>"Building bridges between ideas and innovation."</p>,
             instagram: 'https://www.instagram.com/vamanakhil/',
             github: 'https://github.com/Vamanakhil',
             linkedin: 'https://www.linkedin.com/in/vaman-akhil-b47604243/',
             website: 'https://akhilon.dev/',
             icon: <FaRegHandPeace />,
         },
-        'Amarnath': {
+        Amarnath: {
             role: 'Organizing Head',
             imgSrc: pfp_none,
             quote: '',
@@ -100,16 +96,21 @@ export const leadership = {
             website: 'https://premsai.vercel.app/',
             icon: <LuConstruction />,
         },
-        'Himanshu': {
+        Himanshu: {
             role: 'Technical Head',
             imgSrc: pfp_himanshu,
-            quote: <p>Building epic stuffs, Self-taught by shipping things on the internet</p>,
+            quote: (
+                <p>
+                    Building epic stuffs, Self-taught by shipping things on the
+                    internet
+                </p>
+            ),
             github: 'https://github.com/himanshubijja',
             linkedin: 'https://linkedin.com/in/himanshubijja',
             website: 'https://www.himanshubijja.me/',
             icon: <LuConstruction />,
         },
-        'Pranavi': {
+        Pranavi: {
             role: 'Publicity Head',
             imgSrc: pfp_pranavi,
             quote: <p>Communicate with purpose.</p>,
@@ -117,7 +118,7 @@ export const leadership = {
             linkedin: 'https://www.linkedin.com/in/pranavi-vasala-47aa78353/',
             icon: <PiHandshakeBold />,
         },
-        'Thanmayee': {
+        Thanmayee: {
             role: 'Documentation Head',
             imgSrc: pfp_thanmayee,
             quote: <p>Fueling growth, one initiative at a time.</p>,
@@ -125,7 +126,7 @@ export const leadership = {
             linkedin: 'https://www.linkedin.com/in/thanmayee-kotha-1577842a8/',
             icon: <PiHandshakeBold />,
         },
-        'Tharun': {
+        Tharun: {
             role: 'Designing Head',
             imgSrc: pfp_tharun,
             quote: <p>Exploring new cutting edge technologies...!</p>,

@@ -12,18 +12,40 @@ export async function GET() {
             .lean()
 
         const headers = [
-            'Name', 'Email', 'Mobile', 'Roll Number', 'Department', 'Year',
-            'Interests', 'Experience', 'Expectations', 'Referral',
-            'Email Sent', 'Email Sent At', 'Registered At',
+            'Name',
+            'Email',
+            'Mobile',
+            'Roll Number',
+            'Department',
+            'Year',
+            'Interests',
+            'Experience',
+            'Expectations',
+            'Referral',
+            'Email Sent',
+            'Email Sent At',
+            'Registered At',
         ]
 
-        const rows = members.map(m => [
-            m.name, m.email, m.mobile, m.rollNumber, m.department, m.year,
-            m.interests, m.experience ?? '', m.expectations ?? '', m.referral ?? '',
-            m.emailSent ? 'Yes' : 'No',
-            m.emailSentAt ? new Date(m.emailSentAt).toISOString() : '',
-            m.createdAt ? new Date(m.createdAt).toISOString() : '',
-        ].map(escCsv).join(','))
+        const rows = members.map((m) =>
+            [
+                m.name,
+                m.email,
+                m.mobile,
+                m.rollNumber,
+                m.department,
+                m.year,
+                m.interests,
+                m.experience ?? '',
+                m.expectations ?? '',
+                m.referral ?? '',
+                m.emailSent ? 'Yes' : 'No',
+                m.emailSentAt ? new Date(m.emailSentAt).toISOString() : '',
+                m.createdAt ? new Date(m.createdAt).toISOString() : '',
+            ]
+                .map(escCsv)
+                .join(',')
+        )
 
         const csv = [headers.join(','), ...rows].join('\n')
 
@@ -35,9 +57,12 @@ export async function GET() {
         })
     } catch (error) {
         console.error('Members export error:', error)
-        return new Response(JSON.stringify({ message: 'Failed to export members' }), {
-            status: 500,
-            headers: { 'Content-Type': 'application/json' },
-        })
+        return new Response(
+            JSON.stringify({ message: 'Failed to export members' }),
+            {
+                status: 500,
+                headers: { 'Content-Type': 'application/json' },
+            }
+        )
     }
 }

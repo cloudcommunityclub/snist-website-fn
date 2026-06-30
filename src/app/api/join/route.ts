@@ -3,6 +3,7 @@ import { z } from 'zod'
 import dbConnect from '@/lib/db'
 import Registration2026 from '@/models/Registration2026'
 import { escHtml, sendEmail } from '@/lib/mail'
+import { checkRateLimit, getClientIp } from '@/lib/rate-limit'
 
 const joinClubSchema = z.object({
     fullName: z
@@ -14,7 +15,12 @@ const joinClubSchema = z.object({
         .min(10, 'Roll number must be at least 10 characters')
         .regex(/^[A-Z0-9]+$/i, 'Roll number must be alphanumeric'),
     email: z.string().email(),
-    phone: z.string().regex(/^(\+91[\s-]?)?[6-9]\d{9}$/, 'Enter a valid 10-digit Indian mobile number'),
+    phone: z
+        .string()
+        .regex(
+            /^(\+91[\s-]?)?[6-9]\d{9}$/,
+            'Enter a valid 10-digit Indian mobile number'
+        ),
     department: z.string(),
     year: z.string(),
     motivation: z.string().min(20).max(500),
@@ -22,6 +28,25 @@ const joinClubSchema = z.object({
 
 export async function POST(request: Request) {
     try {
+        const ip = getClientIp(request)
+        const rateLimit = checkRateLimit(ip, { max: 5, windowMs: 60_000 })
+        if (!rateLimit.allowed) {
+            return NextResponse.json(
+                {
+                    success: false,
+                    message: 'Too many requests. Please try again later.',
+                },
+                {
+                    status: 429,
+                    headers: {
+                        'Retry-After': String(
+                            Math.ceil((rateLimit.resetAt - Date.now()) / 1000)
+                        ),
+                    },
+                }
+            )
+        }
+
         const body = await request.json()
         const validatedData = joinClubSchema.parse(body)
 
@@ -43,7 +68,10 @@ export async function POST(request: Request) {
         // Upsert: Update existing or create new (allows retries)
         await Registration2026.findOneAndUpdate(
             { email: { $eq: memberData.email } },
-            { $set: memberData, $setOnInsert: { emailSent: false, createdAt: new Date() } },
+            {
+                $set: memberData,
+                $setOnInsert: { emailSent: false, createdAt: new Date() },
+            },
             { upsert: true, new: true, setDefaultsOnInsert: true }
         )
 

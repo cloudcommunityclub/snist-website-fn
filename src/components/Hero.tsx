@@ -8,10 +8,13 @@ import { Link } from 'react-scroll'
 import dynamic from 'next/dynamic'
 
 // Dynamically import ReactTyped to reduce initial bundle size
-const ReactTyped = dynamic(() => import('react-typed').then(mod => mod.ReactTyped), {
-    ssr: false,
-    loading: () => <span className="text-[#00A0DC]">Loading...</span>
-})
+const ReactTyped = dynamic(
+    () => import('react-typed').then((mod) => mod.ReactTyped),
+    {
+        ssr: false,
+        loading: () => <span className='text-[#00A0DC]'>Loading...</span>,
+    }
+)
 
 const TYPED_KEYWORDS = [
     'Cloud Compute',
@@ -45,8 +48,6 @@ export default function Hero(): React.ReactNode {
             {/* Background Images */}
             <div className='absolute w-full h-full pointer-events-none overflow-hidden'>
                 <div className='w-full h-full'>
-
-
                     <Image
                         width={1920}
                         height={1080}
@@ -55,7 +56,7 @@ export default function Hero(): React.ReactNode {
                         alt='SNIST Campus Backdrop'
                         priority
                         quality={85}
-                        sizes="100vw"
+                        sizes='100vw'
                     />
 
                     <video
@@ -63,11 +64,17 @@ export default function Hero(): React.ReactNode {
                         loop
                         muted
                         playsInline
-                        className="absolute top-0 w-full h-full object-cover z-0"
+                        className='absolute top-0 w-full h-full object-cover z-0'
                         style={{ opacity: 0.7, mixBlendMode: 'overlay' }}
                     >
-                        <source src="/assets/home/hero_overlay.webm" type="video/webm" />
-                        <source src="/assets/home/hero_overlay.mp4" type="video/mp4" />
+                        <source
+                            src='/assets/home/hero_overlay.webm'
+                            type='video/webm'
+                        />
+                        <source
+                            src='/assets/home/hero_overlay.mp4'
+                            type='video/mp4'
+                        />
                         Your browser does not support the video tag.
                     </video>
 
@@ -88,7 +95,7 @@ export default function Hero(): React.ReactNode {
                         alt='Cloud Community Club Logo'
                         priority
                         quality={90}
-                        sizes="(max-width: 768px) 150px, 250px"
+                        sizes='(max-width: 768px) 150px, 250px'
                         className='relative z-20 animate-heartbeat drop-shadow-[0_0_30px_rgba(255,255,255,0.6)]'
                     />
                 </div>
@@ -99,10 +106,18 @@ export default function Hero(): React.ReactNode {
                 </h1>
 
                 <div className='z-20 title-main w-full text-white text-center text-shadow shadow-black text-lg sm:text-xl'>
-                    <p className='drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]'>#Development2Deployment🚀</p>
+                    <p className='drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]'>
+                        #Development2Deployment🚀
+                    </p>
                     <h1 className='title-main font-bold sm:text-[24px] text-2xl sm:pt-[10px]'>
                         {'>'} Let's{' '}
-                        <Suspense fallback={<span className="text-[#00A0DC]">Loading...</span>}>
+                        <Suspense
+                            fallback={
+                                <span className='text-[#00A0DC]'>
+                                    Loading...
+                                </span>
+                            }
+                        >
                             <ReactTyped
                                 className='text-[#00A0DC] drop-shadow-[0_0_12px_rgba(0,160,220,0.5)]'
                                 strings={TYPED_KEYWORDS}
@@ -112,9 +127,10 @@ export default function Hero(): React.ReactNode {
                                 fadeOut={true}
                                 loop
                             />
-                        </Suspense>
-                        {' '}
-                        <span className="text-[#00A0DC] inline-block animate-pulse">{'<'}</span>
+                        </Suspense>{' '}
+                        <span className='text-[#00A0DC] inline-block animate-pulse'>
+                            {'<'}
+                        </span>
                     </h1>
                 </div>
 

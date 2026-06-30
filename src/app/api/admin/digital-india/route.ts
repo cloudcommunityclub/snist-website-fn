@@ -19,7 +19,10 @@ export async function GET(request: Request) {
         const verified = searchParams.get('verified') || ''
 
         if (search.length > MAX_SEARCH_LENGTH) {
-            return NextResponse.json({ message: 'Search query too long' }, { status: 400 })
+            return NextResponse.json(
+                { message: 'Search query too long' },
+                { status: 400 }
+            )
         }
 
         const pageNum = Math.max(1, parseInt(page, 10) || 1)
@@ -61,6 +64,9 @@ export async function GET(request: Request) {
         })
     } catch (error) {
         console.error('Admin digital-india list error:', error)
-        return NextResponse.json({ message: 'Failed to fetch Digital India data' }, { status: 500 })
+        return NextResponse.json(
+            { message: 'Failed to fetch Digital India data' },
+            { status: 500 }
+        )
     }
 }

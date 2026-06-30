@@ -22,7 +22,8 @@ export async function POST(request: Request) {
             submittedSolution: true,
             updatedAt: new Date(),
         }
-        if (validatedData.problemId) updateData.problemUnlocked = validatedData.problemId
+        if (validatedData.problemId)
+            updateData.problemUnlocked = validatedData.problemId
         if (validatedData.prUrl) updateData.prUrl = validatedData.prUrl
 
         const candidate = await Recruitment.findOneAndUpdate(
@@ -33,7 +34,11 @@ export async function POST(request: Request) {
 
         if (!candidate) {
             return NextResponse.json(
-                { success: false, message: 'Candidate not found. Please unlock a challenge first.' },
+                {
+                    success: false,
+                    message:
+                        'Candidate not found. Please unlock a challenge first.',
+                },
                 { status: 404 }
             )
         }
@@ -47,11 +52,17 @@ export async function POST(request: Request) {
     } catch (error) {
         if (error instanceof z.ZodError) {
             return NextResponse.json(
-                { success: false, message: error.issues.map(i => i.message).join('. ') },
+                {
+                    success: false,
+                    message: error.issues.map((i) => i.message).join('. '),
+                },
                 { status: 400 }
             )
         }
         console.error('Submit error:', error)
-        return NextResponse.json({ success: false, message: 'Internal Server Error' }, { status: 500 })
+        return NextResponse.json(
+            { success: false, message: 'Internal Server Error' },
+            { status: 500 }
+        )
     }
 }

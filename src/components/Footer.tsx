@@ -7,14 +7,10 @@ import { MdOutlineEmail } from 'react-icons/md'
 export default function Footer() {
     return (
         <div className='w-full h-full bg-gradient-to-b from-neutral-800 dark:from-neutral-950 to-neutral-950 dark:to-black text-lg font-semibold pt-4 text-center'>
-
             <p className='font-semibold'>Connect with C³</p>
 
             <div className='flex flex-row flex-wrap gap-3 justify-center py-4 overflow-x-hidden px-4'>
-                <Link
-                    href='https://discord.gg/dBNXWDKhrD'
-                    target='_blank'
-                >
+                <Link href='https://discord.gg/dBNXWDKhrD' target='_blank'>
                     <button className='flex group w-full justify-center bg-neutral-700 dark:bg-neutral-900 bg-opacity-80 rounded-md gap-2 py-2 px-4 min-h-[44px] items-center active:scale-95 hover:bg-[#5865F2] hover:outline-4 hover:text-white active:outline-2 hover:outline-double outline-white border-[1px] border-neutral-800 hover:outline-[#5865F2] active:outline-neutral-200 duration-200 active:duration-200'>
                         <SiDiscord className='my-auto group-hover:text-white' />
                         Discord
@@ -41,10 +37,7 @@ export default function Footer() {
                     </button>
                 </Link>
 
-                <Link
-                    href='https://github.com/C3Snist'
-                    target='_blank'
-                >
+                <Link href='https://github.com/C3Snist' target='_blank'>
                     <button className='flex group w-full justify-center bg-neutral-700 dark:bg-neutral-900 bg-opacity-80 rounded-md gap-1 py-2 px-4 min-h-[44px] items-center active:scale-95 hover:bg-[#24292e] hover:outline-4 hover:text-white active:outline-2 hover:outline-double outline-white border-[1px] border-neutral-800 hover:outline-[#24292e] active:outline-neutral-200 duration-200 active:duration-200'>
                         <SiGithub className='my-auto group-hover:text-white' />
                         GitHub
@@ -69,7 +62,7 @@ export default function Footer() {
             <div className='flex flex-row items-center justify-center gap-4 py-2 w-full'>
                 <Link href='https://sreenidhi.edu.in/' target='_blank'>
                     <Image
-                        src='/assets/bits/sreenidhi-logo.webp'  // Add your college logo
+                        src='/assets/bits/sreenidhi-logo.webp' // Add your college logo
                         width={250}
                         height={250}
                         alt='College Logo'
@@ -80,13 +73,27 @@ export default function Footer() {
 
             <div className='pt-4 pb-10'>
                 <p className='text-blue-500 text-sm sm:text-lg'>
-                    Built with 💙 by <Link href='https://github.com/prem22k' target='_blank' className='underline'>Prem Sai</Link> and <Link href='https://github.com/C3Snist' target='_blank' className='underline'>C³ members</Link>
+                    Built with 💙 by{' '}
+                    <Link
+                        href='https://github.com/prem22k'
+                        target='_blank'
+                        className='underline'
+                    >
+                        Prem Sai
+                    </Link>{' '}
+                    and{' '}
+                    <Link
+                        href='https://github.com/C3Snist'
+                        target='_blank'
+                        className='underline'
+                    >
+                        C³ members
+                    </Link>
                 </p>
                 <p className='text-neutral-500 text-sm sm:text-lg'>
                     Copyright ©️ Cloud Community Club (C³) 2024
                 </p>
             </div>
-
         </div>
     )
 }

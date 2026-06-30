@@ -5,12 +5,10 @@ import Image from 'next/image'
 import { motion } from 'framer-motion'
 
 // Update these paths with your club's assets
-const logo = '/assets/ccc_logo.webp'  // Replace with your club logo
-const loader = '/assets/bits/loader.webp'  // Replace with a cloud-themed loader
+const logo = '/assets/ccc_logo.webp' // Replace with your club logo
+const loader = '/assets/bits/loader.webp' // Replace with a cloud-themed loader
 
 export default function IntroFade(): React.ReactNode {
-
-
     return (
         <motion.div
             initial={{ opacity: 1 }}
@@ -26,7 +24,7 @@ export default function IntroFade(): React.ReactNode {
                 height={150}
                 priority
                 quality={85}
-                sizes="150px"
+                sizes='150px'
             />
             <Image
                 src={loader}
@@ -36,10 +34,12 @@ export default function IntroFade(): React.ReactNode {
                 height={80}
                 priority
                 quality={75}
-                sizes="80px"
+                sizes='80px'
             />
 
-            <p className="text-[#00A0DC] text-sm mt-2 font-light opacity-70">Cloud Community Club</p>
+            <p className='text-[#00A0DC] text-sm mt-2 font-light opacity-70'>
+                Cloud Community Club
+            </p>
         </motion.div>
     )
 }

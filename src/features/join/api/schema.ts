@@ -25,7 +25,12 @@ export const joinClubSchema = z.object({
         .min(10, 'Roll number must be at least 10 characters')
         .regex(/^[A-Z0-9]+$/i, 'Roll number must be alphanumeric'),
     email: z.string().email(),
-    phone: z.string().regex(/^(\+91[\s-]?)?[6-9]\d{9}$/, 'Enter a valid 10-digit Indian mobile number'),
+    phone: z
+        .string()
+        .regex(
+            /^(\+91[\s-]?)?[6-9]\d{9}$/,
+            'Enter a valid 10-digit Indian mobile number'
+        ),
     department: z.enum(DEPARTMENTS),
     year: z.enum(['1', '2', '3', '4']),
     motivation: z.string().min(20).max(500),

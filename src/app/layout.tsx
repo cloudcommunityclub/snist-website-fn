@@ -1,6 +1,11 @@
-import { Inter, Poppins, JetBrains_Mono, Mrs_Saint_Delafield } from 'next/font/google'
+import {
+    Inter,
+    Poppins,
+    JetBrains_Mono,
+    Mrs_Saint_Delafield,
+} from 'next/font/google'
 import { Metadata } from 'next'
-import { SpeedInsights } from "@vercel/speed-insights/next"
+import { SpeedInsights } from '@vercel/speed-insights/next'
 import Navbar from '@/components/Navbar'
 import './globals.css'
 
@@ -9,7 +14,7 @@ const inter = Inter({
     subsets: ['latin'],
     display: 'swap',
     variable: '--font-inter',
-    preload: true
+    preload: true,
 })
 
 const poppins = Poppins({
@@ -17,14 +22,14 @@ const poppins = Poppins({
     subsets: ['latin'],
     display: 'swap',
     variable: '--font-poppins',
-    preload: true
+    preload: true,
 })
 
 const jetbrainsMono = JetBrains_Mono({
     subsets: ['latin'],
     display: 'swap',
     variable: '--font-jetbrains',
-    preload: false
+    preload: false,
 })
 
 const mrsSaintDelafield = Mrs_Saint_Delafield({
@@ -32,7 +37,7 @@ const mrsSaintDelafield = Mrs_Saint_Delafield({
     subsets: ['latin'],
     display: 'swap',
     variable: '--font-cursive',
-    preload: false
+    preload: false,
 })
 
 export const metadata: Metadata = {
@@ -41,7 +46,8 @@ export const metadata: Metadata = {
         default: 'Cloud Community Club',
         template: '%s | Cloud Community Club',
     },
-    description: 'Cloud Community Club - Learn, collaborate, and build with our Project Schools initiative and community events.',
+    description:
+        'Cloud Community Club - Learn, collaborate, and build with our Project Schools initiative and community events.',
     keywords: ['cloud community', 'community', 'technology', 'learning'],
     authors: [{ name: 'Cloud Community Club' }],
     openGraph: {
@@ -54,8 +60,8 @@ export const metadata: Metadata = {
                 url: '/ccc_logo.webp',
                 width: 1200,
                 height: 630,
-                alt: 'Cloud Community Club (C³)'
-            }
+                alt: 'Cloud Community Club (C³)',
+            },
         ],
         locale: 'en_US',
         type: 'website',
@@ -64,12 +70,12 @@ export const metadata: Metadata = {
     twitter: {
         card: 'summary_large_image',
         site: '@C3Snist',
-        creator: '@C3Snist'
+        creator: '@C3Snist',
     },
     other: {
         'linkedin:organization': 'cloud-community-club',
-        'github:organization': 'C3Snist'
-    }
+        'github:organization': 'C3Snist',
+    },
 }
 
 export default function RootLayout({
@@ -78,8 +84,14 @@ export default function RootLayout({
     children: React.ReactNode
 }) {
     return (
-        <html lang="en" className={`${inter.variable} ${poppins.variable} ${jetbrainsMono.variable} ${mrsSaintDelafield.variable}`}>
-            <body className="min-h-screen bg-black text-white" suppressHydrationWarning>
+        <html
+            lang='en'
+            className={`${inter.variable} ${poppins.variable} ${jetbrainsMono.variable} ${mrsSaintDelafield.variable}`}
+        >
+            <body
+                className='min-h-screen bg-black text-white'
+                suppressHydrationWarning
+            >
                 <Navbar />
                 <main>{children}</main>
                 {process.env.NODE_ENV === 'production' && <SpeedInsights />}

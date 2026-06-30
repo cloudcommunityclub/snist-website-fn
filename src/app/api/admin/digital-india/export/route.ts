@@ -12,27 +12,54 @@ export async function GET() {
             .lean()
 
         const headers = [
-            'Team Name', 'Leader Name', 'Email', 'Phone', 'College',
-            'Domain Track', 'Team Size', 'Team Members',
-            'Idea Description', 'UTR ID', 'Payment Screenshot URL', 'Verified',
-            'Verified At', 'Verified By', 'Registered At',
-            'Referral Code', 'Referred By', 'Referral Points',
+            'Team Name',
+            'Leader Name',
+            'Email',
+            'Phone',
+            'College',
+            'Domain Track',
+            'Team Size',
+            'Team Members',
+            'Idea Description',
+            'UTR ID',
+            'Payment Screenshot URL',
+            'Verified',
+            'Verified At',
+            'Verified By',
+            'Registered At',
+            'Referral Code',
+            'Referred By',
+            'Referral Points',
         ]
 
-        const rows = submissions.map(s => [
-            s.teamName ?? '', s.name, s.email, s.phone, s.college,
-            s.domain ?? '', s.teamSize ?? 1,
-            s.teamMembers ? s.teamMembers.map((m: any) => `${m.name} (${m.email})`).join('; ') : '',
-            s.idea, s.utrId, s.paymentScreenshotUrl,
-            s.paymentVerified ? 'Yes' : 'No',
-            s.verifiedAt ? new Date(s.verifiedAt).toISOString() : '',
-            s.verifiedBy ?? '',
-            s.createdAt ? new Date(s.createdAt).toISOString() : '',
-            s.referralCode ?? '',
-            s.referredByCode ?? '',
-            s.referralPoints ?? 0,
-        ].map(escCsv).join(','))
-
+        const rows = submissions.map((s) =>
+            [
+                s.teamName ?? '',
+                s.name,
+                s.email,
+                s.phone,
+                s.college,
+                s.domain ?? '',
+                s.teamSize ?? 1,
+                s.teamMembers
+                    ? s.teamMembers
+                          .map((m: any) => `${m.name} (${m.email})`)
+                          .join('; ')
+                    : '',
+                s.idea,
+                s.utrId,
+                s.paymentScreenshotUrl,
+                s.paymentVerified ? 'Yes' : 'No',
+                s.verifiedAt ? new Date(s.verifiedAt).toISOString() : '',
+                s.verifiedBy ?? '',
+                s.createdAt ? new Date(s.createdAt).toISOString() : '',
+                s.referralCode ?? '',
+                s.referredByCode ?? '',
+                s.referralPoints ?? 0,
+            ]
+                .map(escCsv)
+                .join(',')
+        )
 
         const csv = [headers.join(','), ...rows].join('\n')
 
@@ -44,9 +71,12 @@ export async function GET() {
         })
     } catch (error) {
         console.error('Digital India export error:', error)
-        return new Response(JSON.stringify({ message: 'Failed to export Digital India data' }), {
-            status: 500,
-            headers: { 'Content-Type': 'application/json' },
-        })
+        return new Response(
+            JSON.stringify({ message: 'Failed to export Digital India data' }),
+            {
+                status: 500,
+                headers: { 'Content-Type': 'application/json' },
+            }
+        )
     }
 }

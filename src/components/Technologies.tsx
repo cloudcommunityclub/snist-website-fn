@@ -40,12 +40,13 @@ const sfxClick = '/assets/sound_fx/click.mp3'
 const conveyorFront = '/assets/home/conveyor_front.webp'
 const cloudIcon = '/assets/ccc_logo.webp'
 
-const TECH_TEXT_CLASSES = 'title-main my-auto mx-10 font-semibold text-xl md:text-2xl'
+const TECH_TEXT_CLASSES =
+    'title-main my-auto mx-10 font-semibold text-xl md:text-2xl'
 const TECH_ICON_CLASSES = 'my-auto w-[60px] md:w-[72px] h-full'
 const TECH_ICON_SHADOW = { filter: 'drop-shadow(4px 4px 2px rgba(0, 0, 0, 1))' }
 
 const TECHNOLOGIES: { [key: string]: React.ReactNode } = {
-    'AWS': (
+    AWS: (
         <FaAws
             color='#FF9900'
             className={TECH_ICON_CLASSES}
@@ -59,98 +60,98 @@ const TECHNOLOGIES: { [key: string]: React.ReactNode } = {
             style={TECH_ICON_SHADOW}
         />
     ),
-    'Azure': (
+    Azure: (
         <VscAzure
             color='#0089D6'
             className={TECH_ICON_CLASSES}
             style={TECH_ICON_SHADOW}
         />
     ),
-    'Docker': (
+    Docker: (
         <SiDocker
             color='#2496ED'
             className={TECH_ICON_CLASSES}
             style={TECH_ICON_SHADOW}
         />
     ),
-    'Kubernetes': (
+    Kubernetes: (
         <SiKubernetes
             color='#326CE5'
             className={TECH_ICON_CLASSES}
             style={TECH_ICON_SHADOW}
         />
     ),
-    'Terraform': (
+    Terraform: (
         <SiTerraform
             color='#7B42BC'
             className={TECH_ICON_CLASSES}
             style={TECH_ICON_SHADOW}
         />
     ),
-    'Jenkins': (
+    Jenkins: (
         <SiJenkins
             color='#D24939'
             className={TECH_ICON_CLASSES}
             style={TECH_ICON_SHADOW}
         />
     ),
-    'Gitlab': (
+    Gitlab: (
         <SiGitlab
             color='#FC6D26'
             className={TECH_ICON_CLASSES}
             style={TECH_ICON_SHADOW}
         />
     ),
-    'Grafana': (
+    Grafana: (
         <SiGrafana
             color='#F46800'
             className={TECH_ICON_CLASSES}
             style={TECH_ICON_SHADOW}
         />
     ),
-    'Prometheus': (
+    Prometheus: (
         <SiPrometheus
             color='#E6522C'
             className={TECH_ICON_CLASSES}
             style={TECH_ICON_SHADOW}
         />
     ),
-    'Redis': (
+    Redis: (
         <SiRedis
             color='#DC382D'
             className={TECH_ICON_CLASSES}
             style={TECH_ICON_SHADOW}
         />
     ),
-    'Python': (
+    Python: (
         <SiPython
             color='#3776AB'
             className={TECH_ICON_CLASSES}
             style={TECH_ICON_SHADOW}
         />
     ),
-    'Go': (
+    Go: (
         <SiGo
             color='#00ADD8'
             className={TECH_ICON_CLASSES}
             style={TECH_ICON_SHADOW}
         />
     ),
-    'TypeScript': (
+    TypeScript: (
         <SiTypescript
             color='#3178C6'
             className={TECH_ICON_CLASSES}
             style={TECH_ICON_SHADOW}
         />
     ),
-    'Rust': (
+    Rust: (
         <SiRust
             color='#DEA584' // Rust logo color
             className={TECH_ICON_CLASSES}
             style={TECH_ICON_SHADOW}
         />
     ),
-    'Linux': (
+    Linux: (
         <SiLinux
             color='#F7F7F7' // Linux logo color (light grey)
             className={TECH_ICON_CLASSES}
@@ -170,7 +171,7 @@ export default function Technologies(): React.ReactNode {
                 width={250}
                 height={250}
                 src={cloudIcon}
-                alt="Cloud icon"
+                alt='Cloud icon'
                 className='mx-auto my-4 md:my-10 hover:!scale-105 transition duration-300 ease-out'
                 initial={{ transform: 'translateY(-10%)' }}
                 animate={{ transform: 'translateY(10%)' }}

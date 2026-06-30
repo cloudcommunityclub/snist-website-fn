@@ -22,8 +22,8 @@ This document provides a live summary of the repository status, active component
 ## 3. Identified Gaps & Technical Debt (P0-P1 Priorities)
 Based on comparative analysis of the standalone backend migration plan:
 
-- **Missing Rate Limiting (P0)**: API routes (especially `POST /api/join` and `POST /api/admin/login`) lack rate limit protective middleware. They are vulnerable to brute-force attacks.
-- **Request & PII Logging (P0)**: The application does not log API hits or redact sensitive fields (like emails, phone numbers, or passwords) in production.
-- **Health Check Endpoint (P0)**: No monitoring health check endpoint (`/api/health`) is configured to track database connection health.
+- **Rate Limiting (P0)**: `POST /api/join` and `POST /api/digital-india/submit` have rate limiting implemented. `POST /api/admin/login` still needs it.
+- **Request & PII Logging (P0)**: BN has PII redaction and request logging. FN relies on Vercel platform logs.
+- **Health Check Endpoint**: BN has `GET /health`. FN has no health check endpoint.
 - **Security Headers (P1)**: `next.config.js` is missing strict HTTP Strict Transport Security (HSTS) settings and Cross-Origin Resource Policy configurations.
 - **Email Pre-flight checks (P1)**: The client form cannot pre-flight check if an email already exists because the `GET /api/join/check` route is missing.

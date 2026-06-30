@@ -7,19 +7,28 @@ export async function POST(request: Request) {
         const { password } = body
 
         if (!password || typeof password !== 'string') {
-            return NextResponse.json({ success: false, message: 'Password required' }, { status: 400 })
+            return NextResponse.json(
+                { success: false, message: 'Password required' },
+                { status: 400 }
+            )
         }
 
         const adminPassword = process.env.ADMIN_PASSWORD
         if (!adminPassword) {
             console.error('ADMIN_PASSWORD not configured')
-            return NextResponse.json({ success: false, message: 'Server configuration error' }, { status: 500 })
+            return NextResponse.json(
+                { success: false, message: 'Server configuration error' },
+                { status: 500 }
+            )
         }
 
         if (password !== adminPassword) {
             // Small artificial delay to slow brute force
-            await new Promise(r => setTimeout(r, 300))
-            return NextResponse.json({ success: false, message: 'Invalid credentials' }, { status: 401 })
+            await new Promise((r) => setTimeout(r, 300))
+            return NextResponse.json(
+                { success: false, message: 'Invalid credentials' },
+                { status: 401 }
+            )
         }
 
         const secret = new TextEncoder().encode(
@@ -44,6 +53,9 @@ export async function POST(request: Request) {
         return response
     } catch (error) {
         console.error('Admin login error:', error)
-        return NextResponse.json({ success: false, message: 'Internal server error' }, { status: 500 })
+        return NextResponse.json(
+            { success: false, message: 'Internal server error' },
+            { status: 500 }
+        )
     }
 }

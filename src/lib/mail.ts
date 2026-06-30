@@ -10,7 +10,9 @@ function getTransporter() {
         const pass = process.env.SMTP_PASS
 
         if (!host || !user || !pass) {
-            throw new Error('SMTP mail credentials are not configured in environment variables.')
+            throw new Error(
+                'SMTP mail credentials are not configured in environment variables.'
+            )
         }
 
         // Use secure: true for port 465, secure: false for 587 (TLS/STARTTLS)
@@ -26,8 +28,8 @@ function getTransporter() {
             },
             // Set tls config to allow unauthorized certs if needed, or default
             tls: {
-                rejectUnauthorized: false
-            }
+                rejectUnauthorized: false,
+            },
         })
     }
     return transporter
@@ -47,9 +49,15 @@ export function escHtml(s: string): string {
 /**
  * Send an email via the traditional SMTP transporter.
  */
-export async function sendEmail(to: string, subject: string, htmlBody: string): Promise<void> {
+export async function sendEmail(
+    to: string,
+    subject: string,
+    htmlBody: string
+): Promise<void> {
     const client = getTransporter()
-    const from = process.env.EMAIL_FROM || `Cloud Community Club (C³) <${process.env.SMTP_USER}>`
+    const from =
+        process.env.EMAIL_FROM ||
+        `Cloud Community Club (C³) <${process.env.SMTP_USER}>`
 
     await client.sendMail({
         from,

@@ -8,6 +8,7 @@ export interface IDigitalIndiaSubmission {
     idea: string
     utrId: string
     paymentScreenshotUrl: string
+    thumbnailUrl?: string
     paymentVerified: boolean
     verifiedAt?: Date
     verifiedBy?: string
@@ -27,11 +28,18 @@ export interface IDigitalIndiaSubmission {
 const DigitalIndiaSubmissionSchema = new Schema({
     name: { type: String, required: true },
     college: { type: String, required: true },
-    email: { type: String, required: true, unique: true, lowercase: true, trim: true },
+    email: {
+        type: String,
+        required: true,
+        unique: true,
+        lowercase: true,
+        trim: true,
+    },
     phone: { type: String, required: true },
     idea: { type: String, required: true },
     utrId: { type: String, required: true, unique: true, trim: true },
     paymentScreenshotUrl: { type: String, required: true },
+    thumbnailUrl: { type: String, default: null },
     paymentVerified: { type: Boolean, default: false },
     verifiedAt: { type: Date },
     verifiedBy: { type: String },
@@ -44,10 +52,21 @@ const DigitalIndiaSubmissionSchema = new Schema({
     teamMembers: [
         {
             name: { type: String, required: true },
-            email: { type: String, required: true, lowercase: true, trim: true },
-        }
+            email: {
+                type: String,
+                required: true,
+                lowercase: true,
+                trim: true,
+            },
+        },
     ],
-    referralCode: { type: String, required: true, unique: true, uppercase: true, trim: true },
+    referralCode: {
+        type: String,
+        required: true,
+        unique: true,
+        uppercase: true,
+        trim: true,
+    },
     referredByCode: { type: String, uppercase: true, trim: true, index: true },
     referralPoints: { type: Number, default: 0, index: true },
     lastPointEarnedAt: { type: Date, default: Date.now, index: true },
@@ -69,4 +88,3 @@ const DigitalIndiaSubmission: Model<IDigitalIndiaSubmission> =
     )
 
 export default DigitalIndiaSubmission
-

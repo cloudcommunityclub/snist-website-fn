@@ -3,5 +3,5 @@ export const GALLERY_TYPED_WORDS = [
     'Innovation',
     'Community',
     'Learning',
-    'Technology'
+    'Technology',
 ]

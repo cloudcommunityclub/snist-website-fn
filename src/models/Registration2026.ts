@@ -19,7 +19,13 @@ export interface IRegistration2026 {
 
 const Registration2026Schema = new Schema({
     name: { type: String, required: true },
-    email: { type: String, required: true, unique: true, lowercase: true, trim: true },
+    email: {
+        type: String,
+        required: true,
+        unique: true,
+        lowercase: true,
+        trim: true,
+    },
     mobile: { type: String, required: true },
     rollNumber: { type: String, required: true },
     department: { type: String, required: true },
@@ -45,6 +51,10 @@ Registration2026Schema.index({ emailSent: 1 })
 // Prevent model recompilation in dev (HMR)
 const Registration2026: Model<IRegistration2026> =
     mongoose.models.Registration2026 ||
-    mongoose.model<IRegistration2026>('Registration2026', Registration2026Schema, 'registrations-2026')
+    mongoose.model<IRegistration2026>(
+        'Registration2026',
+        Registration2026Schema,
+        'registrations-2026'
+    )
 
 export default Registration2026

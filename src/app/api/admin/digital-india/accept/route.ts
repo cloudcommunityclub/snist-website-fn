@@ -6,79 +6,100 @@ import DigitalIndiaReferral from '@/models/DigitalIndiaReferral'
 import { escHtml, sendEmail } from '@/lib/mail'
 
 export async function POST(request: Request) {
-  try {
-    const body = await request.json()
-    const { id } = body
-
-    if (!id) {
-      return NextResponse.json({ success: false, message: 'Submission ID is required.' }, { status: 400 })
-    }
-
-    await dbConnect()
-
-    // Find the submission
-    const submission = await DigitalIndiaSubmission.findById(id)
-    if (!submission) {
-      return NextResponse.json({ success: false, message: 'Submission not found.' }, { status: 404 })
-    }
-
-    // Check if already in Accepted table to prevent duplicates
-    const existingAccepted = await DigitalIndiaAccepted.findOne({ email: submission.email })
-    if (existingAccepted) {
-      return NextResponse.json({ success: false, message: 'Candidate has already been accepted.' }, { status: 400 })
-    }
-
-    // Create accepted participant record
-    const acceptedParticipant = new DigitalIndiaAccepted({
-      name: submission.name,
-      college: submission.college,
-      email: submission.email,
-      phone: submission.phone,
-      idea: submission.idea,
-      utrId: submission.utrId,
-      paymentScreenshotUrl: submission.paymentScreenshotUrl,
-      // copy new referral & team fields
-      teamName: submission.teamName,
-      domain: submission.domain,
-      teamSize: submission.teamSize,
-      teamMembers: submission.teamMembers,
-      referralCode: submission.referralCode,
-      referredByCode: submission.referredByCode,
-      referralPoints: submission.referralPoints,
-      lastPointEarnedAt: submission.lastPointEarnedAt || submission.createdAt,
-      acceptedAt: new Date(),
-      acceptedBy: 'Admin',
-    })
-
-    await acceptedParticipant.save()
-
-    // Delete from submissions table
-    await DigitalIndiaSubmission.findByIdAndDelete(id)
-
-    // Update referral records to use the new accepted participant ObjectId
     try {
-      // 1. If this team was referred by someone, update their referredTeamId
-      await DigitalIndiaReferral.updateOne(
-        { referredEmail: submission.email },
-        { referredTeamId: acceptedParticipant._id }
-      )
+        const body = await request.json()
+        const { id } = body
 
-      // 2. If this team referred other teams, update their referrerTeamId
-      await DigitalIndiaReferral.updateMany(
-        { referrerEmail: submission.email },
-        { referrerTeamId: acceptedParticipant._id }
-      )
-    } catch (refUpdateErr) {
-      console.error('❌ Failed to update referral ObjectIds on accept:', refUpdateErr)
-    }
+        if (!id) {
+            return NextResponse.json(
+                { success: false, message: 'Submission ID is required.' },
+                { status: 400 }
+            )
+        }
 
+        await dbConnect()
 
-    // Send shortlisted SMTP mail
-    try {
-      const whatsappLink = process.env.WHATSAPP_GROUP_LINK || 'https://chat.whatsapp.com/mock-digital-india'
-      const hackathonLink = process.env.HACKATHON_REGISTRATION_LINK || 'https://c3-digital-india-hackathon.example.com'
+        // Find the submission
+        const submission = await DigitalIndiaSubmission.findById(id)
+        if (!submission) {
+            return NextResponse.json(
+                { success: false, message: 'Submission not found.' },
+                { status: 404 }
+            )
+        }
 
-      const htmlBody = `
+        // Check if already in Accepted table to prevent duplicates
+        const existingAccepted = await DigitalIndiaAccepted.findOne({
+            email: submission.email,
+        })
+        if (existingAccepted) {
+            return NextResponse.json(
+                {
+                    success: false,
+                    message: 'Candidate has already been accepted.',
+                },
+                { status: 400 }
+            )
+        }
+
+        // Create accepted participant record
+        const acceptedParticipant = new DigitalIndiaAccepted({
+            name: submission.name,
+            college: submission.college,
+            email: submission.email,
+            phone: submission.phone,
+            idea: submission.idea,
+            utrId: submission.utrId,
+            paymentScreenshotUrl: submission.paymentScreenshotUrl,
+            // copy new referral & team fields
+            teamName: submission.teamName,
+            domain: submission.domain,
+            teamSize: submission.teamSize,
+            teamMembers: submission.teamMembers,
+            referralCode: submission.referralCode,
+            referredByCode: submission.referredByCode,
+            referralPoints: submission.referralPoints,
+            lastPointEarnedAt:
+                submission.lastPointEarnedAt || submission.createdAt,
+            acceptedAt: new Date(),
+            acceptedBy: 'Admin',
+        })
+
+        await acceptedParticipant.save()
+
+        // Delete from submissions table
+        await DigitalIndiaSubmission.findByIdAndDelete(id)
+
+        // Update referral records to use the new accepted participant ObjectId
+        try {
+            // 1. If this team was referred by someone, update their referredTeamId
+            await DigitalIndiaReferral.updateOne(
+                { referredEmail: submission.email },
+                { referredTeamId: acceptedParticipant._id }
+            )
+
+            // 2. If this team referred other teams, update their referrerTeamId
+            await DigitalIndiaReferral.updateMany(
+                { referrerEmail: submission.email },
+                { referrerTeamId: acceptedParticipant._id }
+            )
+        } catch (refUpdateErr) {
+            console.error(
+                '❌ Failed to update referral ObjectIds on accept:',
+                refUpdateErr
+            )
+        }
+
+        // Send shortlisted SMTP mail
+        try {
+            const whatsappLink =
+                process.env.WHATSAPP_GROUP_LINK ||
+                'https://chat.whatsapp.com/mock-digital-india'
+            const hackathonLink =
+                process.env.HACKATHON_REGISTRATION_LINK ||
+                'https://c3-digital-india-hackathon.example.com'
+
+            const htmlBody = `
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -179,23 +200,31 @@ export async function POST(request: Request) {
 </html>
             `
 
-      await sendEmail(
-        submission.email,
-        'Shortlisted Announcement: Digital India Hackathon',
-        htmlBody
-      )
-      console.log(`✅ Acceptance email sent successfully to ${submission.email}`)
-    } catch (emailError) {
-      console.error('❌ Acceptance Email Failed:', (emailError as Error).message)
-    }
+            await sendEmail(
+                submission.email,
+                'Shortlisted Announcement: Digital India Hackathon',
+                htmlBody
+            )
+            console.log(
+                `✅ Acceptance email sent successfully to ${submission.email}`
+            )
+        } catch (emailError) {
+            console.error(
+                '❌ Acceptance Email Failed:',
+                (emailError as Error).message
+            )
+        }
 
-    return NextResponse.json({
-      success: true,
-      message: 'Candidate accepted and notification email sent.',
-      data: acceptedParticipant,
-    })
-  } catch (error) {
-    console.error('Accept candidate error:', error)
-    return NextResponse.json({ success: false, message: 'Internal Server Error' }, { status: 500 })
-  }
+        return NextResponse.json({
+            success: true,
+            message: 'Candidate accepted and notification email sent.',
+            data: acceptedParticipant,
+        })
+    } catch (error) {
+        console.error('Accept candidate error:', error)
+        return NextResponse.json(
+            { success: false, message: 'Internal Server Error' },
+            { status: 500 }
+        )
+    }
 }

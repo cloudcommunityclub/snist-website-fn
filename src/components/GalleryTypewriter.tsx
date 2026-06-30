@@ -3,10 +3,17 @@
 import React from 'react'
 import dynamic from 'next/dynamic'
 
-const ReactTyped = dynamic(() => import('react-typed').then(mod => mod.ReactTyped), {
-    ssr: false,
-    loading: () => <span className="bg-gradient-to-t from-yellow-300 to-purple-400 bg-clip-text text-transparent">Loading...</span>
-})
+const ReactTyped = dynamic(
+    () => import('react-typed').then((mod) => mod.ReactTyped),
+    {
+        ssr: false,
+        loading: () => (
+            <span className='bg-gradient-to-t from-yellow-300 to-purple-400 bg-clip-text text-transparent'>
+                Loading...
+            </span>
+        ),
+    }
+)
 
 interface GalleryTypewriterProps {
     words: string[]

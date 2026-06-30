@@ -5,15 +5,18 @@ This document describes the design patterns, technology choices, and data flow a
 ```mermaid
 graph TD
     Client[Next.js 16 Web Client / React 19 / Tailwind 4]
-    API[Next.js Serverless API Routes]
+    FN[Next.js Route Handlers]
+    BN[Express.js API Server]
     DB[(MongoDB Atlas / Mongoose)]
     SMTP[SMTP Mailer / nodemailer]
-    R2[(Cloudflare R2 Bucket / AWS S3 SDK)]
+    Disk[(Local Disk Storage)]
 
-    Client -->|Form Submissions / JWT Session Auth| API
-    API -->|Write Member Details / Submissions| DB
-    API -->|Send HTML Confirmation Emails| SMTP
-    API -->|Upload Verification Screenshots| R2
+    Client -->|Form Submissions / JWT Session Auth| FN
+    FN -->|Write Registrations & Submissions| DB
+    FN -->|Relay Multipart Form Data (Ideathon)| BN
+    BN -->|Upload + Optimize Screenshots| Disk
+    BN -->|Send Confirmation Emails| SMTP
+    BN -->|Serve Screenshots via Proxy| FN
 ```
 
 ## 1. Technical Stack
@@ -42,7 +45,7 @@ All database schemas are built on top of Mongoose with appropriate indexing for 
   - Purpose: Captures details, payment UTR numbers, screenshot URLs, and validation states for the Digital India Ideathon entries.
 
 ## 3. Storage & Integration Layers
-- **File Storage** (`src/lib/r2.ts`): Uses the `@aws-sdk/client-s3` library configured to interact with a Cloudflare R2 bucket for storing static user-uploaded files, such as payment screenshots.
+- **File Storage**: All user-uploaded files (payment screenshots) are handled by the backend (BN) using multer for receipt, Sharp for optimization/thumbnail generation, and `file-type` for magic-byte validation. Files are stored on local disk with date-partitioned directories and UUID filenames. The admin dashboard proxies file access through authenticated API endpoints. Old Cloudflare R2 URLs from before the migration are still supported with a fallback lookup.
 - **Email Service** (`src/lib/mail.ts`): Integrated with the `nodemailer` library to establish traditional SMTP connections (using `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`), enabling high-quality HTML email templates to be dispatched dynamically during registration, onboarding, and shortlisting states.
 - **Authentication**: JWT-based session security using the `jose` library. Authentication uses an HTTP-Only cookie (`c3_admin_session`) with a life cycle of 8 hours, strict same-site configuration, and SSL enforcement.
 

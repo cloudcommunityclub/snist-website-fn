@@ -1,44 +1,57 @@
+/**
+ * Admin screenshot proxy route.
+ *
+ * Acts as a relay to the BN backend's screenshot serving endpoint.
+ * The BN handles authentication (API key) and file serving from local disk.
+ * This keeps the actual file paths hidden from the client.
+ */
+
 import { NextResponse } from 'next/server'
-import dbConnect from '@/lib/db'
-import DigitalIndiaSubmission from '@/models/DigitalIndiaSubmission'
-import DigitalIndiaAccepted from '@/models/DigitalIndiaAccepted'
+
+const BACKEND_API_URL =
+    process.env.NEXT_PUBLIC_API_URL || 'http://localhost:6000'
 
 export async function GET(request: Request) {
     try {
         const { searchParams } = new URL(request.url)
         const id = searchParams.get('id')
-        const isAccepted = searchParams.get('accepted') === 'true'
+        const thumb = searchParams.get('thumb') === 'true'
 
         if (!id) {
-            return new Response('Missing ID', { status: 400 })
+            return new Response('Missing submission ID', { status: 400 })
         }
 
-        await dbConnect()
-
-        let record
-        if (isAccepted) {
-            record = await DigitalIndiaAccepted.findById(id)
-        } else {
-            record = await DigitalIndiaSubmission.findById(id)
+        // Relay to BN with admin API key
+        const bnUrl = new URL(
+            `${BACKEND_API_URL}/api/admin/digital-india/screenshot`
+        )
+        bnUrl.searchParams.set('id', id)
+        if (thumb) {
+            bnUrl.searchParams.set('thumb', 'true')
         }
 
-        if (!record || !record.paymentScreenshotUrl) {
-            return new Response('Screenshot not found', { status: 404 })
+        const response = await fetch(bnUrl.toString(), {
+            headers: {
+                'x-api-key': process.env.API_KEY || '',
+            },
+        })
+
+        if (!response.ok) {
+            if (response.status === 404) {
+                return new Response('Screenshot not found', { status: 404 })
+            }
+            return new Response('Failed to retrieve image', {
+                status: response.status,
+            })
         }
 
-        // Fetch image from R2 using backend fetch
-        const res = await fetch(record.paymentScreenshotUrl)
-        if (!res.ok) {
-            return new Response('Failed to retrieve image from storage', { status: res.status })
-        }
-
-        const buffer = await res.arrayBuffer()
-        const contentType = res.headers.get('content-type') || 'image/png'
+        const buffer = await response.arrayBuffer()
+        const contentType = response.headers.get('content-type') || 'image/png'
 
         return new Response(buffer, {
             headers: {
                 'Content-Type': contentType,
-                'Cache-Control': 'public, max-age=31536000, immutable',
+                'Cache-Control': 'public, max-age=86400', // 24 hours
             },
         })
     } catch (error) {

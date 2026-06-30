@@ -11,7 +11,8 @@ import { ReactTyped } from 'react-typed'
 
 import { FcCollaboration, FcElectronics, FcIdea } from 'react-icons/fc'
 
-const cardBaseClasses = 'hover:z-10 z-0 w-[350px] hover:w-[420px] h-[430px] active:!scale-100 hover:outline-[8px] outline-[3px] outline hover:outline-double transition-all duration-300 ease-out bg-gradient-to-t rounded-3xl'
+const cardBaseClasses =
+    'hover:z-10 z-0 w-[350px] hover:w-[420px] h-[430px] active:!scale-100 hover:outline-[8px] outline-[3px] outline hover:outline-double transition-all duration-300 ease-out bg-gradient-to-t rounded-3xl'
 
 const sfxClunk = '/assets/sound_fx/clunk.mp3'
 const logo = '/assets/ccc_logo.webp'
@@ -27,7 +28,10 @@ export default function About(): React.ReactNode {
     const [card3Animating, setCard3Animating] = useState(false)
 
     return (
-        <div ref={ref} className='w-full h-full bg-gradient-to-b from-black to-[#0a0a0a] text-gray-300 py-[24vh] mt-40 overflow-hidden'>
+        <div
+            ref={ref}
+            className='w-full h-full bg-gradient-to-b from-black to-[#0a0a0a] text-gray-300 py-[24vh] mt-40 overflow-hidden'
+        >
             <Element name='about' />
 
             <div className='w-full py-24 flex flex-col lg:flex-row justify-center items-center gap-x-20 gap-y-8 bg-[#030303]'>
@@ -48,8 +52,14 @@ export default function About(): React.ReactNode {
                         muted
                         loop
                     >
-                        <source src='/assets/home/aerial.webm' type='video/webm' />
-                        <source src='/assets/home/aerial.mp4' type='video/mp4' />
+                        <source
+                            src='/assets/home/aerial.webm'
+                            type='video/webm'
+                        />
+                        <source
+                            src='/assets/home/aerial.mp4'
+                            type='video/mp4'
+                        />
                     </video>
                 </div>
 
@@ -63,16 +73,25 @@ export default function About(): React.ReactNode {
                     <h2>🌐 A Student-Driven Tech Initiative</h2>
                     <div className='w-full h-[1px] bg-white my-3'></div>
                     <p className='my-2'>
-                        As a newly established club, C³ aims to create a vibrant ecosystem where students can explore and excel in various domains of technology. We believe in bridging the gap between theoretical knowledge and practical application through hands-on experience.
+                        As a newly established club, C³ aims to create a vibrant
+                        ecosystem where students can explore and excel in
+                        various domains of technology. We believe in bridging
+                        the gap between theoretical knowledge and practical
+                        application through hands-on experience.
                     </p>
                     <p className='my-2'>
-                        Whether you're a beginner or experienced in any tech domain, our community welcomes everyone. We focus on collaborative learning, research opportunities, and real-world project experience to help you grow in your chosen field.
+                        Whether you're a beginner or experienced in any tech
+                        domain, our community welcomes everyone. We focus on
+                        collaborative learning, research opportunities, and
+                        real-world project experience to help you grow in your
+                        chosen field.
                     </p>
                     <p className='my-2'>
-                        This is your platform to innovate, research, collaborate, and grow in the ever-evolving world of technology!
+                        This is your platform to innovate, research,
+                        collaborate, and grow in the ever-evolving world of
+                        technology!
                     </p>
                 </div>
-
             </div>
 
             <div className='w-full h-[180px] bg-[#040404]'></div>
@@ -134,9 +153,7 @@ export default function About(): React.ReactNode {
                                     duration: 2,
                                 }}
                             >
-                                <FcElectronics
-                                    className='w-[145px] h-[145px] drop-shadow-[0_25px_25px_rgba(0,0,0,1)]'
-                                />
+                                <FcElectronics className='w-[145px] h-[145px] drop-shadow-[0_25px_25px_rgba(0,0,0,1)]' />
                             </motion.div>
                             <h1 className='title-main font-bold text-2xl text-center mt-7'>
                                 Explore{' '}
@@ -145,9 +162,15 @@ export default function About(): React.ReactNode {
                                 </span>
                             </h1>
                             <p className='text-sm text-center py-2 px-8 leading-6'>
-                                Dive into cutting-edge cloud technologies and platforms. Learn{' '}
-                                <b>AWS, Azure, GCP</b>, and other emerging technologies. Get hands-on experience with{' '}
-                                <b>containerization, serverless computing, and cloud architecture</b>.
+                                Dive into cutting-edge cloud technologies and
+                                platforms. Learn <b>AWS, Azure, GCP</b>, and
+                                other emerging technologies. Get hands-on
+                                experience with{' '}
+                                <b>
+                                    containerization, serverless computing, and
+                                    cloud architecture
+                                </b>
+                                .
                             </p>
                         </div>
                     </motion.div>
@@ -191,9 +214,7 @@ export default function About(): React.ReactNode {
                                     duration: 2,
                                 }}
                             >
-                                <FcCollaboration
-                                    className='w-[145px] h-[145px] drop-shadow-[0_25px_25px_rgba(0,0,0,1)]'
-                                />
+                                <FcCollaboration className='w-[145px] h-[145px] drop-shadow-[0_25px_25px_rgba(0,0,0,1)]' />
                             </motion.div>
                             <h1 className='title-main font-bold text-2xl text-center mt-7'>
                                 Drive{' '}
@@ -202,9 +223,11 @@ export default function About(): React.ReactNode {
                                 </span>
                             </h1>
                             <p className='text-sm text-center py-2 px-8 leading-6'>
-                                Engage in <b>research-driven activities</b> and contribute to{' '}
-                                <b>open-source projects</b>. Collaborate on publishing papers and developing solutions for{' '}
-                                <b>real-world challenges</b> in emerging tech.
+                                Engage in <b>research-driven activities</b> and
+                                contribute to <b>open-source projects</b>.
+                                Collaborate on publishing papers and developing
+                                solutions for <b>real-world challenges</b> in
+                                emerging tech.
                             </p>
                         </div>
                     </motion.div>
@@ -248,9 +271,7 @@ export default function About(): React.ReactNode {
                                     duration: 2,
                                 }}
                             >
-                                <FcIdea
-                                    className='w-[145px] h-[145px] drop-shadow-[0_25px_25px_rgba(0,0,0,1)]'
-                                />
+                                <FcIdea className='w-[145px] h-[145px] drop-shadow-[0_25px_25px_rgba(0,0,0,1)]' />
                             </motion.div>
                             <h1 className='title-main font-bold text-2xl text-center mt-7'>
                                 Connect with{' '}
@@ -259,15 +280,18 @@ export default function About(): React.ReactNode {
                                 </span>
                             </h1>
                             <p className='text-sm text-center py-2 px-8 leading-6'>
-                                Network with <b>industry leaders</b> and gain insights into the evolving tech landscape. Access{' '}
-                                <b>mentorship opportunities</b> and build connections for your future career in{' '}
+                                Network with <b>industry leaders</b> and gain
+                                insights into the evolving tech landscape.
+                                Access <b>mentorship opportunities</b> and build
+                                connections for your future career in{' '}
                                 <b>cutting-edge innovation</b>.
                             </p>
                         </div>
-
                     </motion.div>
                 </div>
-                <p className='m-4 lg:hidden font-semibold text-neutral-400 animate-pulse'>drag to view cards →</p>
+                <p className='m-4 lg:hidden font-semibold text-neutral-400 animate-pulse'>
+                    drag to view cards →
+                </p>
             </div>
         </div>
     )

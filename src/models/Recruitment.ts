@@ -24,7 +24,11 @@ const RecruitmentSchema = new Schema({
         validate: {
             validator: function (email: string): boolean {
                 const domain = email.split('@')[1]
-                return !!(domain && (domain.endsWith('sreenidhi.edu.in') || domain.endsWith('shu.edu.in')))
+                return !!(
+                    domain &&
+                    (domain.endsWith('sreenidhi.edu.in') ||
+                        domain.endsWith('shu.edu.in'))
+                )
             },
             message: 'Email must be from sreenidhi.edu.in or shu.edu.in domain',
         },
@@ -50,6 +54,10 @@ RecruitmentSchema.index({ submittedSolution: 1 })
 // Prevent model recompilation in dev (HMR)
 const Recruitment: Model<IRecruitment> =
     mongoose.models.Recruitment ||
-    mongoose.model<IRecruitment>('Recruitment', RecruitmentSchema, 'recruitment')
+    mongoose.model<IRecruitment>(
+        'Recruitment',
+        RecruitmentSchema,
+        'recruitment'
+    )
 
 export default Recruitment

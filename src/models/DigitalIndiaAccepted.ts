@@ -26,7 +26,13 @@ export interface IDigitalIndiaAccepted {
 const DigitalIndiaAcceptedSchema = new Schema({
     name: { type: String, required: true },
     college: { type: String, required: true },
-    email: { type: String, required: true, unique: true, lowercase: true, trim: true },
+    email: {
+        type: String,
+        required: true,
+        unique: true,
+        lowercase: true,
+        trim: true,
+    },
     phone: { type: String, required: true },
     idea: { type: String, required: true },
     utrId: { type: String, required: true, unique: true, trim: true },
@@ -42,10 +48,21 @@ const DigitalIndiaAcceptedSchema = new Schema({
     teamMembers: [
         {
             name: { type: String, required: true },
-            email: { type: String, required: true, lowercase: true, trim: true },
-        }
+            email: {
+                type: String,
+                required: true,
+                lowercase: true,
+                trim: true,
+            },
+        },
     ],
-    referralCode: { type: String, required: true, unique: true, uppercase: true, trim: true },
+    referralCode: {
+        type: String,
+        required: true,
+        unique: true,
+        uppercase: true,
+        trim: true,
+    },
     referredByCode: { type: String, uppercase: true, trim: true, index: true },
     referralPoints: { type: Number, default: 0, index: true },
     lastPointEarnedAt: { type: Date, default: Date.now, index: true },
@@ -66,4 +83,3 @@ const DigitalIndiaAccepted: Model<IDigitalIndiaAccepted> =
     )
 
 export default DigitalIndiaAccepted
-

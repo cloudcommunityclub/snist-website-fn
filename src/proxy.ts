@@ -7,8 +7,12 @@ const PUBLIC_API_PATHS = ['/api/admin/login']
 
 function isPublic(pathname: string): boolean {
     return (
-        PUBLIC_ADMIN_PATHS.some(p => pathname === p || pathname.startsWith(p + '/')) ||
-        PUBLIC_API_PATHS.some(p => pathname === p || pathname.startsWith(p + '/'))
+        PUBLIC_ADMIN_PATHS.some(
+            (p) => pathname === p || pathname.startsWith(p + '/')
+        ) ||
+        PUBLIC_API_PATHS.some(
+            (p) => pathname === p || pathname.startsWith(p + '/')
+        )
     )
 }
 

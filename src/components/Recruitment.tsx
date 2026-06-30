@@ -18,13 +18,12 @@ export default function Recruitment(): React.ReactNode {
                 height={1600}
                 alt='space background'
                 className='-z-10 object-cover aspect-auto absolute w-full h-full opacity-[50%]'
-                loading="lazy"
+                loading='lazy'
                 quality={75}
-                sizes="100vw"
+                sizes='100vw'
             />
 
             <div className='w-full h-[110vh] flex absolute bottom-[12rem] flex-col gap-4 justify-center items-center'>
-
                 <Image
                     src={logo}
                     width={200}
@@ -56,17 +55,20 @@ export default function Recruitment(): React.ReactNode {
 
                     {/* Discord Widget */}
                     <iframe
-                        src="https://e.widgetbot.io/channels/1316108296075218944/1316108302404550658"
-                        title="WidgetBot Discord Chat"
-                        allow="clipboard-write; fullscreen"
-                        height="600"
+                        src='https://e.widgetbot.io/channels/1316108296075218944/1316108302404550658'
+                        title='WidgetBot Discord Chat'
+                        allow='clipboard-write; fullscreen'
+                        height='600'
                         className='rounded-2xl drop-shadow-[0_0_20px_rgba(0,0,0,0.5)]'
-                        width="100%"
-                        loading="lazy"
-                    >
-                    </iframe>
+                        width='100%'
+                        loading='lazy'
+                    ></iframe>
 
-                    <a href='https://discord.gg/dBNXWDKhrD' target='_blank' className='w-[75%] h-[72px] hover:scale-[101%] hover:animate-pulse transition-all opacity-70 hover:opacity-85 duration-300'>
+                    <a
+                        href='https://discord.gg/dBNXWDKhrD'
+                        target='_blank'
+                        className='w-[75%] h-[72px] hover:scale-[101%] hover:animate-pulse transition-all opacity-70 hover:opacity-85 duration-300'
+                    >
                         <iframe
                             title='Discord Widget'
                             src='https://ptb.discord.com/widget?id=1316108296075218944&theme=dark'
@@ -74,11 +76,12 @@ export default function Recruitment(): React.ReactNode {
                             height='72'
                             className='rounded-2xl pointer-events-none'
                             sandbox='allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts'
-                            loading="lazy"
+                            loading='lazy'
                         ></iframe>
-                        <p className='font-semibold mt-2 ml-2'>👉 Click to join us!</p>
+                        <p className='font-semibold mt-2 ml-2'>
+                            👉 Click to join us!
+                        </p>
                     </a>
-
                 </div>
             </div>
         </div>
