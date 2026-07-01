@@ -4,7 +4,7 @@ import React, { useState, useRef, useEffect } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { gsap } from 'gsap'
 import { 
-    Check, ArrowRight, Upload, CreditCard, Loader2,
+    Check, ArrowRight, Upload, CreditCard, Loader2, AlertCircle,
     Trophy, Award, Gift, Sparkles, Code, Brain, Users2, ChevronDown, Copy, Search, Medal, Calendar, MapPin
 } from 'lucide-react'
 import Image from 'next/image'
@@ -725,14 +725,22 @@ export default function DigitalIndiaGSAPForm() {
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0] || null
-        setScreenshot(file)
         if (file) {
+            if (file.size > 15 * 1024 * 1024) {
+                setErrors(prev => ({ ...prev, screenshot: 'File size exceeds 15 MB limit. Please select a smaller screenshot.' }))
+                setScreenshot(null)
+                setScreenshotPreview(null)
+                return
+            }
+            setErrors(prev => ({ ...prev, screenshot: undefined }))
+            setScreenshot(file)
             const reader = new FileReader()
             reader.onloadend = () => {
                 setScreenshotPreview(reader.result as string)
             }
             reader.readAsDataURL(file)
         } else {
+            setScreenshot(null)
             setScreenshotPreview(null)
         }
     }
@@ -2352,7 +2360,7 @@ export default function DigitalIndiaGSAPForm() {
                                                     }`}>
                                                     <input
                                                         type="file"
-                                                        accept="image/*"
+                                                        accept="image/*,image/heic,image/heif,.heic,.heif,application/pdf"
                                                         onChange={handleFileChange}
                                                         className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                                                     />
@@ -2369,12 +2377,23 @@ export default function DigitalIndiaGSAPForm() {
                                                         </span>
                                                     )}
                                                 </div>
-                                                {errors.screenshot && <p className="text-red-500 text-xs mt-1">{errors.screenshot}</p>}
+                                                {errors.screenshot && (
+                                                    <div className="flex items-center gap-1.5 text-red-400 text-xs mt-1.5 font-mono">
+                                                        <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+                                                        <span>{errors.screenshot}</span>
+                                                    </div>
+                                                )}
                                             </div>
                                         </div>
 
                                         {apiError && (
-                                            <p className="text-red-400 text-xs text-center border border-red-950/40 bg-red-950/25 rounded-xl py-3 px-4 font-mono">{apiError}</p>
+                                            <div className="flex items-start gap-3 border border-red-500/30 bg-red-950/40 backdrop-blur-md rounded-xl p-3.5 text-left text-red-300 shadow-lg shadow-red-950/20 animate-in fade-in duration-300">
+                                                <AlertCircle className="w-4 h-4 text-red-400 shrink-0 mt-0.5" />
+                                                <div className="flex-1">
+                                                    <p className="text-[10px] font-mono font-semibold text-red-400 uppercase tracking-widest mb-0.5">Submission Notice</p>
+                                                    <p className="text-xs font-light text-red-200/90 leading-relaxed">{apiError}</p>
+                                                </div>
+                                            </div>
                                         )}
                                     </div>
 
