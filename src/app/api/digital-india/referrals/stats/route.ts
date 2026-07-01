@@ -26,8 +26,8 @@ export async function GET(request: Request) {
 
         if (!team) {
             return NextResponse.json(
-                { success: false, message: 'No registered team found with this email.' },
-                { status: 404 }
+                { success: false, notFound: true, message: 'No registered team found with this email.' },
+                { status: 200 }
             )
         }
 
