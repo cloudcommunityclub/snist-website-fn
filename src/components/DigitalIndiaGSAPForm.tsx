@@ -4,7 +4,7 @@ import React, { useState, useRef, useEffect } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { gsap } from 'gsap'
 import { 
-    Check, ArrowRight, Upload, CreditCard, Loader2, AlertCircle,
+    Check, ArrowRight, Upload, CreditCard, Loader2, AlertCircle, FileText,
     Trophy, Award, Gift, Sparkles, Code, Brain, Users2, ChevronDown, Copy, Search, Medal, Calendar, MapPin
 } from 'lucide-react'
 import Image from 'next/image'
@@ -730,15 +730,28 @@ export default function DigitalIndiaGSAPForm() {
                 setErrors(prev => ({ ...prev, screenshot: 'File size exceeds 15 MB limit. Please select a smaller screenshot.' }))
                 setScreenshot(null)
                 setScreenshotPreview(null)
+                e.target.value = ''
+                return
+            }
+            const isValidType = file.type.startsWith('image/') || file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.heic') || file.name.toLowerCase().endsWith('.heif') || file.name.toLowerCase().endsWith('.pdf')
+            if (!isValidType) {
+                setErrors(prev => ({ ...prev, screenshot: 'Unsupported file type. Please upload an image or PDF receipt.' }))
+                setScreenshot(null)
+                setScreenshotPreview(null)
+                e.target.value = ''
                 return
             }
             setErrors(prev => ({ ...prev, screenshot: undefined }))
             setScreenshot(file)
-            const reader = new FileReader()
-            reader.onloadend = () => {
-                setScreenshotPreview(reader.result as string)
+            if (file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf')) {
+                setScreenshotPreview('PDF_DOCUMENT')
+            } else {
+                const reader = new FileReader()
+                reader.onloadend = () => {
+                    setScreenshotPreview(reader.result as string)
+                }
+                reader.readAsDataURL(file)
             }
-            reader.readAsDataURL(file)
         } else {
             setScreenshot(null)
             setScreenshotPreview(null)
@@ -2366,8 +2379,12 @@ export default function DigitalIndiaGSAPForm() {
                                                     />
                                                     {screenshotPreview ? (
                                                         <div className="flex items-center justify-center gap-2">
-                                                            <div className="relative w-8 h-8 rounded overflow-hidden border border-zinc-800">
-                                                                <img src={screenshotPreview} alt="Screenshot" className="w-full h-full object-cover" />
+                                                            <div className="relative w-8 h-8 rounded overflow-hidden border border-zinc-800 flex items-center justify-center bg-zinc-900/80">
+                                                                {screenshotPreview === 'PDF_DOCUMENT' ? (
+                                                                    <FileText className="w-4 h-4 text-emerald-400" />
+                                                                ) : (
+                                                                    <img src={screenshotPreview} alt="Screenshot" className="w-full h-full object-cover" />
+                                                                )}
                                                             </div>
                                                             <span className="text-xs text-zinc-300 truncate max-w-[120px]">{screenshot?.name}</span>
                                                         </div>

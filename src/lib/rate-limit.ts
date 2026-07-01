@@ -7,7 +7,7 @@ const rateLimitStore = new Map<string, RateLimitEntry>();
 
 // Clean up expired entries periodically
 if (typeof setInterval !== 'undefined') {
-  setInterval(() => {
+  const timer = setInterval(() => {
     const now = Date.now();
     rateLimitStore.forEach((entry, key) => {
       if (now > entry.resetAt) {
@@ -15,6 +15,9 @@ if (typeof setInterval !== 'undefined') {
       }
     });
   }, 60000);
+  if (timer && typeof (timer as any).unref === 'function') {
+    (timer as any).unref();
+  }
 }
 
 export function checkRateLimit(key: string, limit: number, windowMs: number): { success: boolean; limit: number; remaining: number; reset: number } {

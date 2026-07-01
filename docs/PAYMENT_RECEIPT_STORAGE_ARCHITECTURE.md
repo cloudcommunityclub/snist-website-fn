@@ -39,11 +39,11 @@ Instead of the Next.js serverless functions connecting to AWS S3 / Cloudflare R2
 
 ## 2. Frontend Responsibilities & Concurrency Protection
 
-### A. Stateless Streaming Relay
+### A. Frontend Validation + Relay
 When a user submits the registration form (`POST /api/digital-india/submit`):
-1. **Lightweight Validation:** The Next.js API route validates basic field requirements, phone/email regex, and checks in-memory rate limits (`src/lib/rate-limit.ts`) to prevent abuse before processing large payloads.
-2. **Payload Forwarding:** The raw `FormData` (including the multipart file stream) is forwarded directly to the backend service via `fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/digital-india/submit`, { method: 'POST', body: formData })`.
-3. **No RAM Buffering:** By forwarding the `FormData` directly, the serverless frontend avoids buffering multi-megabyte images in runtime memory, preventing cold-start memory spikes and Vercel execution timeouts under high user concurrency.
+1. **Lightweight Validation:** The Next.js API route validates basic field requirements, phone/email regex, and checks in-memory rate limits (`src/lib/rate-limit.ts`) to prevent abuse.
+2. **Payload Forwarding:** The parsed `FormData` (with normalized fields) is relayed directly to the backend service via `fetch(`${process.env.BACKEND_API_URL}/api/digital-india/ideathon/submit`, { method: 'POST', body: formData })`.
+3. **Storage Offload:** The backend is responsible for compression/disk writes and returns metadata (e.g., `referralCode`); the frontend no longer uploads to R2.
 
 ### B. Admin Verification Proxy (`GET /api/admin/digital-india/screenshot`)
 When administrators review payment receipts on the dashboard:
@@ -76,13 +76,13 @@ To configure the frontend relay target, maintain the following variables in `.en
 
 ```env
 # URL of the Express backend repository (snist-website-bn)
-NEXT_PUBLIC_API_URL=http://localhost:8000
+BACKEND_API_URL=http://localhost:5000
 
 # Administrative API key required for secured screenshot viewing relays
-API_KEY=your_secure_shared_api_key
+BACKEND_API_KEY=your_secure_shared_api_key
 ```
 
-When deploying to production, `NEXT_PUBLIC_API_URL` should point to the baremetal or containerized backend domain (e.g., `https://api.cloudcommunityclub.com`).
+When deploying to production, `BACKEND_API_URL` should point to the baremetal or containerized backend domain (e.g., `https://api.cloudcommunityclub.com`).
 
 ---
 

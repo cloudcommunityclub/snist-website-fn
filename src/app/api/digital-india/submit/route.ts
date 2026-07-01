@@ -11,7 +11,8 @@ function escapeRegex(str: string): string {
 
 export async function POST(request: Request) {
   try {
-    const ip = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'anonymous'
+    const rawForwarded = request.headers.get('x-forwarded-for')
+    const ip = (rawForwarded ? rawForwarded.split(',')[0] : request.headers.get('x-real-ip'))?.trim() || 'anonymous'
     const rateLimit = checkRateLimit(`submit_${ip}`, 10, 60 * 1000)
     if (!rateLimit.success) {
       return NextResponse.json(
@@ -127,8 +128,12 @@ export async function POST(request: Request) {
       }
     }
 
-    // Relay submission directly to backend server storage
-    const backendUrl = process.env.BACKEND_API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
+    // Relay normalized submission directly to backend server storage
+    formData.set('email', normalizedEmail)
+    formData.set('utrId', normalizedUtr)
+    formData.set('teamName', normalizedTeamName)
+
+    const backendUrl = process.env.BACKEND_API_URL || process.env.NEXT_PUBLIC_BACKEND_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
     const backendRes = await fetch(`${backendUrl}/api/digital-india/ideathon/submit`, {
       method: 'POST',
       body: formData,

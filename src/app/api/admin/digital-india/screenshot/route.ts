@@ -25,16 +25,33 @@ export async function GET(request: Request) {
             return new Response('Screenshot not found', { status: 404 })
         }
 
-        const backendUrl = process.env.BACKEND_API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
+        const backendUrl = process.env.BACKEND_API_URL || process.env.NEXT_PUBLIC_BACKEND_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
         const apiKey = process.env.BACKEND_API_KEY || process.env.API_KEY || ''
 
-        const targetUrl = record.paymentScreenshotUrl.startsWith('http')
-            ? record.paymentScreenshotUrl
-            : `${backendUrl}/api/admin/digital-india/screenshot?id=${encodeURIComponent(id)}`
+        let targetUrl = record.paymentScreenshotUrl
+        let fetchHeaders: Record<string, string> = {}
 
-        const res = await fetch(targetUrl, {
-            headers: record.paymentScreenshotUrl.startsWith('http') ? {} : { 'x-api-key': apiKey },
-        })
+        if (record.paymentScreenshotUrl.startsWith('http')) {
+            try {
+                const parsedUrl = new URL(record.paymentScreenshotUrl)
+                const isTrustedHost = parsedUrl.hostname.endsWith('.r2.dev') ||
+                                      parsedUrl.hostname.endsWith('.cloudflarestorage.com') ||
+                                      parsedUrl.origin === new URL(backendUrl).origin
+                if (!isTrustedHost) {
+                    return new Response('Untrusted screenshot URL origin', { status: 403 })
+                }
+            } catch {
+                return new Response('Malformed screenshot URL', { status: 400 })
+            }
+        } else {
+            if (!apiKey) {
+                return new Response('Backend storage API key unconfigured', { status: 500 })
+            }
+            targetUrl = `${backendUrl}/api/admin/digital-india/screenshot?id=${encodeURIComponent(id)}`
+            fetchHeaders = { 'x-api-key': apiKey }
+        }
+
+        const res = await fetch(targetUrl, { headers: fetchHeaders })
 
         if (!res.ok) {
             return new Response('Failed to retrieve image from storage', { status: res.status })
