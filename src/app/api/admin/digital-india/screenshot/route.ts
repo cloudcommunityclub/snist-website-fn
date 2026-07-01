@@ -1,4 +1,3 @@
-import { NextResponse } from 'next/server'
 import dbConnect from '@/lib/db'
 import DigitalIndiaSubmission from '@/models/DigitalIndiaSubmission'
 import DigitalIndiaAccepted from '@/models/DigitalIndiaAccepted'
@@ -26,19 +25,28 @@ export async function GET(request: Request) {
             return new Response('Screenshot not found', { status: 404 })
         }
 
-        // Fetch image from R2 using backend fetch
-        const res = await fetch(record.paymentScreenshotUrl)
+        const backendUrl = process.env.BACKEND_API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
+        const apiKey = process.env.BACKEND_API_KEY || process.env.API_KEY || ''
+
+        const targetUrl = record.paymentScreenshotUrl.startsWith('http')
+            ? record.paymentScreenshotUrl
+            : `${backendUrl}/api/admin/digital-india/screenshot?id=${encodeURIComponent(id)}`
+
+        const res = await fetch(targetUrl, {
+            headers: record.paymentScreenshotUrl.startsWith('http') ? {} : { 'x-api-key': apiKey },
+        })
+
         if (!res.ok) {
             return new Response('Failed to retrieve image from storage', { status: res.status })
         }
 
         const buffer = await res.arrayBuffer()
-        const contentType = res.headers.get('content-type') || 'image/png'
+        const contentType = res.headers.get('content-type') || 'image/webp'
 
         return new Response(buffer, {
             headers: {
                 'Content-Type': contentType,
-                'Cache-Control': 'public, max-age=31536000, immutable',
+                'Cache-Control': 'public, max-age=86400',
             },
         })
     } catch (error) {
