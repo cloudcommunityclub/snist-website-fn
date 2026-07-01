@@ -20,7 +20,10 @@ export default function BlogsPage() {
     const [searchQuery, setSearchQuery] = useState('')
     const [mounted, setMounted] = useState(false)
 
-    useEffect(() => setMounted(true), [])
+    useEffect(() => {
+        const t = setTimeout(() => setMounted(true), 0)
+        return () => clearTimeout(t)
+    }, [])
 
     const filteredPosts = BLOG_POSTS.filter((post) => {
         const matchesCategory =

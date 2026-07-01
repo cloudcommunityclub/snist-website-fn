@@ -207,7 +207,7 @@ export default function TerminalJoinForm() {
         try {
             const registeredEmail = localStorage.getItem('c3_registered_email')
             if (registeredEmail) setSubmitSuccess(true)
-        } catch {}
+        } catch { /* noop */ }
     }, [])
 
     // Helper to reset cursor state on step change
@@ -341,7 +341,7 @@ export default function TerminalJoinForm() {
             setSubmitSuccess(true)
             try {
                 localStorage.setItem('c3_registered_email', data.email)
-            } catch {}
+            } catch { /* noop */ }
         } catch (error) {
             console.error('Registration failed:', error)
             setSubmissionLogs((prev) => [

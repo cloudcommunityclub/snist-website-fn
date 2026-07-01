@@ -799,7 +799,7 @@ export default function AdminDashboard() {
                                 C3
                             </span>
                             <span className='text-[#6272a4] text-sm hidden sm:block'>
-                                //
+                                {'//'}
                             </span>
                             <span className='text-[#f8f8f2] text-sm font-bold hidden sm:block'>
                                 ADMIN
@@ -935,7 +935,7 @@ export default function AdminDashboard() {
                                 {activeTab}
                             </h2>
                             <span className='text-[#6272a4] text-xs font-mono'>
-                                //{' '}
+                                {'//'}{' '}
                                 {activeTab === 'members'
                                     ? 'registered members'
                                     : 'recruitment candidates'}

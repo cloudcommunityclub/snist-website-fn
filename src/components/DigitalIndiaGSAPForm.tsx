@@ -190,9 +190,12 @@ export default function DigitalIndiaGSAPForm() {
 
     // Load URL parameter and localStorage on mount
     useEffect(() => {
-        if (refParam) {
-            setReferredBy(refParam.toUpperCase())
-        }
+        const t = setTimeout(() => {
+            if (refParam) {
+                setReferredBy(refParam.toUpperCase())
+            }
+        }, 0)
+        return () => clearTimeout(t)
 
         const storedEmail = localStorage.getItem(
             'c3_digital_india_registered_email'

@@ -11,18 +11,17 @@ declare global {
     var _mongoosePromise: Promise<typeof mongoose> | undefined
 }
 
-const MONGO_URI = process.env.MONGO_URI
-
-if (!MONGO_URI) {
-    throw new Error('MONGO_URI environment variable is not defined')
-}
-
 export default function dbConnect(): Promise<typeof mongoose> {
     if (global._mongoosePromise) {
         return global._mongoosePromise
     }
 
-    global._mongoosePromise = mongoose.connect(MONGO_URI!).then((m) => {
+    const MONGO_URI = process.env.MONGO_URI
+    if (!MONGO_URI) {
+        throw new Error('MONGO_URI environment variable is not defined')
+    }
+
+    global._mongoosePromise = mongoose.connect(MONGO_URI).then((m) => {
         console.log('✅ Connected to MongoDB')
         return m
     })
