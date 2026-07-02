@@ -2320,7 +2320,7 @@ export default function DigitalIndiaGSAPForm() {
                                             <div className="flex justify-center items-center">
                                                 <div className="relative w-48 h-48 border border-zinc-800 bg-white rounded-2xl overflow-hidden p-3 shadow-sm">
                                                     <Image
-                                                        src="/assets/events/upi-qr-v2.png"
+                                                        src="/assets/events/upi-qr-v3.png"
                                                         alt="UPI Payment QR Code"
                                                         fill
                                                         className="object-contain"
