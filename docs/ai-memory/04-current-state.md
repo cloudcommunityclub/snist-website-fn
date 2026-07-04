@@ -15,7 +15,7 @@ This document provides a live summary of the repository status, active component
 | Onboarding Form (`/join`) | **Completed** | Terminal interactive form with Zod schema checking and Git commit simulations. |
 | Admin Session Auth (`/admin/login`) | **Completed** | Secure password check producing JWT cookie credentials. |
 | Admin Console (`/admin/dashboard`) | **Completed** | Statistics view, CSV file export capabilities, and student search filter list. |
-| Ideathon & Recruitment APIs | **Completed** | APIs to submit ideas, record payments, and lock/unlock tasks. |
+| Ideathon & Recruitment APIs | **Completed** | APIs to submit ideas, record payments, and lock/unlock tasks. Approving/accepting a submission sends notification emails to both the team leader and all other team members. |
 | GSAP Ideathon Form (`/events/digitalindia`) | **Completed** | Apple-style light silver horizontal accordion form with GSAP width animations. Fully responsive for tablet/mobile. Includes hackathon info header, text error feedback, and flexible 10-35 character UTR validation. |
 
 

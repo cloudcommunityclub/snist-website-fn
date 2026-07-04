@@ -21,7 +21,7 @@ This log tracks all active user-facing and backend features implemented in the C
 - **Email Delivery Verification**: Tracks email delivery status in the database (`emailSent`, `emailSentAt`).
 - **Digital India Ideathon Communication Pipeline**:
   - **Submission Confirmation Template**: Sends a beautiful dark/indigo themed email directly to applicants confirming receipt of their idea details, college info, and payment UTR reference ID.
-  - **Shortlisted Notification Template**: Celebratory selection template with prominent WhatsApp group integration and secondary final hackathon registration call-to-actions.
+  - **Shortlisted Notification Template**: Celebratory selection template with prominent WhatsApp group integration and secondary final hackathon registration call-to-actions. Sent to the team leader and all registered team members when approved from the admin dashboard.
 
 ## 4. Secure Admin Console Portal (`/admin`)
 - **Cookie Session Authorization**: Password-protected login flow (`/admin/login`) verifying credentials on the server and generating HTTP-only JWT cookies.

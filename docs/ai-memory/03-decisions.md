@@ -51,4 +51,12 @@ This document records the architectural and technology decisions made during the
   - Flexibility: Allows swapping email providers (Gmail SMTP, SendGrid, Resend, Amazon SES, etc.) without code modifications.
   - Robustness: Traditional SMTP libraries handle connections, TLS encryption/negotiation, and queue retries reliably inside Next.js serverless functions.
 
+## 8. Multi-Recipient Shortlist Notification Email Dispatch on Acceptance
+- **Context**: Previously, when an administrator accepted a team submission from the admin console, only the team leader (the submitter) received the shortlisted email notification, leaving other team members unaware.
+- **Decision**: Refactored the accept API route to parse the team size and `teamMembers` collection, sending the shortlisted HTML email to both the team leader and each individual team member.
+- **Rationale**:
+  - Improved Team Onboarding: Ensures that all participants receive immediate steps (like joining the WhatsApp group and registering for the build phase) without relying on the team leader to forward information.
+  - Resilience: Wrapped each individual mail dispatch in a separate try-catch block to guarantee that failure to send to one participant does not halt notifications for the rest of the team.
+  - Code Dryness: Extracted the heavy, custom HTML template into a modular helper function (`getAcceptanceEmailHtml`) rather than duplicating it.
+
 

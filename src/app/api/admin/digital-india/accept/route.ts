@@ -90,7 +90,7 @@ export async function POST(request: Request) {
             )
         }
 
-        // Send shortlisted SMTP mail
+        // Send shortlisted SMTP mail to leader and all team members
         try {
             const whatsappLink =
                 process.env.WHATSAPP_GROUP_LINK ||
@@ -99,7 +99,82 @@ export async function POST(request: Request) {
                 process.env.HACKATHON_REGISTRATION_LINK ||
                 'https://c3-digital-india-hackathon.example.com'
 
-            const htmlBody = `
+            // 1. Send to Team Leader
+            try {
+                const leaderHtmlBody = getAcceptanceEmailHtml(
+                    submission.name,
+                    whatsappLink,
+                    hackathonLink
+                )
+                await sendEmail(
+                    submission.email,
+                    'Shortlisted Announcement: Digital India Hackathon',
+                    leaderHtmlBody
+                )
+                console.log(
+                    `✅ Acceptance email sent successfully to Team Leader: ${submission.email}`
+                )
+            } catch (leaderEmailError) {
+                console.error(
+                    `❌ Acceptance Email Failed for Team Leader (${submission.email}):`,
+                    (leaderEmailError as Error).message
+                )
+            }
+
+            // 2. Send to all other Team Members
+            if (submission.teamMembers && submission.teamMembers.length > 0) {
+                for (const member of submission.teamMembers) {
+                    if (member.email && member.name) {
+                        try {
+                            const memberHtmlBody = getAcceptanceEmailHtml(
+                                member.name,
+                                whatsappLink,
+                                hackathonLink
+                            )
+                            await sendEmail(
+                                member.email,
+                                'Shortlisted Announcement: Digital India Hackathon',
+                                memberHtmlBody
+                            )
+                            console.log(
+                                `✅ Acceptance email sent successfully to Team Member: ${member.email}`
+                            )
+                        } catch (memberEmailError) {
+                            console.error(
+                                `❌ Acceptance Email Failed for Team Member (${member.email}):`,
+                                (memberEmailError as Error).message
+                            )
+                        }
+                    }
+                }
+            }
+        } catch (emailError) {
+            console.error(
+                '❌ Acceptance Email Process Failed:',
+                (emailError as Error).message
+            )
+        }
+
+        return NextResponse.json({
+            success: true,
+            message: 'Candidate accepted and notification email sent.',
+            data: acceptedParticipant,
+        })
+    } catch (error) {
+        console.error('Accept candidate error:', error)
+        return NextResponse.json(
+            { success: false, message: 'Internal Server Error' },
+            { status: 500 }
+        )
+    }
+}
+
+function getAcceptanceEmailHtml(
+    recipientName: string,
+    whatsappLink: string,
+    hackathonLink: string
+): string {
+    return `
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -144,7 +219,7 @@ export async function POST(request: Request) {
           <tr>
             <td align="left" style="padding: 40px 40px 30px 40px;">
               <p style="margin: 0; font-size: 16px; color: #ffffff; line-height: 1.6;">
-                Dear <strong>${escHtml(submission.name)}</strong>,
+                Dear <strong>${escHtml(recipientName)}</strong>,
               </p>
               <p style="margin: 15px 0 0 0; font-size: 15px; color: #a1a1aa; line-height: 1.6;">
                 Congratulations! We are thrilled to inform you that your idea pitch has been <strong>shortlisted</strong> for the final round of the Digital India Hackathon.
@@ -198,33 +273,5 @@ export async function POST(request: Request) {
   </table>
 </body>
 </html>
-            `
-
-            await sendEmail(
-                submission.email,
-                'Shortlisted Announcement: Digital India Hackathon',
-                htmlBody
-            )
-            console.log(
-                `✅ Acceptance email sent successfully to ${submission.email}`
-            )
-        } catch (emailError) {
-            console.error(
-                '❌ Acceptance Email Failed:',
-                (emailError as Error).message
-            )
-        }
-
-        return NextResponse.json({
-            success: true,
-            message: 'Candidate accepted and notification email sent.',
-            data: acceptedParticipant,
-        })
-    } catch (error) {
-        console.error('Accept candidate error:', error)
-        return NextResponse.json(
-            { success: false, message: 'Internal Server Error' },
-            { status: 500 }
-        )
-    }
+    `
 }
