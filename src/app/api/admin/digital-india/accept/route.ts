@@ -256,6 +256,16 @@ function getAcceptanceEmailHtml(
                   </td>
                 </tr>
               </table>
+              <div style="border-top: 1px solid #27272a; margin-top: 30px; padding-top: 20px;">
+                <p style="margin: 0; font-size: 14px; color: #a1a1aa; line-height: 1.6;">
+                  For any queries or further information, please contact:
+                </p>
+                <p style="margin: 8px 0 0 0; font-size: 14px; color: #ffffff; line-height: 1.6; font-family: monospace;">
+                  <strong>Amarnath:</strong> 6302180155<br>
+                  <strong>Vaman Akhil:</strong> 8008151542<br>
+                  <strong>Vinay:</strong> 8121007035
+                </p>
+              </div>
             </td>
           </tr>
           <!-- Footer -->
