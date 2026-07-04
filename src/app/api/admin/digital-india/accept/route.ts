@@ -227,6 +227,9 @@ function getAcceptanceEmailHtml(
               <p style="margin: 15px 0 0 0; font-size: 15px; color: #a1a1aa; line-height: 1.6;">
                 Please complete the following next steps immediately to lock in your participation and secure your team's slot:
               </p>
+              <p style="margin: 15px 0 0 0; font-size: 15px; color: #a1a1aa; line-height: 1.6;">
+  <strong>Important:</strong> Please use a <strong>laptop</strong> to complete your registration. 
+</p>
             </td>
           </tr>
           <!-- Steps List -->
