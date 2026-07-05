@@ -30,8 +30,8 @@ export default function Navbar(): React.ReactNode {
     const [announceDismissed, setAnnounceDismissed] = useState(false)
     const handleClick = () => setNav(!nav)
 
-    // Hide the site navbar on admin routes (admin has its own nav)
-    if (pathname.startsWith('/admin')) return null
+    // Hide the site navbar on admin routes (admin has its own nav) and countdown page
+    if (pathname.startsWith('/admin') || pathname === '/events/digitalindia/countdown') return null
 
     return (
         <div className='z-50 flex flex-col fixed w-full'>
