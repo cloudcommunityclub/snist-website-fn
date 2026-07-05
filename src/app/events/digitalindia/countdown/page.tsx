@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import { Terminal, Timer, Sparkles, MapPin, Calendar } from 'lucide-react'
+import { Terminal, Timer, MapPin, Calendar } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 
 // ==========================================
@@ -9,7 +9,7 @@ import { useRouter } from 'next/navigation'
 // Change this string to update the countdown
 // ==========================================
 const TARGET_DATE = "2026-07-09T09:00:00+05:30" 
-const EVENT_TITLE = "Digital India Hackathon - Stage 2 Build"
+const EVENT_TITLE = "Digital India Hackathon"
 const EVENT_LOCATION = "SNIST Campus, Hyderabad"
 
 interface TimeLeft {
@@ -93,20 +93,10 @@ export default function DigitalIndiaCountdownPage() {
 
             {/* Main Content Area */}
             <main className="flex-1 flex flex-col items-center justify-center w-full max-w-4xl mx-auto px-6 py-12 z-10 text-center">
-                {/* Event Tag */}
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#9dff00]/30 bg-[#9dff00]/5 text-[#9dff00] text-xs font-mono font-medium tracking-wide uppercase mb-6 animate-pulse">
-                    <Sparkles size={12} />
-                    <span>Innovation Phase Countdown</span>
-                </div>
-
                 {/* Event Heading */}
-                <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white mb-4 max-w-2xl leading-none">
+                <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight text-white mb-16 max-w-3xl leading-none">
                     {EVENT_TITLE}
                 </h1>
-                
-                <p className="text-zinc-400 text-sm sm:text-base font-mono mb-12 max-w-lg">
-                    Build phase begins on 09 July 2026 at 09:00 AM IST. Prepare your environment.
-                </p>
 
                 {timeLeft.isOver ? (
                     /* Event Live / Timer Over State */
@@ -127,38 +117,38 @@ export default function DigitalIndiaCountdownPage() {
                     </div>
                 ) : (
                     /* Countdown Grid */
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 w-full max-w-3xl mb-12">
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 w-full max-w-4xl mb-16">
                         {/* Days */}
-                        <div className="bg-zinc-900/30 border border-zinc-800/80 rounded-2xl p-6 sm:p-8 backdrop-blur-md relative group hover:border-zinc-700/50 transition-colors shadow-2xl">
+                        <div className="bg-zinc-900/30 border border-zinc-800/80 rounded-2xl p-6 sm:p-8 backdrop-blur-md relative group hover:border-zinc-700/50 transition-colors shadow-2xl flex flex-col items-center justify-center min-h-[140px] sm:min-h-[180px]">
                             <div className="absolute inset-x-0 bottom-0 h-[2px] bg-gradient-to-r from-transparent via-[#9dff00]/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                            <div className="text-5xl sm:text-6xl font-extrabold font-mono text-white tracking-tight leading-none mb-2">
+                            <div className="text-6xl sm:text-7xl md:text-8xl font-black font-mono text-white tracking-tight leading-none mb-3 drop-shadow-[0_0_20px_rgba(255,255,255,0.05)]">
                                 {String(timeLeft.days).padStart(2, '0')}
                             </div>
-                            <div className="text-[10px] sm:text-xs font-mono text-[#9dff00] uppercase tracking-widest font-semibold">Days</div>
+                            <div className="text-[10px] sm:text-xs font-mono text-zinc-500 uppercase tracking-widest font-semibold">Days</div>
                         </div>
 
                         {/* Hours */}
-                        <div className="bg-zinc-900/30 border border-zinc-800/80 rounded-2xl p-6 sm:p-8 backdrop-blur-md relative group hover:border-zinc-700/50 transition-colors shadow-2xl">
+                        <div className="bg-zinc-900/30 border border-zinc-800/80 rounded-2xl p-6 sm:p-8 backdrop-blur-md relative group hover:border-zinc-700/50 transition-colors shadow-2xl flex flex-col items-center justify-center min-h-[140px] sm:min-h-[180px]">
                             <div className="absolute inset-x-0 bottom-0 h-[2px] bg-gradient-to-r from-transparent via-[#9dff00]/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                            <div className="text-5xl sm:text-6xl font-extrabold font-mono text-white tracking-tight leading-none mb-2">
+                            <div className="text-6xl sm:text-7xl md:text-8xl font-black font-mono text-white tracking-tight leading-none mb-3 drop-shadow-[0_0_20px_rgba(255,255,255,0.05)]">
                                 {String(timeLeft.hours).padStart(2, '0')}
                             </div>
-                            <div className="text-[10px] sm:text-xs font-mono text-[#9dff00] uppercase tracking-widest font-semibold">Hours</div>
+                            <div className="text-[10px] sm:text-xs font-mono text-zinc-500 uppercase tracking-widest font-semibold">Hours</div>
                         </div>
 
                         {/* Minutes */}
-                        <div className="bg-zinc-900/30 border border-zinc-800/80 rounded-2xl p-6 sm:p-8 backdrop-blur-md relative group hover:border-zinc-700/50 transition-colors shadow-2xl">
+                        <div className="bg-zinc-900/30 border border-zinc-800/80 rounded-2xl p-6 sm:p-8 backdrop-blur-md relative group hover:border-zinc-700/50 transition-colors shadow-2xl flex flex-col items-center justify-center min-h-[140px] sm:min-h-[180px]">
                             <div className="absolute inset-x-0 bottom-0 h-[2px] bg-gradient-to-r from-transparent via-[#9dff00]/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                            <div className="text-5xl sm:text-6xl font-extrabold font-mono text-white tracking-tight leading-none mb-2">
+                            <div className="text-6xl sm:text-7xl md:text-8xl font-black font-mono text-white tracking-tight leading-none mb-3 drop-shadow-[0_0_20px_rgba(255,255,255,0.05)]">
                                 {String(timeLeft.minutes).padStart(2, '0')}
                             </div>
-                            <div className="text-[10px] sm:text-xs font-mono text-[#9dff00] uppercase tracking-widest font-semibold">Minutes</div>
+                            <div className="text-[10px] sm:text-xs font-mono text-zinc-500 uppercase tracking-widest font-semibold">Minutes</div>
                         </div>
 
                         {/* Seconds */}
-                        <div className="bg-zinc-900/30 border border-zinc-800/80 rounded-2xl p-6 sm:p-8 backdrop-blur-md relative group hover:border-zinc-700/50 transition-colors shadow-2xl">
+                        <div className="bg-zinc-900/30 border border-zinc-800/80 rounded-2xl p-6 sm:p-8 backdrop-blur-md relative group hover:border-zinc-700/50 transition-colors shadow-2xl flex flex-col items-center justify-center min-h-[140px] sm:min-h-[180px]">
                             <div className="absolute inset-x-0 bottom-0 h-[2px] bg-gradient-to-r from-transparent via-[#9dff00]/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                            <div className="text-5xl sm:text-6xl font-extrabold font-mono text-[#9dff00] tracking-tight leading-none mb-2">
+                            <div className="text-6xl sm:text-7xl md:text-8xl font-black font-mono text-[#9dff00] tracking-tight leading-none mb-3 drop-shadow-[0_0_25px_rgba(157,255,0,0.15)]">
                                 {String(timeLeft.seconds).padStart(2, '0')}
                             </div>
                             <div className="text-[10px] sm:text-xs font-mono text-zinc-400 uppercase tracking-widest font-semibold">Seconds</div>
