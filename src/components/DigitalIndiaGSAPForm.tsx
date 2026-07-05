@@ -1760,10 +1760,6 @@ export default function DigitalIndiaGSAPForm() {
                                 
                                 {/* Status Container */}
                                 <div className="relative z-10">
-                                    <div className="w-20 h-20 rounded-3xl bg-[#9dff00]/5 border border-[#9dff00]/15 flex items-center justify-center mx-auto mb-8 shadow-inner shadow-[#9dff00]/5">
-                                        <Medal size={40} className="text-[#9dff00] stroke-[1.25] drop-shadow-[0_0_8px_rgba(157,255,0,0.2)]" />
-                                    </div>
-                                    
                                     <h3 className="text-2xl md:text-3xl font-extrabold text-white tracking-tight mb-4">
                                         Registrations Have Concluded
                                     </h3>
