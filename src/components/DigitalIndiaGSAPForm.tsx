@@ -1741,16 +1741,6 @@ export default function DigitalIndiaGSAPForm() {
             <section ref={formSectionRef} id="register" className="relative z-10 w-full max-w-[1440px] mx-auto px-6 md:px-12 py-20 md:py-28 border-t border-zinc-800/40">
                 {REGISTRATIONS_CLOSED ? (
                     <div className="flex flex-col items-center">
-                        {/* Metallic Header */}
-                        <div className="text-center mb-12">
-                            <h2 className="text-3xl md:text-5xl font-light text-white tracking-tight mb-4">
-                                Registration <span className="text-[#9dff00] font-normal">Closed</span>
-                            </h2>
-                            <p className="text-zinc-400 text-sm font-light max-w-lg mx-auto">
-                                The initial stage abstract submissions for the Digital India Hackathon have completed.
-                            </p>
-                        </div>
-
                         {/* Main Glassmorphic Panel */}
                         <div className="flex w-full items-center justify-center max-w-4xl mx-auto">
                             <div className="w-full bg-[#0d0d0f]/60 border border-zinc-800/80 rounded-[40px] p-8 md:p-16 text-center backdrop-blur-3xl relative overflow-hidden group shadow-2xl shadow-black/80">
