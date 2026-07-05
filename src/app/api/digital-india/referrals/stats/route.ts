@@ -3,8 +3,21 @@ import dbConnect from '@/lib/db'
 import DigitalIndiaSubmission from '@/models/DigitalIndiaSubmission'
 import DigitalIndiaAccepted from '@/models/DigitalIndiaAccepted'
 import DigitalIndiaReferral from '@/models/DigitalIndiaReferral'
+import { checkRateLimit } from '@/lib/rate-limit'
+import { getClientIP } from '@/lib/geo'
 
 export async function GET(request: Request) {
+    const clientIP = getClientIP(request)
+    console.log(`[DigitalIndia ReferralStats] IP=${clientIP} UA=${request.headers.get('user-agent') || 'unknown'}`)
+
+    const rate = checkRateLimit(clientIP, { maxRequests: 30, windowMs: 60_000 })
+    if (!rate.allowed) {
+      return NextResponse.json(
+        { success: false, message: 'Too many requests. Please try again later.' },
+        { status: 429 }
+      )
+    }
+
     try {
         await dbConnect()
 

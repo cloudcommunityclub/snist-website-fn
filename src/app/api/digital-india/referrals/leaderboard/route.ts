@@ -2,12 +2,25 @@ import { NextResponse } from 'next/server'
 import dbConnect from '@/lib/db'
 import DigitalIndiaSubmission from '@/models/DigitalIndiaSubmission'
 import DigitalIndiaAccepted from '@/models/DigitalIndiaAccepted'
+import { checkRateLimit } from '@/lib/rate-limit'
+import { getClientIP } from '@/lib/geo'
 
 function escapeRegex(str: string): string {
     return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
 }
 
 export async function GET(request: Request) {
+    const clientIP = getClientIP(request)
+    console.log(`[DigitalIndia Leaderboard] IP=${clientIP} UA=${request.headers.get('user-agent') || 'unknown'}`)
+
+    const rate = checkRateLimit(clientIP, { maxRequests: 30, windowMs: 60_000 })
+    if (!rate.allowed) {
+      return NextResponse.json(
+        { success: false, message: 'Too many requests. Please try again later.' },
+        { status: 429 }
+      )
+    }
+
     try {
         await dbConnect()
 
