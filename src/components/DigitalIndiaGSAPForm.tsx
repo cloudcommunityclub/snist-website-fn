@@ -1759,7 +1759,7 @@ export default function DigitalIndiaGSAPForm() {
                                     </p>
 
                                     {/* Referral Winner Announcement */}
-                                    <div className="w-full bg-[#121214]/60 border-l-2 border-l-[#9dff00] border-y border-r border-zinc-800/80 rounded-2xl p-6 text-left max-w-lg mx-auto mb-10 relative overflow-hidden backdrop-blur-md group">
+                                    <div className="w-full bg-[#121214]/60 border border-[#9dff00]/25 rounded-2xl p-6 text-left max-w-lg mx-auto mb-10 relative overflow-hidden backdrop-blur-md group">
                                         <div className="absolute top-0 right-0 p-4 opacity-[0.03] group-hover:opacity-[0.06] transition-opacity pointer-events-none">
                                             <Trophy className="w-24 h-24 text-[#9dff00] stroke-[1]" />
                                         </div>
