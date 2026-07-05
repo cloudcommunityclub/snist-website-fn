@@ -1,8 +1,8 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import { Terminal, Timer, MapPin, Calendar } from 'lucide-react'
-import { useRouter } from 'next/navigation'
+import { Timer, MapPin, Calendar } from 'lucide-react'
+import Link from 'next/link'
 
 // ==========================================
 // TARGET CONFIGURATION (IST Timezone)
@@ -21,7 +21,6 @@ interface TimeLeft {
 }
 
 export default function DigitalIndiaCountdownPage() {
-    const router = useRouter()
     const [isMounted, setIsMounted] = useState(false)
     const [timeLeft, setTimeLeft] = useState<TimeLeft>({
         days: 0,
@@ -75,22 +74,6 @@ export default function DigitalIndiaCountdownPage() {
             <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(157,255,0,0.07),rgba(255,255,255,0))]" />
             <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-[#9dff00]/20 to-transparent" />
 
-            {/* Top Navigation / Header */}
-            <header className="w-full max-w-7xl mx-auto px-6 py-6 flex items-center justify-between z-10">
-                <div className="flex items-center gap-3 font-mono">
-                    <Terminal size={18} className="text-[#9dff00]" />
-                    <span className="text-[#9dff00] font-bold text-sm tracking-widest">C3</span>
-                    <span className="text-zinc-600">{"//"}</span>
-                    <span className="text-zinc-300 text-sm font-semibold tracking-wider">EVENTS</span>
-                </div>
-                <button
-                    onClick={() => router.push('/events/digitalindia')}
-                    className="text-xs font-mono text-zinc-400 hover:text-[#9dff00] transition-colors border border-zinc-800 hover:border-[#9dff00]/30 rounded-lg px-3 py-1.5 bg-zinc-900/50 backdrop-blur-sm"
-                >
-                    Back to Event
-                </button>
-            </header>
-
             {/* Main Content Area */}
             <main className="flex-1 flex flex-col items-center justify-center w-full max-w-4xl mx-auto px-6 py-12 z-10 text-center">
                 {/* Event Heading */}
@@ -108,12 +91,12 @@ export default function DigitalIndiaCountdownPage() {
                         <p className="text-zinc-400 text-sm sm:text-base leading-relaxed mb-6">
                             The countdown has concluded. Innovation lab doors are open, and the Stage 2 build phase is officially underway. Good luck!
                         </p>
-                        <button
-                            onClick={() => router.push('/events/digitalindia')}
-                            className="bg-[#9dff00] text-black font-semibold text-sm px-6 py-3 rounded-xl hover:bg-[#8ade00] transition-colors shadow-lg shadow-[#9dff00]/25"
+                        <Link
+                            href="/events/digitalindia"
+                            className="bg-[#9dff00] text-black font-semibold text-sm px-6 py-3 rounded-xl hover:bg-[#8ade00] transition-colors shadow-lg shadow-[#9dff00]/25 inline-block"
                         >
                             View Live Details
-                        </button>
+                        </Link>
                     </div>
                 ) : (
                     /* Countdown Grid */
