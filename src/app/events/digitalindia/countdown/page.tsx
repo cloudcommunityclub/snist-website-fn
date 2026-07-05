@@ -94,7 +94,7 @@ export default function DigitalIndiaCountdownPage() {
             {/* Main Content Area */}
             <main className="flex-1 flex flex-col items-center justify-center w-full max-w-4xl mx-auto px-6 py-12 z-10 text-center">
                 {/* Event Heading */}
-                <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight text-white mb-16 max-w-3xl leading-none">
+                <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight mb-16 max-w-3xl leading-none bg-gradient-to-r from-white via-zinc-200 to-[#9dff00] bg-clip-text text-transparent">
                     {EVENT_TITLE}
                 </h1>
 
@@ -119,36 +119,36 @@ export default function DigitalIndiaCountdownPage() {
                     /* Countdown Grid */
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 w-full max-w-4xl mb-16">
                         {/* Days */}
-                        <div className="bg-zinc-900/30 border border-zinc-800/80 rounded-2xl p-6 sm:p-8 backdrop-blur-md relative group hover:border-zinc-700/50 transition-colors shadow-2xl flex flex-col items-center justify-center min-h-[140px] sm:min-h-[180px]">
-                            <div className="absolute inset-x-0 bottom-0 h-[2px] bg-gradient-to-r from-transparent via-[#9dff00]/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                            <div className="text-6xl sm:text-7xl md:text-8xl font-black font-mono text-white tracking-tight leading-none mb-3 drop-shadow-[0_0_20px_rgba(255,255,255,0.05)]">
+                        <div className="bg-zinc-950/40 border border-white/5 rounded-3xl p-6 sm:p-8 backdrop-blur-xl relative group hover:border-[#9dff00]/30 hover:shadow-[0_0_30px_-5px_rgba(157,255,0,0.12)] transition-all duration-300 flex flex-col items-center justify-center min-h-[150px] sm:min-h-[200px] shadow-2xl">
+                            <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-[#9dff00]/40 to-transparent rounded-t-3xl opacity-50 group-hover:opacity-100 transition-opacity" />
+                            <div className="text-6xl sm:text-7xl md:text-8xl font-black font-mono tracking-tight leading-none mb-3 drop-shadow-[0_0_20px_rgba(255,255,255,0.05)] bg-gradient-to-b from-white via-zinc-100 to-zinc-400 bg-clip-text text-transparent">
                                 {String(timeLeft.days).padStart(2, '0')}
                             </div>
                             <div className="text-[10px] sm:text-xs font-mono text-zinc-500 uppercase tracking-widest font-semibold">Days</div>
                         </div>
 
                         {/* Hours */}
-                        <div className="bg-zinc-900/30 border border-zinc-800/80 rounded-2xl p-6 sm:p-8 backdrop-blur-md relative group hover:border-zinc-700/50 transition-colors shadow-2xl flex flex-col items-center justify-center min-h-[140px] sm:min-h-[180px]">
-                            <div className="absolute inset-x-0 bottom-0 h-[2px] bg-gradient-to-r from-transparent via-[#9dff00]/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                            <div className="text-6xl sm:text-7xl md:text-8xl font-black font-mono text-white tracking-tight leading-none mb-3 drop-shadow-[0_0_20px_rgba(255,255,255,0.05)]">
+                        <div className="bg-zinc-950/40 border border-white/5 rounded-3xl p-6 sm:p-8 backdrop-blur-xl relative group hover:border-[#9dff00]/30 hover:shadow-[0_0_30px_-5px_rgba(157,255,0,0.12)] transition-all duration-300 flex flex-col items-center justify-center min-h-[150px] sm:min-h-[200px] shadow-2xl">
+                            <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-[#9dff00]/40 to-transparent rounded-t-3xl opacity-50 group-hover:opacity-100 transition-opacity" />
+                            <div className="text-6xl sm:text-7xl md:text-8xl font-black font-mono tracking-tight leading-none mb-3 drop-shadow-[0_0_20px_rgba(255,255,255,0.05)] bg-gradient-to-b from-white via-zinc-100 to-zinc-400 bg-clip-text text-transparent">
                                 {String(timeLeft.hours).padStart(2, '0')}
                             </div>
                             <div className="text-[10px] sm:text-xs font-mono text-zinc-500 uppercase tracking-widest font-semibold">Hours</div>
                         </div>
 
                         {/* Minutes */}
-                        <div className="bg-zinc-900/30 border border-zinc-800/80 rounded-2xl p-6 sm:p-8 backdrop-blur-md relative group hover:border-zinc-700/50 transition-colors shadow-2xl flex flex-col items-center justify-center min-h-[140px] sm:min-h-[180px]">
-                            <div className="absolute inset-x-0 bottom-0 h-[2px] bg-gradient-to-r from-transparent via-[#9dff00]/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                            <div className="text-6xl sm:text-7xl md:text-8xl font-black font-mono text-white tracking-tight leading-none mb-3 drop-shadow-[0_0_20px_rgba(255,255,255,0.05)]">
+                        <div className="bg-zinc-950/40 border border-white/5 rounded-3xl p-6 sm:p-8 backdrop-blur-xl relative group hover:border-[#9dff00]/30 hover:shadow-[0_0_30px_-5px_rgba(157,255,0,0.12)] transition-all duration-300 flex flex-col items-center justify-center min-h-[150px] sm:min-h-[200px] shadow-2xl">
+                            <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-[#9dff00]/40 to-transparent rounded-t-3xl opacity-50 group-hover:opacity-100 transition-opacity" />
+                            <div className="text-6xl sm:text-7xl md:text-8xl font-black font-mono tracking-tight leading-none mb-3 drop-shadow-[0_0_20px_rgba(255,255,255,0.05)] bg-gradient-to-b from-white via-zinc-100 to-zinc-400 bg-clip-text text-transparent">
                                 {String(timeLeft.minutes).padStart(2, '0')}
                             </div>
                             <div className="text-[10px] sm:text-xs font-mono text-zinc-500 uppercase tracking-widest font-semibold">Minutes</div>
                         </div>
 
                         {/* Seconds */}
-                        <div className="bg-zinc-900/30 border border-zinc-800/80 rounded-2xl p-6 sm:p-8 backdrop-blur-md relative group hover:border-zinc-700/50 transition-colors shadow-2xl flex flex-col items-center justify-center min-h-[140px] sm:min-h-[180px]">
-                            <div className="absolute inset-x-0 bottom-0 h-[2px] bg-gradient-to-r from-transparent via-[#9dff00]/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                            <div className="text-6xl sm:text-7xl md:text-8xl font-black font-mono text-[#9dff00] tracking-tight leading-none mb-3 drop-shadow-[0_0_25px_rgba(157,255,0,0.15)]">
+                        <div className="bg-zinc-950/40 border border-white/5 rounded-3xl p-6 sm:p-8 backdrop-blur-xl relative group hover:border-[#9dff00]/30 hover:shadow-[0_0_30px_-5px_rgba(157,255,0,0.2)] transition-all duration-300 flex flex-col items-center justify-center min-h-[150px] sm:min-h-[200px] shadow-2xl">
+                            <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-[#9dff00]/50 to-transparent rounded-t-3xl opacity-60 group-hover:opacity-100 transition-opacity" />
+                            <div className="text-6xl sm:text-7xl md:text-8xl font-black font-mono tracking-tight leading-none mb-3 drop-shadow-[0_0_25px_rgba(157,255,0,0.25)] bg-gradient-to-b from-[#c0ff55] via-[#9dff00] to-[#72bd00] bg-clip-text text-transparent animate-pulse">
                                 {String(timeLeft.seconds).padStart(2, '0')}
                             </div>
                             <div className="text-[10px] sm:text-xs font-mono text-zinc-400 uppercase tracking-widest font-semibold">Seconds</div>
