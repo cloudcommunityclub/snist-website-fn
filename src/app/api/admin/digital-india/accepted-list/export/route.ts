@@ -2,11 +2,23 @@ import dbConnect from '@/lib/db'
 import DigitalIndiaAccepted from '@/models/DigitalIndiaAccepted'
 import { escCsv } from '@/lib/csv'
 
-export async function GET() {
+export async function GET(request: Request) {
     try {
         await dbConnect()
 
-        const submissions = await DigitalIndiaAccepted.find()
+        const { searchParams } = new URL(request.url)
+        const fromDate = searchParams.get('from')
+        const toDate = searchParams.get('to')
+
+        const filter: Record<string, unknown> = {}
+        if (fromDate || toDate) {
+            const acceptedAt: Record<string, Date> = {}
+            if (fromDate) acceptedAt.$gte = new Date(fromDate)
+            if (toDate) acceptedAt.$lte = new Date(toDate)
+            filter.acceptedAt = acceptedAt
+        }
+
+        const submissions = await DigitalIndiaAccepted.find(filter)
             .sort({ acceptedAt: -1 })
             .select('-__v')
             .lean()
@@ -17,6 +29,7 @@ export async function GET() {
             'Idea Description', 'UTR ID', 'Payment Screenshot URL',
             'Accepted At', 'Accepted By', 'Registered At',
             'Referral Code', 'Referred By', 'Referral Points',
+            'Latitude', 'Longitude', 'Submitter IP', 'Country',
         ]
 
         const rows = submissions.map(s => [
@@ -30,8 +43,9 @@ export async function GET() {
             s.referralCode ?? '',
             s.referredByCode ?? '',
             s.referralPoints ?? 0,
+            s.latitude ?? '', s.longitude ?? '',
+            s.submitterIP ?? '', s.country ?? '',
         ].map(escCsv).join(','))
-
 
         const csv = [headers.join(','), ...rows].join('\n')
 
