@@ -38,3 +38,4 @@ This log tracks all active user-facing and backend features implemented in the C
 - **Hackathon Info Header & Selection Metrics**: Integrated a sleek intro header with selection process details (highlighting that the top 100 problem statements will be shortlisted).
 - **Comprehensive Error UI & Dynamic Input Clearing**: Added in-card text validation errors below profile/college input fields with auto-clearing onChange hooks when the user types.
 - **Flexible Alphanumeric UTR Validation**: Implemented a flexible 10-35 character alphanumeric regex (`^[A-Za-z0-9]{10,35}$`) to support all major UPI payment providers and custom bank reference ID formats.
+- **Digital India Countdown Page (`/events/digitalindia/countdown`)**: Customizable target date-based real-time countdown page designed with a luxury dark theme matching the core ideathon events style, complete with client-side hydration safety.
