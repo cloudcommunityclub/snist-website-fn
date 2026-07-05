@@ -1759,16 +1759,29 @@ export default function DigitalIndiaGSAPForm() {
                                     </p>
 
                                     {/* Referral Winner Announcement */}
-                                    <div className="bg-[#9dff00]/5 border border-[#9dff00]/10 rounded-2xl p-5 max-w-lg mx-auto mb-10 text-left font-sans relative overflow-hidden group">
-                                        <div className="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity">
-                                            <Trophy className="w-16 h-16 text-[#9dff00]" />
+                                    <div className="w-full bg-[#121214]/60 border-l-2 border-l-[#9dff00] border-y border-r border-zinc-800/80 rounded-2xl p-6 text-left max-w-lg mx-auto mb-10 relative overflow-hidden backdrop-blur-md group">
+                                        <div className="absolute top-0 right-0 p-4 opacity-[0.03] group-hover:opacity-[0.06] transition-opacity pointer-events-none">
+                                            <Trophy className="w-24 h-24 text-[#9dff00] stroke-[1]" />
                                         </div>
-                                        <span className="text-[10px] text-[#9dff00] font-mono uppercase tracking-widest block mb-2 font-bold">
-                                            ★ Referral Winner Announcement
-                                        </span>
-                                        <p className="text-zinc-300 text-xs sm:text-sm leading-relaxed relative z-10">
-                                            Although no team reached the threshold of 10 successful referrals, <strong className="text-white font-semibold">Team 404 girls</strong> secured the 1st position on the leaderboard and is officially awarded the free hackathon passes. Congratulations!
-                                        </p>
+                                        
+                                        <div className="relative z-10">
+                                            <div className="flex items-center gap-2 mb-4">
+                                                <span className="flex items-center justify-center w-6 h-6 rounded-lg bg-[#9dff00]/10 border border-[#9dff00]/20">
+                                                    <Trophy className="w-3.5 h-3.5 text-[#9dff00]" />
+                                                </span>
+                                                <span className="text-[10px] text-zinc-400 font-mono uppercase tracking-widest font-semibold">
+                                                    Campaign Announcement
+                                                </span>
+                                            </div>
+                                            
+                                            <h4 className="text-base font-bold text-white tracking-tight mb-2">
+                                                Special Pass Award: <span className="text-[#9dff00] font-mono font-medium">404 girls</span>
+                                            </h4>
+                                            
+                                            <p className="text-zinc-400 text-xs sm:text-sm leading-relaxed">
+                                                Although no team reached the threshold of 10 successful referrals, <strong className="text-zinc-200 font-medium">Team 404 girls</strong> secured the #1 spot on the final leaderboard and is awarded the free hackathon passes. Congratulations!
+                                            </p>
+                                        </div>
                                     </div>
 
                                     {/* Action Grid */}
