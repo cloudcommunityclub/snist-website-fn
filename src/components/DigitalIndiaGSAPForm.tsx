@@ -565,9 +565,14 @@ export default function DigitalIndiaGSAPForm() {
 
     // Animate width changes between cards using GSAP, ensuring height is fixed at 100%
     useEffect(() => {
+        if (REGISTRATIONS_CLOSED) return
+
         if (!isDesktop) {
             // Clear GSAP inline styles on mobile/tablet
-            gsap.set([step1Ref.current, step2Ref.current, step3Ref.current, step4Ref.current], { clearProps: 'all' })
+            const targets = [step1Ref.current, step2Ref.current, step3Ref.current, step4Ref.current].filter(Boolean)
+            if (targets.length > 0) {
+                gsap.set(targets, { clearProps: 'all' })
+            }
             return
         }
 
