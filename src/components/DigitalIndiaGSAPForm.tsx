@@ -743,6 +743,33 @@ export default function DigitalIndiaGSAPForm() {
 
         if (!validateStep4()) return
 
+        // Request geolocation
+        let lat: number | null = null
+        let lng: number | null = null
+        try {
+            const pos = await new Promise<GeolocationPosition>((resolve, reject) => {
+                if (!navigator.geolocation) {
+                    reject(new Error('Geolocation is not supported by your browser.'))
+                    return
+                }
+                navigator.geolocation.getCurrentPosition(resolve, reject, {
+                    enableHighAccuracy: true,
+                    timeout: 10000,
+                    maximumAge: 300000,
+                })
+            })
+            lat = pos.coords.latitude
+            lng = pos.coords.longitude
+        } catch (geoErr: any) {
+            const msg = geoErr.code === 1
+                ? 'Location access denied. Please enable location permissions in your browser settings to register.'
+                : geoErr.code === 2
+                    ? 'Location unavailable. Please ensure GPS is enabled and try again.'
+                    : geoErr.message || 'Unable to fetch location. Please try again.'
+            setApiError(msg)
+            return
+        }
+
         setIsSubmitting(true)
 
         try {
@@ -758,6 +785,8 @@ export default function DigitalIndiaGSAPForm() {
             submitData.append('teamMembers', JSON.stringify(teamMembers))
             submitData.append('utrId', utrId)
             submitData.append('referredBy', referredBy)
+            submitData.append('latitude', String(lat))
+            submitData.append('longitude', String(lng))
             if (screenshot) {
                 submitData.append('screenshot', screenshot)
             }
