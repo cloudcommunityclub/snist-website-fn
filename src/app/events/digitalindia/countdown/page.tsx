@@ -148,7 +148,7 @@ export default function DigitalIndiaCountdownPage() {
                     <div className="hidden sm:block text-zinc-700">•</div>
                     <div className="flex items-center gap-2">
                         <Calendar size={14} className="text-[#9dff00]" />
-                        <span>July 9-10, 2026</span>
+                        <span>July 9-11, 2026</span>
                     </div>
                 </div>
             </main>
