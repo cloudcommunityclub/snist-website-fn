@@ -1741,24 +1741,67 @@ export default function DigitalIndiaGSAPForm() {
             <section ref={formSectionRef} id="register" className="relative z-10 w-full max-w-[1440px] mx-auto px-6 md:px-12 py-20 md:py-28 border-t border-zinc-800/40">
                 {REGISTRATIONS_CLOSED ? (
                     <div className="flex flex-col items-center">
-                        <div className="text-center mb-8">
-                            <h2 className="text-3xl md:text-5xl font-light text-white tracking-tight mb-4">
-                                Registration <span className="text-[#9dff00] font-normal">Closed</span>
-                            </h2>
+                        {/* High-end badge */}
+                        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-zinc-800/60 bg-zinc-950/80 text-zinc-400 text-[10px] font-mono uppercase tracking-widest mb-6">
+                            <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
+                            <span>Ideathon Submissions Closed</span>
                         </div>
 
+                        {/* Metallic Header */}
+                        <div className="text-center mb-12">
+                            <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tight text-white mb-4 bg-gradient-to-b from-white via-zinc-200 to-zinc-600 bg-clip-text text-transparent">
+                                REGISTRATION <span className="text-[#9dff00] font-light">CLOSED</span>
+                            </h2>
+                            <p className="text-zinc-400 text-sm font-light max-w-lg mx-auto">
+                                The initial stage abstract submissions for the Digital India Hackathon have completed.
+                            </p>
+                        </div>
+
+                        {/* Main Glassmorphic Panel */}
                         <div className="flex w-full items-center justify-center max-w-4xl mx-auto">
-                            <div className="w-full bg-[#18181b]/30 border border-zinc-800/60 rounded-[32px] p-8 md:p-12 text-center backdrop-blur-xl relative overflow-hidden group shadow-2xl">
-                                <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-[#9dff00]/40 to-transparent rounded-t-[32px]" />
-                                <div className="w-16 h-16 rounded-2xl bg-[#9dff00]/10 border border-[#9dff00]/30 flex items-center justify-center mx-auto mb-6">
-                                    <Medal size={32} className="text-[#9dff00] animate-pulse" />
-                                </div>
-                                <h3 className="text-xl md:text-2xl font-bold text-white mb-3">Registrations are now closed</h3>
-                                <p className="text-zinc-400 text-sm md:text-base leading-relaxed max-w-lg mx-auto mb-6 font-sans">
-                                    Thank you for the overwhelming response! The registration phase for the Digital India Hackathon has officially concluded.
-                                </p>
-                                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-zinc-800 bg-zinc-900/50 text-zinc-400 text-xs font-mono">
-                                    <span>Shortlist results will be announced soon.</span>
+                            <div className="w-full bg-[#0d0d0f]/60 border border-zinc-800/80 rounded-[40px] p-8 md:p-16 text-center backdrop-blur-3xl relative overflow-hidden group shadow-2xl shadow-black/80">
+                                {/* Spotlights & decorative gradient border */}
+                                <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(157,255,0,0.06),transparent_50%)]" />
+                                <div className="absolute top-0 inset-x-0 h-[1px] bg-gradient-to-r from-transparent via-[#9dff00]/40 to-transparent" />
+                                
+                                {/* Status Container */}
+                                <div className="relative z-10">
+                                    <div className="w-20 h-20 rounded-3xl bg-[#9dff00]/5 border border-[#9dff00]/15 flex items-center justify-center mx-auto mb-8 shadow-inner shadow-[#9dff00]/5">
+                                        <Medal size={40} className="text-[#9dff00] stroke-[1.25] drop-shadow-[0_0_8px_rgba(157,255,0,0.2)]" />
+                                    </div>
+                                    
+                                    <h3 className="text-2xl md:text-3xl font-extrabold text-white tracking-tight mb-4">
+                                        Registrations Have Concluded
+                                    </h3>
+                                    
+                                    <p className="text-zinc-400 text-sm md:text-base leading-relaxed max-w-xl mx-auto mb-10 font-sans">
+                                        Thank you to the hundreds of teams who submitted their ideas! The registration and abstract pipeline is now officially closed. The organizing committee is currently shortlisting proposals.
+                                    </p>
+
+                                    {/* Action Grid */}
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-lg mx-auto mb-10 text-left font-mono">
+                                        <div className="bg-[#121214]/80 border border-zinc-800/50 p-5 rounded-2xl flex flex-col justify-between hover:border-zinc-700/60 transition-colors">
+                                            <span className="text-[10px] text-zinc-500 uppercase tracking-widest block mb-1">Evaluation Phase</span>
+                                            <span className="text-[#9dff00] text-xs font-bold uppercase tracking-wider flex items-center gap-1.5">
+                                                <span className="w-1.5 h-1.5 rounded-full bg-[#9dff00] animate-ping" />
+                                                In Progress
+                                            </span>
+                                        </div>
+                                        <div className="bg-[#121214]/80 border border-zinc-800/50 p-5 rounded-2xl flex flex-col justify-between hover:border-zinc-700/60 transition-colors">
+                                            <span className="text-[10px] text-zinc-500 uppercase tracking-widest block mb-1">Hackathon Dates</span>
+                                            <span className="text-white text-xs font-bold uppercase tracking-wider">
+                                                July 9-11, 2026
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    {/* CTA link to Referral rank lookup */}
+                                    <button
+                                        onClick={() => document.getElementById('referral-dashboard')?.scrollIntoView({ behavior: 'smooth' })}
+                                        className="inline-flex items-center gap-2 bg-[#9dff00]/10 hover:bg-[#9dff00]/15 border border-[#9dff00]/20 text-[#9dff00] px-6 py-3.5 rounded-2xl text-xs font-bold font-mono uppercase tracking-wider transition-all duration-300 cursor-pointer shadow-lg hover:shadow-[#9dff00]/5 hover:-translate-y-0.5 active:translate-y-0"
+                                    >
+                                        Check Referral Leaderboard & Stats <ArrowRight className="w-3.5 h-3.5" />
+                                    </button>
                                 </div>
                             </div>
                         </div>
