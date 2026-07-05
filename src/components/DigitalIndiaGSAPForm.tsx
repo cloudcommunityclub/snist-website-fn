@@ -68,6 +68,7 @@ const faqs = [
 ]
 
 export default function DigitalIndiaGSAPForm() {
+    const REGISTRATIONS_CLOSED = true
     const router = useRouter()
     const searchParams = useSearchParams()
     const refParam = searchParams ? searchParams.get('ref') : null
@@ -163,6 +164,7 @@ export default function DigitalIndiaGSAPForm() {
     // Load URL parameter and localStorage on mount
     useEffect(() => {
         if (refParam) {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             setReferredBy(refParam.toUpperCase())
         }
 
@@ -563,9 +565,14 @@ export default function DigitalIndiaGSAPForm() {
 
     // Animate width changes between cards using GSAP, ensuring height is fixed at 100%
     useEffect(() => {
+        if (REGISTRATIONS_CLOSED) return
+
         if (!isDesktop) {
             // Clear GSAP inline styles on mobile/tablet
-            gsap.set([step1Ref.current, step2Ref.current, step3Ref.current, step4Ref.current], { clearProps: 'all' })
+            const targets = [step1Ref.current, step2Ref.current, step3Ref.current, step4Ref.current].filter(Boolean)
+            if (targets.length > 0) {
+                gsap.set(targets, { clearProps: 'all' })
+            }
             return
         }
 
@@ -624,7 +631,7 @@ export default function DigitalIndiaGSAPForm() {
         if (isFirstRender.current) {
             isFirstRender.current = false
         }
-    }, [activeStep, isSubmitted, isDesktop])
+    }, [activeStep, isSubmitted, isDesktop, REGISTRATIONS_CLOSED])
 
     const validateStep1 = (): boolean => {
         const newErrors: FormErrors = {}
@@ -978,12 +985,21 @@ export default function DigitalIndiaGSAPForm() {
                     </div>
 
                     <div className="hero-animate-title flex flex-wrap gap-4 items-center">
-                        <button
-                            onClick={() => formSectionRef.current?.scrollIntoView({ behavior: 'smooth' })}
-                            className="hero-animate-btn bg-[#9dff00] hover:bg-[#8ae000] text-zinc-950 px-8 py-4 rounded-full font-bold text-sm flex items-center gap-2 shadow-lg shadow-[#9dff00]/10 hover:shadow-[#9dff00]/25 transition-all cursor-pointer"
-                        >
-                            Register Now <ArrowRight className="w-4 h-4" />
-                        </button>
+                        {REGISTRATIONS_CLOSED ? (
+                            <button
+                                onClick={() => formSectionRef.current?.scrollIntoView({ behavior: 'smooth' })}
+                                className="hero-animate-btn border border-[#9dff00]/30 bg-[#9dff00]/5 text-[#9dff00] px-8 py-4 rounded-full font-bold text-sm flex items-center gap-2 transition-all cursor-pointer"
+                            >
+                                Registrations Closed <ArrowRight className="w-4 h-4" />
+                            </button>
+                        ) : (
+                            <button
+                                onClick={() => formSectionRef.current?.scrollIntoView({ behavior: 'smooth' })}
+                                className="hero-animate-btn bg-[#9dff00] hover:bg-[#8ae000] text-zinc-950 px-8 py-4 rounded-full font-bold text-sm flex items-center gap-2 shadow-lg shadow-[#9dff00]/10 hover:shadow-[#9dff00]/25 transition-all cursor-pointer"
+                            >
+                                Register Now <ArrowRight className="w-4 h-4" />
+                            </button>
+                        )}
                         <button
                             onClick={() => document.getElementById('details')?.scrollIntoView({ behavior: 'smooth' })}
                             className="hero-animate-btn border border-zinc-800 hover:border-zinc-500 bg-zinc-900/40 text-white px-8 py-4 rounded-full font-medium text-sm transition-all cursor-pointer"
@@ -1723,14 +1739,63 @@ export default function DigitalIndiaGSAPForm() {
 
             {/* 6. Registration Form Section */}
             <section ref={formSectionRef} id="register" className="relative z-10 w-full max-w-[1440px] mx-auto px-6 md:px-12 py-20 md:py-28 border-t border-zinc-800/40">
-                <div className="text-center mb-12">
-                    <h2 className="text-3xl md:text-5xl font-light text-white tracking-tight mb-4">
-                        Secure Your <span className="text-[#9dff00] font-normal">Team Slot</span>
-                    </h2>
-                    <p className="text-zinc-400 text-sm md:text-base font-light max-w-2xl mx-auto leading-relaxed">
-                        Submit your details, select your domain track, describe your idea proposal, and complete payment verification.
-                    </p>
-                </div>
+                {REGISTRATIONS_CLOSED ? (
+                    <div className="flex flex-col items-center">
+                        {/* Main Glassmorphic Panel */}
+                        <div className="flex w-full items-center justify-center max-w-4xl mx-auto">
+                            <div className="w-full bg-[#0d0d0f]/60 border border-zinc-800/80 rounded-[40px] p-8 md:p-16 text-center backdrop-blur-3xl relative overflow-hidden group shadow-2xl shadow-black/80">
+                                {/* Spotlights & decorative gradient border */}
+                                <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(157,255,0,0.06),transparent_50%)]" />
+                                <div className="absolute top-0 inset-x-0 h-[1px] bg-gradient-to-r from-transparent via-[#9dff00]/40 to-transparent" />
+                                
+                                {/* Status Container */}
+                                <div className="relative z-10">
+                                    <h3 className="text-2xl md:text-3xl font-extrabold text-white tracking-tight mb-4">
+                                        Registrations Have Concluded
+                                    </h3>
+                                    
+                                    <p className="text-zinc-400 text-sm md:text-base leading-relaxed max-w-xl mx-auto mb-10 font-sans">
+                                        Thank you to all the teams who submitted their ideas! The registration and abstract pipeline is now officially closed. The organizing committee is currently shortlisting proposals.
+                                    </p>
+
+                                    {/* Action Grid */}
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-lg mx-auto mb-10 text-left font-mono">
+                                        <div className="bg-[#121214]/80 border border-zinc-800/50 p-5 rounded-2xl flex flex-col justify-between hover:border-zinc-700/60 transition-colors">
+                                            <span className="text-[10px] text-zinc-500 uppercase tracking-widest block mb-1">Evaluation Phase</span>
+                                            <span className="text-[#9dff00] text-xs font-bold uppercase tracking-wider flex items-center gap-1.5">
+                                                <span className="w-1.5 h-1.5 rounded-full bg-[#9dff00] animate-ping" />
+                                                In Progress
+                                            </span>
+                                        </div>
+                                        <div className="bg-[#121214]/80 border border-zinc-800/50 p-5 rounded-2xl flex flex-col justify-between hover:border-zinc-700/60 transition-colors">
+                                            <span className="text-[10px] text-zinc-500 uppercase tracking-widest block mb-1">Hackathon Dates</span>
+                                            <span className="text-white text-xs font-bold uppercase tracking-wider">
+                                                July 9-11, 2026
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    {/* CTA link to Referral rank lookup */}
+                                    <button
+                                        onClick={() => document.getElementById('referral-dashboard')?.scrollIntoView({ behavior: 'smooth' })}
+                                        className="inline-flex items-center gap-2 bg-[#9dff00]/10 hover:bg-[#9dff00]/15 border border-[#9dff00]/20 text-[#9dff00] px-6 py-3.5 rounded-2xl text-xs font-bold font-mono uppercase tracking-wider transition-all duration-300 cursor-pointer shadow-lg hover:shadow-[#9dff00]/5 hover:-translate-y-0.5 active:translate-y-0"
+                                    >
+                                        Check Referral Leaderboard & Stats <ArrowRight className="w-3.5 h-3.5" />
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                ) : (
+                    <>
+                        <div className="text-center mb-12">
+                            <h2 className="text-3xl md:text-5xl font-light text-white tracking-tight mb-4">
+                                Secure Your <span className="text-[#9dff00] font-normal">Team Slot</span>
+                            </h2>
+                            <p className="text-zinc-400 text-sm md:text-base font-light max-w-2xl mx-auto leading-relaxed">
+                                Submit your details, select your domain track, describe your idea proposal, and complete payment verification.
+                            </p>
+                        </div>
 
                 {/* Horizontal Top Stepper for Mobile/Tablet */}
                 <div className="lg:hidden w-full max-w-[1440px] mb-6 px-2 font-mono text-[10px] uppercase tracking-widest flex items-center justify-between">
@@ -2442,6 +2507,8 @@ export default function DigitalIndiaGSAPForm() {
                         </div>
                     </div>
                 </div>
+                    </>
+                )}
             </section>
 
             {/* Referral Dashboard lookup */}
