@@ -119,6 +119,7 @@ export default function DigitalIndiaAdminDashboard() {
     const [verifyingId, setVerifyingId] = useState<string | null>(null)
     const [acceptingId, setAcceptingId] = useState<string | null>(null)
     const [deletingId, setDeletingId] = useState<string | null>(null)
+    const [rejectingId, setRejectingId] = useState<string | null>(null)
     const [activeSubTab, setActiveSubTab] = useState<'submissions' | 'accepted'>('submissions')
     const [exportFilter, setExportFilter] = useState<'all' | 'pending' | 'verified'>('all')
     const router = useRouter()
@@ -204,6 +205,34 @@ export default function DigitalIndiaAdminDashboard() {
         }
     }
 
+    const handleReject = async (id: string) => {
+        const reason = prompt(
+            'Are you sure you want to reject this submission? They will be deleted and notified via email.\n\nEnter rejection reason (optional):',
+            "We're sorry, your idea did not meet our submission criteria this time. Thank you for participating, and we encourage you to come back with an even stronger idea next time."
+        )
+        if (reason === null) return // User cancelled
+        
+        setRejectingId(id)
+        try {
+            const res = await fetch('/api/admin/digital-india/reject', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id, reason })
+            })
+            if (res.ok) {
+                mutate()
+                refreshStats()
+            } else {
+                const err = await res.json()
+                alert(err.message || 'Action failed')
+            }
+        } catch {
+            alert('Rejection failed. Please try again.')
+        } finally {
+            setRejectingId(null)
+        }
+    }
+
     const handleDelete = async (id: string, collection: 'submissions' | 'accepted') => {
         if (!confirm('Are you sure you want to permanently delete this entry? This will also clean up related referral records. This action cannot be undone.')) {
             return
@@ -284,7 +313,7 @@ export default function DigitalIndiaAdminDashboard() {
                         <div className="flex items-center gap-2 font-mono">
                             <Terminal size={16} className="text-[#bd93f9]" />
                             <span className="text-[#bd93f9] font-bold text-sm hidden sm:block">C3</span>
-                            <span className="text-[#6272a4] text-sm hidden sm:block">//</span>
+                            <span className="text-[#6272a4] text-sm hidden sm:block">{"//"}</span>
                             <span className="text-[#f8f8f2] text-sm font-bold">DIGITAL INDIA</span>
                         </div>
                     </div>
@@ -549,7 +578,7 @@ export default function DigitalIndiaAdminDashboard() {
                                                         <div className="flex items-center gap-2">
                                                             <button
                                                                 onClick={() => handleVerify(sub._id, sub.paymentVerified)}
-                                                                disabled={verifyingId === sub._id || acceptingId === sub._id}
+                                                                disabled={verifyingId === sub._id || acceptingId === sub._id || rejectingId === sub._id}
                                                                 className={`px-3 py-1.5 rounded-md text-xs font-mono font-medium transition-colors flex items-center gap-1 ${
                                                                     sub.paymentVerified
                                                                         ? 'border border-[#ff5555]/30 text-[#ff5555] hover:bg-[#ff5555]/10'
@@ -569,7 +598,7 @@ export default function DigitalIndiaAdminDashboard() {
                                                             </button>
                                                             <button
                                                                 onClick={() => handleAccept(sub._id)}
-                                                                disabled={!sub.paymentVerified || acceptingId === sub._id || verifyingId === sub._id}
+                                                                disabled={!sub.paymentVerified || acceptingId === sub._id || verifyingId === sub._id || rejectingId === sub._id}
                                                                 className={`px-3 py-1.5 rounded-md text-xs font-mono font-medium transition-colors flex items-center gap-1 ${
                                                                     sub.paymentVerified
                                                                         ? 'bg-[#50fa7b] text-[#0d0e12] hover:bg-[#40c762] cursor-pointer'
@@ -584,8 +613,20 @@ export default function DigitalIndiaAdminDashboard() {
                                                                 )}
                                                             </button>
                                                             <button
+                                                                onClick={() => handleReject(sub._id)}
+                                                                disabled={rejectingId === sub._id || acceptingId === sub._id || verifyingId === sub._id}
+                                                                className="px-3 py-1.5 rounded-md text-xs font-mono font-medium transition-colors flex items-center gap-1 border border-[#ff5555]/30 text-[#ff5555] hover:bg-[#ff5555]/10"
+                                                                title="Reject candidate and send rejection email"
+                                                            >
+                                                                {rejectingId === sub._id ? (
+                                                                    <RefreshCw size={12} className="animate-spin" />
+                                                                ) : (
+                                                                    'Reject'
+                                                                )}
+                                                            </button>
+                                                            <button
                                                                 onClick={() => handleDelete(sub._id, 'submissions')}
-                                                                disabled={deletingId === sub._id}
+                                                                disabled={deletingId === sub._id || rejectingId === sub._id || acceptingId === sub._id || verifyingId === sub._id}
                                                                 className="px-3 py-1.5 rounded-md text-xs font-mono font-medium transition-colors flex items-center gap-1 border border-[#ff5555]/30 text-[#ff5555] hover:bg-[#ff5555]/10"
                                                                 title="Delete this entry permanently"
                                                             >
