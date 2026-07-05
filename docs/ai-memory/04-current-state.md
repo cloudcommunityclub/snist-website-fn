@@ -17,6 +17,7 @@ This document provides a live summary of the repository status, active component
 | Admin Console (`/admin/dashboard`) | **Completed** | Statistics view, CSV export split by members, all-field search, and interactive Reject action with customizable reasons. |
 | Ideathon & Recruitment APIs | **Completed** | APIs to submit ideas, record payments, lock/unlock tasks, and accept/reject submissions. Rejecting or accepting a submission cleans up referral tables and sends SMTP emails to all members. |
 | GSAP Ideathon Form (`/events/digitalindia`) | **Completed** | Apple-style light silver horizontal accordion form with GSAP width animations. Fully responsive for tablet/mobile. Includes hackathon info header, text error feedback, and flexible 10-35 character UTR validation. |
+| Digital India Countdown (`/events/digitalindia/countdown`) | **Completed** | Real-time countdown clock in luxury dark theme with mount-hydration safeties. |
 
 
 ## 3. Identified Gaps & Technical Debt (P0-P1 Priorities)

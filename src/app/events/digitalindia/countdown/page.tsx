@@ -1,0 +1,189 @@
+'use client'
+
+import React, { useState, useEffect } from 'react'
+import { Terminal, Timer, Sparkles, MapPin, Calendar } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+
+// ==========================================
+// TARGET CONFIGURATION (IST Timezone)
+// Change this string to update the countdown
+// ==========================================
+const TARGET_DATE = "2026-07-09T09:00:00+05:30" 
+const EVENT_TITLE = "Digital India Hackathon - Stage 2 Build"
+const EVENT_LOCATION = "SNIST Campus, Hyderabad"
+
+interface TimeLeft {
+    days: number
+    hours: number
+    minutes: number
+    seconds: number
+    isOver: boolean
+}
+
+export default function DigitalIndiaCountdownPage() {
+    const router = useRouter()
+    const [isMounted, setIsMounted] = useState(false)
+    const [timeLeft, setTimeLeft] = useState<TimeLeft>({
+        days: 0,
+        hours: 0,
+        minutes: 0,
+        seconds: 0,
+        isOver: false
+    })
+
+    useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setIsMounted(true)
+
+        const calculateTimeLeft = () => {
+            const difference = +new Date(TARGET_DATE) - +new Date()
+            
+            if (difference <= 0) {
+                return { days: 0, hours: 0, minutes: 0, seconds: 0, isOver: true }
+            }
+
+            return {
+                days: Math.floor(difference / (1000 * 60 * 60 * 24)),
+                hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
+                minutes: Math.floor((difference / 1000 / 60) % 60),
+                seconds: Math.floor((difference / 1000) % 60),
+                isOver: false
+            }
+        }
+
+        // Set initial
+        setTimeLeft(calculateTimeLeft())
+
+        const timer = setInterval(() => {
+            setTimeLeft(calculateTimeLeft())
+        }, 1000)
+
+        return () => clearInterval(timer)
+    }, [])
+
+    if (!isMounted) {
+        return (
+            <div className="min-h-screen bg-[#09090b] flex items-center justify-center font-mono text-zinc-500 text-xs">
+                LOADING EXPERIENCE...
+            </div>
+        )
+    }
+
+    return (
+        <div className="min-h-screen bg-[#09090b] text-[#f8f8f2] flex flex-col items-center justify-between relative overflow-hidden font-sans selection:bg-[#9dff00]/30 selection:text-[#9dff00]">
+            {/* Background decorative patterns */}
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(157,255,0,0.07),rgba(255,255,255,0))]" />
+            <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-[#9dff00]/20 to-transparent" />
+
+            {/* Top Navigation / Header */}
+            <header className="w-full max-w-7xl mx-auto px-6 py-6 flex items-center justify-between z-10">
+                <div className="flex items-center gap-3 font-mono">
+                    <Terminal size={18} className="text-[#9dff00]" />
+                    <span className="text-[#9dff00] font-bold text-sm tracking-widest">C3</span>
+                    <span className="text-zinc-600">{"//"}</span>
+                    <span className="text-zinc-300 text-sm font-semibold tracking-wider">EVENTS</span>
+                </div>
+                <button
+                    onClick={() => router.push('/events/digitalindia')}
+                    className="text-xs font-mono text-zinc-400 hover:text-[#9dff00] transition-colors border border-zinc-800 hover:border-[#9dff00]/30 rounded-lg px-3 py-1.5 bg-zinc-900/50 backdrop-blur-sm"
+                >
+                    Back to Event
+                </button>
+            </header>
+
+            {/* Main Content Area */}
+            <main className="flex-1 flex flex-col items-center justify-center w-full max-w-4xl mx-auto px-6 py-12 z-10 text-center">
+                {/* Event Tag */}
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#9dff00]/30 bg-[#9dff00]/5 text-[#9dff00] text-xs font-mono font-medium tracking-wide uppercase mb-6 animate-pulse">
+                    <Sparkles size={12} />
+                    <span>Innovation Phase Countdown</span>
+                </div>
+
+                {/* Event Heading */}
+                <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white mb-4 max-w-2xl leading-none">
+                    {EVENT_TITLE}
+                </h1>
+                
+                <p className="text-zinc-400 text-sm sm:text-base font-mono mb-12 max-w-lg">
+                    Build phase begins on 09 July 2026 at 09:00 AM IST. Prepare your environment.
+                </p>
+
+                {timeLeft.isOver ? (
+                    /* Event Live / Timer Over State */
+                    <div className="bg-zinc-900/40 border border-[#9dff00]/35 rounded-3xl p-8 sm:p-12 max-w-xl w-full backdrop-blur-md shadow-[0_0_50px_-12px_rgba(157,255,0,0.2)]">
+                        <div className="w-16 h-16 rounded-2xl bg-[#9dff00]/10 border border-[#9dff00]/30 flex items-center justify-center mx-auto mb-6">
+                            <Timer size={32} className="text-[#9dff00] animate-bounce" />
+                        </div>
+                        <h2 className="text-2xl sm:text-3xl font-bold text-white mb-3">Hackathon is Live!</h2>
+                        <p className="text-zinc-400 text-sm sm:text-base leading-relaxed mb-6">
+                            The countdown has concluded. Innovation lab doors are open, and the Stage 2 build phase is officially underway. Good luck!
+                        </p>
+                        <button
+                            onClick={() => router.push('/events/digitalindia')}
+                            className="bg-[#9dff00] text-black font-semibold text-sm px-6 py-3 rounded-xl hover:bg-[#8ade00] transition-colors shadow-lg shadow-[#9dff00]/25"
+                        >
+                            View Live Details
+                        </button>
+                    </div>
+                ) : (
+                    /* Countdown Grid */
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 w-full max-w-3xl mb-12">
+                        {/* Days */}
+                        <div className="bg-zinc-900/30 border border-zinc-800/80 rounded-2xl p-6 sm:p-8 backdrop-blur-md relative group hover:border-zinc-700/50 transition-colors shadow-2xl">
+                            <div className="absolute inset-x-0 bottom-0 h-[2px] bg-gradient-to-r from-transparent via-[#9dff00]/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                            <div className="text-5xl sm:text-6xl font-extrabold font-mono text-white tracking-tight leading-none mb-2">
+                                {String(timeLeft.days).padStart(2, '0')}
+                            </div>
+                            <div className="text-[10px] sm:text-xs font-mono text-[#9dff00] uppercase tracking-widest font-semibold">Days</div>
+                        </div>
+
+                        {/* Hours */}
+                        <div className="bg-zinc-900/30 border border-zinc-800/80 rounded-2xl p-6 sm:p-8 backdrop-blur-md relative group hover:border-zinc-700/50 transition-colors shadow-2xl">
+                            <div className="absolute inset-x-0 bottom-0 h-[2px] bg-gradient-to-r from-transparent via-[#9dff00]/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                            <div className="text-5xl sm:text-6xl font-extrabold font-mono text-white tracking-tight leading-none mb-2">
+                                {String(timeLeft.hours).padStart(2, '0')}
+                            </div>
+                            <div className="text-[10px] sm:text-xs font-mono text-[#9dff00] uppercase tracking-widest font-semibold">Hours</div>
+                        </div>
+
+                        {/* Minutes */}
+                        <div className="bg-zinc-900/30 border border-zinc-800/80 rounded-2xl p-6 sm:p-8 backdrop-blur-md relative group hover:border-zinc-700/50 transition-colors shadow-2xl">
+                            <div className="absolute inset-x-0 bottom-0 h-[2px] bg-gradient-to-r from-transparent via-[#9dff00]/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                            <div className="text-5xl sm:text-6xl font-extrabold font-mono text-white tracking-tight leading-none mb-2">
+                                {String(timeLeft.minutes).padStart(2, '0')}
+                            </div>
+                            <div className="text-[10px] sm:text-xs font-mono text-[#9dff00] uppercase tracking-widest font-semibold">Minutes</div>
+                        </div>
+
+                        {/* Seconds */}
+                        <div className="bg-zinc-900/30 border border-zinc-800/80 rounded-2xl p-6 sm:p-8 backdrop-blur-md relative group hover:border-zinc-700/50 transition-colors shadow-2xl">
+                            <div className="absolute inset-x-0 bottom-0 h-[2px] bg-gradient-to-r from-transparent via-[#9dff00]/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                            <div className="text-5xl sm:text-6xl font-extrabold font-mono text-[#9dff00] tracking-tight leading-none mb-2">
+                                {String(timeLeft.seconds).padStart(2, '0')}
+                            </div>
+                            <div className="text-[10px] sm:text-xs font-mono text-zinc-400 uppercase tracking-widest font-semibold">Seconds</div>
+                        </div>
+                    </div>
+                )}
+
+                {/* Event details card */}
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-6 text-zinc-400 text-xs sm:text-sm font-mono border-t border-zinc-900 pt-8 w-full max-w-xl">
+                    <div className="flex items-center gap-2">
+                        <MapPin size={14} className="text-[#9dff00]" />
+                        <span>{EVENT_LOCATION}</span>
+                    </div>
+                    <div className="hidden sm:block text-zinc-700">•</div>
+                    <div className="flex items-center gap-2">
+                        <Calendar size={14} className="text-[#9dff00]" />
+                        <span>July 9-10, 2026</span>
+                    </div>
+                </div>
+            </main>
+
+            {/* Footer */}
+            <footer className="w-full py-8 text-center text-zinc-600 text-xs font-mono z-10 border-t border-zinc-900/40">
+                © 2026 Cloud Community Club (C³) & Student Developers Community (SDC) – SNIST.
+            </footer>
+        </div>
+    )
+}
