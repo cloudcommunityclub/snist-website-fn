@@ -68,6 +68,7 @@ const faqs = [
 ]
 
 export default function DigitalIndiaGSAPForm() {
+    const REGISTRATIONS_CLOSED = true
     const router = useRouter()
     const searchParams = useSearchParams()
     const refParam = searchParams ? searchParams.get('ref') : null
@@ -163,6 +164,7 @@ export default function DigitalIndiaGSAPForm() {
     // Load URL parameter and localStorage on mount
     useEffect(() => {
         if (refParam) {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             setReferredBy(refParam.toUpperCase())
         }
 
@@ -978,12 +980,21 @@ export default function DigitalIndiaGSAPForm() {
                     </div>
 
                     <div className="hero-animate-title flex flex-wrap gap-4 items-center">
-                        <button
-                            onClick={() => formSectionRef.current?.scrollIntoView({ behavior: 'smooth' })}
-                            className="hero-animate-btn bg-[#9dff00] hover:bg-[#8ae000] text-zinc-950 px-8 py-4 rounded-full font-bold text-sm flex items-center gap-2 shadow-lg shadow-[#9dff00]/10 hover:shadow-[#9dff00]/25 transition-all cursor-pointer"
-                        >
-                            Register Now <ArrowRight className="w-4 h-4" />
-                        </button>
+                        {REGISTRATIONS_CLOSED ? (
+                            <button
+                                onClick={() => formSectionRef.current?.scrollIntoView({ behavior: 'smooth' })}
+                                className="hero-animate-btn border border-[#9dff00]/30 bg-[#9dff00]/5 text-[#9dff00] px-8 py-4 rounded-full font-bold text-sm flex items-center gap-2 transition-all cursor-pointer"
+                            >
+                                Registrations Closed <ArrowRight className="w-4 h-4" />
+                            </button>
+                        ) : (
+                            <button
+                                onClick={() => formSectionRef.current?.scrollIntoView({ behavior: 'smooth' })}
+                                className="hero-animate-btn bg-[#9dff00] hover:bg-[#8ae000] text-zinc-950 px-8 py-4 rounded-full font-bold text-sm flex items-center gap-2 shadow-lg shadow-[#9dff00]/10 hover:shadow-[#9dff00]/25 transition-all cursor-pointer"
+                            >
+                                Register Now <ArrowRight className="w-4 h-4" />
+                            </button>
+                        )}
                         <button
                             onClick={() => document.getElementById('details')?.scrollIntoView({ behavior: 'smooth' })}
                             className="hero-animate-btn border border-zinc-800 hover:border-zinc-500 bg-zinc-900/40 text-white px-8 py-4 rounded-full font-medium text-sm transition-all cursor-pointer"
@@ -1723,14 +1734,40 @@ export default function DigitalIndiaGSAPForm() {
 
             {/* 6. Registration Form Section */}
             <section ref={formSectionRef} id="register" className="relative z-10 w-full max-w-[1440px] mx-auto px-6 md:px-12 py-20 md:py-28 border-t border-zinc-800/40">
-                <div className="text-center mb-12">
-                    <h2 className="text-3xl md:text-5xl font-light text-white tracking-tight mb-4">
-                        Secure Your <span className="text-[#9dff00] font-normal">Team Slot</span>
-                    </h2>
-                    <p className="text-zinc-400 text-sm md:text-base font-light max-w-2xl mx-auto leading-relaxed">
-                        Submit your details, select your domain track, describe your idea proposal, and complete payment verification.
-                    </p>
-                </div>
+                {REGISTRATIONS_CLOSED ? (
+                    <div className="flex flex-col items-center">
+                        <div className="text-center mb-8">
+                            <h2 className="text-3xl md:text-5xl font-light text-white tracking-tight mb-4">
+                                Registration <span className="text-[#9dff00] font-normal">Closed</span>
+                            </h2>
+                        </div>
+
+                        <div className="flex w-full items-center justify-center max-w-4xl mx-auto">
+                            <div className="w-full bg-[#18181b]/30 border border-zinc-800/60 rounded-[32px] p-8 md:p-12 text-center backdrop-blur-xl relative overflow-hidden group shadow-2xl">
+                                <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-[#9dff00]/40 to-transparent rounded-t-[32px]" />
+                                <div className="w-16 h-16 rounded-2xl bg-[#9dff00]/10 border border-[#9dff00]/30 flex items-center justify-center mx-auto mb-6">
+                                    <Medal size={32} className="text-[#9dff00] animate-pulse" />
+                                </div>
+                                <h3 className="text-xl md:text-2xl font-bold text-white mb-3">Registrations are now closed</h3>
+                                <p className="text-zinc-400 text-sm md:text-base leading-relaxed max-w-lg mx-auto mb-6 font-sans">
+                                    Thank you for the overwhelming response! The registration phase for the Digital India Hackathon has officially concluded.
+                                </p>
+                                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-zinc-800 bg-zinc-900/50 text-zinc-400 text-xs font-mono">
+                                    <span>Shortlist results will be announced soon.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                ) : (
+                    <>
+                        <div className="text-center mb-12">
+                            <h2 className="text-3xl md:text-5xl font-light text-white tracking-tight mb-4">
+                                Secure Your <span className="text-[#9dff00] font-normal">Team Slot</span>
+                            </h2>
+                            <p className="text-zinc-400 text-sm md:text-base font-light max-w-2xl mx-auto leading-relaxed">
+                                Submit your details, select your domain track, describe your idea proposal, and complete payment verification.
+                            </p>
+                        </div>
 
                 {/* Horizontal Top Stepper for Mobile/Tablet */}
                 <div className="lg:hidden w-full max-w-[1440px] mb-6 px-2 font-mono text-[10px] uppercase tracking-widest flex items-center justify-between">
@@ -2442,6 +2479,8 @@ export default function DigitalIndiaGSAPForm() {
                         </div>
                     </div>
                 </div>
+                    </>
+                )}
             </section>
 
             {/* Referral Dashboard lookup */}
