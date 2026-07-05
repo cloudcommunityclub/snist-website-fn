@@ -1741,12 +1741,6 @@ export default function DigitalIndiaGSAPForm() {
             <section ref={formSectionRef} id="register" className="relative z-10 w-full max-w-[1440px] mx-auto px-6 md:px-12 py-20 md:py-28 border-t border-zinc-800/40">
                 {REGISTRATIONS_CLOSED ? (
                     <div className="flex flex-col items-center">
-                        {/* High-end badge */}
-                        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-zinc-800/60 bg-zinc-950/80 text-zinc-400 text-[10px] font-mono uppercase tracking-widest mb-6">
-                            <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
-                            <span>Ideathon Submissions Closed</span>
-                        </div>
-
                         {/* Metallic Header */}
                         <div className="text-center mb-12">
                             <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tight text-white mb-4 bg-gradient-to-b from-white via-zinc-200 to-zinc-600 bg-clip-text text-transparent">
@@ -1775,7 +1769,7 @@ export default function DigitalIndiaGSAPForm() {
                                     </h3>
                                     
                                     <p className="text-zinc-400 text-sm md:text-base leading-relaxed max-w-xl mx-auto mb-10 font-sans">
-                                        Thank you to the hundreds of teams who submitted their ideas! The registration and abstract pipeline is now officially closed. The organizing committee is currently shortlisting proposals.
+                                        Thank you to all the teams who submitted their ideas! The registration and abstract pipeline is now officially closed. The organizing committee is currently shortlisting proposals.
                                     </p>
 
                                     {/* Action Grid */}
