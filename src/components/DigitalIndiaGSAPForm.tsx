@@ -1743,8 +1743,8 @@ export default function DigitalIndiaGSAPForm() {
                     <div className="flex flex-col items-center">
                         {/* Metallic Header */}
                         <div className="text-center mb-12">
-                            <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tight text-white mb-4 bg-gradient-to-b from-white via-zinc-200 to-zinc-600 bg-clip-text text-transparent">
-                                REGISTRATION <span className="text-[#9dff00] font-light">CLOSED</span>
+                            <h2 className="text-3xl md:text-5xl font-light text-white tracking-tight mb-4">
+                                Registration <span className="text-[#9dff00] font-normal">Closed</span>
                             </h2>
                             <p className="text-zinc-400 text-sm font-light max-w-lg mx-auto">
                                 The initial stage abstract submissions for the Digital India Hackathon have completed.
