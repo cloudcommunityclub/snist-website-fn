@@ -5,7 +5,7 @@ import useSWR from 'swr'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
     Users, RefreshCw, Search, Download, ChevronLeft, ChevronRight, X,
-    CheckCircle, Clock, Terminal, Filter, AlertTriangle, ArrowLeft, Eye, Check, Image as ImageIcon
+    CheckCircle, Clock, Terminal, Filter, AlertTriangle, ArrowLeft, Eye, Check, Image as ImageIcon, Trash2
 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 
@@ -118,7 +118,9 @@ export default function DigitalIndiaAdminDashboard() {
     const [selectedScreenshot, setSelectedScreenshot] = useState<string | null>(null)
     const [verifyingId, setVerifyingId] = useState<string | null>(null)
     const [acceptingId, setAcceptingId] = useState<string | null>(null)
+    const [deletingId, setDeletingId] = useState<string | null>(null)
     const [activeSubTab, setActiveSubTab] = useState<'submissions' | 'accepted'>('submissions')
+    const [exportFilter, setExportFilter] = useState<'all' | 'pending' | 'verified'>('all')
     const router = useRouter()
 
     const params = new URLSearchParams({
@@ -202,18 +204,49 @@ export default function DigitalIndiaAdminDashboard() {
         }
     }
 
-    const handleExport = async () => {
+    const handleDelete = async (id: string, collection: 'submissions' | 'accepted') => {
+        if (!confirm('Are you sure you want to permanently delete this entry? This will also clean up related referral records. This action cannot be undone.')) {
+            return
+        }
+        setDeletingId(id)
+        try {
+            const res = await fetch(`/api/admin/digital-india/delete?id=${id}&collection=${collection}`, {
+                method: 'DELETE',
+            })
+            if (res.ok) {
+                mutate()
+                refreshStats()
+            } else {
+                const err = await res.json()
+                alert(err.message || 'Delete failed')
+            }
+        } catch {
+            alert('Delete failed. Please try again.')
+        } finally {
+            setDeletingId(null)
+        }
+    }
+
+    const handleExport = async (filter?: 'all' | 'pending' | 'verified') => {
+        const exportType = filter || exportFilter
         setDownloading(true)
         try {
-            const endpoint = activeSubTab === 'submissions'
+            const params = new URLSearchParams()
+            if (exportType === 'pending') params.set('verified', 'false')
+            else if (exportType === 'verified') params.set('verified', 'true')
+
+            const base = activeSubTab === 'submissions'
                 ? '/api/admin/digital-india/export'
                 : '/api/admin/digital-india/accepted-list/export'
+            const endpoint = params.toString() ? `${base}?${params.toString()}` : base
+
             const res = await fetch(endpoint)
             const blob = await res.blob()
             const url = URL.createObjectURL(blob)
             const a = document.createElement('a')
             a.href = url
-            a.download = `c3-digital-india-${activeSubTab}-${Date.now()}.csv`
+            const label = exportType === 'all' ? 'all' : `filtered-${exportType}`
+            a.download = `c3-digital-india-${activeSubTab}-${label}-${Date.now()}.csv`
             document.body.appendChild(a)
             a.click()
             document.body.removeChild(a)
@@ -360,14 +393,25 @@ export default function DigitalIndiaAdminDashboard() {
                             </select>
                         )}
 
-                        <button
-                            onClick={handleExport}
-                            disabled={downloading}
-                            className="flex items-center gap-2 px-3 py-2 rounded-lg border border-[#50fa7b]/30 text-[#50fa7b] hover:bg-[#50fa7b]/10 transition-colors text-sm font-mono disabled:opacity-50"
-                        >
-                            <Download size={14} />
-                            {downloading ? 'Exporting...' : 'Export CSV'}
-                        </button>
+                        <div className="flex items-center gap-1.5">
+                            <select
+                                value={exportFilter}
+                                onChange={e => setExportFilter(e.target.value as 'all' | 'pending' | 'verified')}
+                                className="bg-[#1e1f29] border border-[#6272a4]/30 rounded-lg px-2 py-2 text-xs text-[#f8f8f2] font-mono outline-none focus:border-[#bd93f9]/50"
+                            >
+                                <option value="all">All</option>
+                                <option value="pending">Pending Only</option>
+                                <option value="verified">Verified Only</option>
+                            </select>
+                            <button
+                                onClick={() => handleExport()}
+                                disabled={downloading}
+                                className="flex items-center gap-2 px-3 py-2 rounded-lg border border-[#50fa7b]/30 text-[#50fa7b] hover:bg-[#50fa7b]/10 transition-colors text-sm font-mono disabled:opacity-50"
+                            >
+                                <Download size={14} />
+                                {downloading ? 'Exporting...' : 'Export'}
+                            </button>
+                        </div>
                     </div>
 
                     {/* Table list */}
@@ -539,6 +583,18 @@ export default function DigitalIndiaAdminDashboard() {
                                                                     'Accept'
                                                                 )}
                                                             </button>
+                                                            <button
+                                                                onClick={() => handleDelete(sub._id, 'submissions')}
+                                                                disabled={deletingId === sub._id}
+                                                                className="px-3 py-1.5 rounded-md text-xs font-mono font-medium transition-colors flex items-center gap-1 border border-[#ff5555]/30 text-[#ff5555] hover:bg-[#ff5555]/10"
+                                                                title="Delete this entry permanently"
+                                                            >
+                                                                {deletingId === sub._id ? (
+                                                                    <RefreshCw size={12} className="animate-spin" />
+                                                                ) : (
+                                                                    <Trash2 size={12} />
+                                                                )}
+                                                            </button>
                                                         </div>
                                                     </td>
                                                     <td className="px-4 py-3 text-[#6272a4] font-mono text-xs">{formatDate(sub.createdAt)}</td>
@@ -546,7 +602,23 @@ export default function DigitalIndiaAdminDashboard() {
                                             ) : (
                                                 <>
                                                     <td className="px-4 py-3 text-[#8be9fd] font-mono text-xs">{sub.acceptedBy || 'Admin'}</td>
-                                                    <td className="px-4 py-3 text-[#6272a4] font-mono text-xs">{formatDate(sub.acceptedAt || sub.createdAt)}</td>
+                                                    <td className="px-4 py-3 text-[#6272a4] font-mono text-xs">
+                                                        <div className="flex items-center gap-2">
+                                                            <span>{formatDate(sub.acceptedAt || sub.createdAt)}</span>
+                                                            <button
+                                                                onClick={() => handleDelete(sub._id, 'accepted')}
+                                                                disabled={deletingId === sub._id}
+                                                                className="p-1.5 rounded-md text-xs font-mono font-medium transition-colors border border-[#ff5555]/30 text-[#ff5555] hover:bg-[#ff5555]/10"
+                                                                title="Delete this entry permanently"
+                                                            >
+                                                                {deletingId === sub._id ? (
+                                                                    <RefreshCw size={10} className="animate-spin" />
+                                                                ) : (
+                                                                    <Trash2 size={10} />
+                                                                )}
+                                                            </button>
+                                                        </div>
+                                                    </td>
                                                 </>
                                             )}
                                         </tr>

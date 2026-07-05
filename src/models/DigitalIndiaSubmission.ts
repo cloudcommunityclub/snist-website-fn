@@ -22,6 +22,11 @@ export interface IDigitalIndiaSubmission {
     referredByCode?: string
     referralPoints: number
     lastPointEarnedAt: Date
+    // Geo fields
+    latitude?: number
+    longitude?: number
+    submitterIP?: string
+    country?: string
 }
 
 const DigitalIndiaSubmissionSchema = new Schema({
@@ -51,6 +56,11 @@ const DigitalIndiaSubmissionSchema = new Schema({
     referredByCode: { type: String, uppercase: true, trim: true, index: true },
     referralPoints: { type: Number, default: 0, index: true },
     lastPointEarnedAt: { type: Date, default: Date.now, index: true },
+    // Geo fields
+    latitude: { type: Number },
+    longitude: { type: Number },
+    submitterIP: { type: String },
+    country: { type: String },
 })
 
 DigitalIndiaSubmissionSchema.pre('save', function () {

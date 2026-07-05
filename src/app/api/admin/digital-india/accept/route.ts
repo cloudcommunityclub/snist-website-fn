@@ -61,6 +61,11 @@ export async function POST(request: Request) {
             referralPoints: submission.referralPoints,
             lastPointEarnedAt:
                 submission.lastPointEarnedAt || submission.createdAt,
+            // Geo fields
+            latitude: submission.latitude,
+            longitude: submission.longitude,
+            submitterIP: submission.submitterIP,
+            country: submission.country,
             acceptedAt: new Date(),
             acceptedBy: 'Admin',
         })

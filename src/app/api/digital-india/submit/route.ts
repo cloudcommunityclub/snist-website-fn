@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server'
+import crypto from 'node:crypto'
 import dbConnect from '@/lib/db'
 import DigitalIndiaSubmission from '@/models/DigitalIndiaSubmission'
 import DigitalIndiaAccepted from '@/models/DigitalIndiaAccepted'
@@ -6,6 +7,24 @@ import DigitalIndiaReferral from '@/models/DigitalIndiaReferral'
 import { r2Client, R2_BUCKET_NAME, R2_PUBLIC_URL } from '@/lib/r2'
 import { PutObjectCommand } from '@aws-sdk/client-s3'
 import { escHtml, sendEmail } from '@/lib/mail'
+import { checkRateLimit } from '@/lib/rate-limit'
+import { getClientIP, checkGeoRestrictions } from '@/lib/geo'
+
+const IMAGE_MAGIC_BYTES: Record<string, Uint8Array> = {
+  'image/png': new Uint8Array([0x89, 0x50, 0x4E, 0x47]),
+  'image/jpeg': new Uint8Array([0xFF, 0xD8, 0xFF]),
+}
+
+function validateImageMagicBytes(buffer: Buffer): boolean {
+  for (const sig of Object.values(IMAGE_MAGIC_BYTES)) {
+    if (buffer.length >= sig.length && buffer.subarray(0, sig.length).equals(sig)) return true
+  }
+  const webpSig = Buffer.from('RIFF')
+  if (buffer.length >= 4 && buffer.subarray(0, 4).equals(webpSig)) {
+    if (buffer.length >= 12 && buffer.subarray(8, 12).toString() === 'WEBP') return true
+  }
+  return false
+}
 
 function escapeRegex(str: string): string {
   return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
@@ -31,6 +50,28 @@ async function generateUniqueReferralCode(): Promise<string> {
 }
 
 export async function POST(request: Request) {
+  const clientIP = getClientIP(request)
+  console.log(`[DigitalIndia Submit] IP=${clientIP} UA=${request.headers.get('user-agent') || 'unknown'}`)
+
+  const rate = checkRateLimit(clientIP, { maxRequests: 5, windowMs: 15 * 60 * 1000 })
+  if (!rate.allowed) {
+    console.warn(`[DigitalIndia Submit] Rate limit exceeded for IP=${clientIP}`)
+    return NextResponse.json(
+      { success: false, message: 'Too many submissions. Please try again later.' },
+      { status: 429 }
+    )
+  }
+
+  // Geo-restriction check (India only, no VPN)
+  const geoCheck = await checkGeoRestrictions(request)
+  if (!geoCheck.allowed) {
+    console.warn(`[DigitalIndia Submit] Geo blocked IP=${clientIP} reason=${geoCheck.reason}`)
+    return NextResponse.json(
+      { success: false, message: geoCheck.reason },
+      { status: 403 }
+    )
+  }
+
   try {
     const formData = await request.formData()
 
@@ -48,6 +89,25 @@ export async function POST(request: Request) {
     const teamSize = formData.get('teamSize') as string
     const teamMembersJson = formData.get('teamMembers') as string
     const referredByRaw = formData.get('referredBy') as string | null
+
+    // Geolocation from browser
+    const latitude = formData.get('latitude') as string | null
+    const longitude = formData.get('longitude') as string | null
+
+    if (!latitude || !longitude) {
+      return NextResponse.json(
+        { success: false, message: 'Location access is required. Please enable location services and reload.' },
+        { status: 400 }
+      )
+    }
+    const parsedLat = parseFloat(latitude)
+    const parsedLng = parseFloat(longitude)
+    if (isNaN(parsedLat) || isNaN(parsedLng) || parsedLat < -90 || parsedLat > 90 || parsedLng < -180 || parsedLng > 180) {
+      return NextResponse.json(
+        { success: false, message: 'Invalid location coordinates.' },
+        { status: 400 }
+      )
+    }
 
     if (!name || !college || !email || !phone || !idea || !utrId || !screenshot || !teamName || !domain || !teamSize) {
       return NextResponse.json(
@@ -143,8 +203,15 @@ export async function POST(request: Request) {
     const bytes = await screenshot.arrayBuffer()
     const buffer = Buffer.from(bytes)
 
+    if (!validateImageMagicBytes(buffer)) {
+      return NextResponse.json(
+        { success: false, message: 'Invalid file type. Only PNG, JPG, and WEBP images are allowed.' },
+        { status: 400 }
+      )
+    }
+
     const fileExtension = screenshot.name.split('.').pop() || 'png'
-    const randomString = Math.random().toString(36).substring(2, 8)
+    const randomString = crypto.randomBytes(3).toString('hex')
     const key = `digital-india/screenshot-${Date.now()}-${randomString}.${fileExtension}`
 
     await r2Client.send(
@@ -190,6 +257,11 @@ export async function POST(request: Request) {
       referredByCode: referredByCode || undefined,
       referralPoints: 0,
       lastPointEarnedAt: new Date(),
+      // Geo data
+      latitude: parsedLat,
+      longitude: parsedLng,
+      submitterIP: clientIP,
+      country: geoCheck.country || null,
     })
 
     await newSubmission.save()
