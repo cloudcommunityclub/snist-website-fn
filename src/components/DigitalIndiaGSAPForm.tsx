@@ -631,7 +631,7 @@ export default function DigitalIndiaGSAPForm() {
         if (isFirstRender.current) {
             isFirstRender.current = false
         }
-    }, [activeStep, isSubmitted, isDesktop])
+    }, [activeStep, isSubmitted, isDesktop, REGISTRATIONS_CLOSED])
 
     const validateStep1 = (): boolean => {
         const newErrors: FormErrors = {}
