@@ -1758,6 +1758,19 @@ export default function DigitalIndiaGSAPForm() {
                                         Thank you to all the teams who submitted their ideas! The registration and abstract pipeline is now officially closed. The organizing committee is currently shortlisting proposals.
                                     </p>
 
+                                    {/* Referral Winner Announcement */}
+                                    <div className="bg-[#9dff00]/5 border border-[#9dff00]/10 rounded-2xl p-5 max-w-lg mx-auto mb-10 text-left font-sans relative overflow-hidden group">
+                                        <div className="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity">
+                                            <Trophy className="w-16 h-16 text-[#9dff00]" />
+                                        </div>
+                                        <span className="text-[10px] text-[#9dff00] font-mono uppercase tracking-widest block mb-2 font-bold">
+                                            ★ Referral Winner Announcement
+                                        </span>
+                                        <p className="text-zinc-300 text-xs sm:text-sm leading-relaxed relative z-10">
+                                            Although no team reached the threshold of 10 successful referrals, <strong className="text-white font-semibold">Team 404 girls</strong> secured the 1st position on the leaderboard and is officially awarded the free hackathon passes. Congratulations!
+                                        </p>
+                                    </div>
+
                                     {/* Action Grid */}
                                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-lg mx-auto mb-10 text-left font-mono">
                                         <div className="bg-[#121214]/80 border border-zinc-800/50 p-5 rounded-2xl flex flex-col justify-between hover:border-zinc-700/60 transition-colors">
