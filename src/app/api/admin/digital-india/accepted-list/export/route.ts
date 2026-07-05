@@ -24,18 +24,26 @@ export async function GET(request: Request) {
             .lean()
 
         const headers = [
-            'Team Name', 'Leader Name', 'Email', 'Phone', 'College',
-            'Domain Track', 'Team Size', 'Team Members',
+            'Team Name', 'Leader Name', 'Leader Email', 'Leader Phone', 'College',
+            'Domain Track', 'Team Size',
+            'Member 2 Name', 'Member 2 Email',
+            'Member 3 Name', 'Member 3 Email',
+            'Member 4 Name', 'Member 4 Email',
             'Idea Description', 'UTR ID', 'Payment Screenshot URL',
             'Accepted At', 'Accepted By', 'Registered At',
-            'Referral Code', 'Referred By', 'Referral Points',
+            'Referral Code', 'Referred By Code', 'Referral Points',
             'Latitude', 'Longitude', 'Submitter IP', 'Country',
         ]
 
         const rows = submissions.map(s => [
             s.teamName ?? '', s.name, s.email, s.phone, s.college,
             s.domain ?? '', s.teamSize ?? 1,
-            s.teamMembers ? s.teamMembers.map((m: any) => `${m.name} (${m.email})`).join('; ') : '',
+            s.teamMembers && s.teamMembers[0] ? s.teamMembers[0].name : '',
+            s.teamMembers && s.teamMembers[0] ? s.teamMembers[0].email : '',
+            s.teamMembers && s.teamMembers[1] ? s.teamMembers[1].name : '',
+            s.teamMembers && s.teamMembers[1] ? s.teamMembers[1].email : '',
+            s.teamMembers && s.teamMembers[2] ? s.teamMembers[2].name : '',
+            s.teamMembers && s.teamMembers[2] ? s.teamMembers[2].email : '',
             s.idea, s.utrId, s.paymentScreenshotUrl,
             s.acceptedAt ? new Date(s.acceptedAt).toISOString() : '',
             s.acceptedBy ?? '',

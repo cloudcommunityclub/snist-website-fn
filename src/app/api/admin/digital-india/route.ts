@@ -35,6 +35,13 @@ export async function GET(request: Request) {
                 { email: searchRegex },
                 { utrId: searchRegex },
                 { college: searchRegex },
+                { teamName: searchRegex },
+                { domain: searchRegex },
+                { phone: searchRegex },
+                { referralCode: searchRegex },
+                { referredByCode: searchRegex },
+                { 'teamMembers.name': searchRegex },
+                { 'teamMembers.email': searchRegex },
             ]
         }
         if (verified === 'true') filter.paymentVerified = true

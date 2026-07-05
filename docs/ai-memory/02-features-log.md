@@ -26,8 +26,9 @@ This log tracks all active user-facing and backend features implemented in the C
 ## 4. Secure Admin Console Portal (`/admin`)
 - **Cookie Session Authorization**: Password-protected login flow (`/admin/login`) verifying credentials on the server and generating HTTP-only JWT cookies.
 - **Dynamic Metrics Charts**: Overview of registrations, department ratios, and year-wise breakdown on the dashboard.
-- **CSV Data Exporter**: Administrative routes to export membership logs, ideathon registrations, and coding challenges as clean `.csv` tables.
-- **Search & Filter Control**: Interactive administrative filters to query registrations by department, email, or submission status.
+- **CSV Data Exporter**: Administrative routes to export membership logs, ideathon registrations, and coding challenges as clean `.csv` tables. Spreads team members 1 to 4 with their names and emails into dedicated, distinct columns for simpler spreadsheet data sorting.
+- **Search & Filter Control**: Interactive administrative filters to query registrations by department, email, or submission status. The Digital India search filter queries across all fields, including teamName, domain, phone, referral codes, and individual team member names and emails.
+- **Rejection Workflow**: Integrated a 'Reject' flow enabling admins to reject registrations directly from the dashboard, cleaning up associated referral entries, prompting for custom rejection reasons, and sending rose-themed SMTP notification emails to the team leader and all registered team members.
 
 ## 5. GSAP-Animated Digital India Registration (`/events/digitalindia`)
 - **Luxury Light-Silver Card Layout**: Apple-style horizontal slider form cards (`DigitalIndiaGSAPForm.tsx`) with vertical completed tabs showing checked profiles.
