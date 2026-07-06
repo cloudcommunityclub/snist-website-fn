@@ -1,0 +1,1698 @@
+[
+    {
+        "routeNo":  1,
+        "routeManager":  "Mr. Someshwar (name partly cut off)",
+        "phone":  "8096600692",
+        "destination":  "JNTU",
+        "stops":  [
+                      {
+                          "stopOrder":  1,
+                          "boardingPoint":  "JNTU",
+                          "pickupTime":  "7.00 am",
+                          "latitude":  17.4946328,
+                          "longitude":  78.3953281
+                      }
+                  ]
+    },
+    {
+        "routeNo":  2,
+        "routeManager":  "Mr. N Yadagiri",
+        "phone":  "9951532014",
+        "destination":  "BOWENPALLY PS",
+        "stops":  [
+                      {
+                          "stopOrder":  1,
+                          "boardingPoint":  "KUKATPALLY VV NAGAR",
+                          "pickupTime":  "7.00 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      },
+                      {
+                          "stopOrder":  2,
+                          "boardingPoint":  "KUKATPALLY",
+                          "pickupTime":  "7.10 am",
+                          "latitude":  17.4930841,
+                          "longitude":  78.4054408
+                      },
+                      {
+                          "stopOrder":  3,
+                          "boardingPoint":  "KUKATPALLY BJP OFFICE",
+                          "pickupTime":  "7.10 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      },
+                      {
+                          "stopOrder":  4,
+                          "boardingPoint":  "MOOSAPET Y JUNCTION",
+                          "pickupTime":  "7.10 am",
+                          "latitude":  17.4699702,
+                          "longitude":  78.4380293
+                      },
+                      {
+                          "stopOrder":  5,
+                          "boardingPoint":  "BALANAGAR X ROAD",
+                          "pickupTime":  "7.15 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      },
+                      {
+                          "stopOrder":  6,
+                          "boardingPoint":  "BALANAGAR FEROZGUDA",
+                          "pickupTime":  "7.20 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      },
+                      {
+                          "stopOrder":  7,
+                          "boardingPoint":  "BOWENPALLY PS",
+                          "pickupTime":  "7.20 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      }
+                  ]
+    },
+    {
+        "routeNo":  3,
+        "routeManager":  "Mr. Bala Siddulu",
+        "phone":  "8919121565",
+        "destination":  "Rampally X Road",
+        "stops":  [
+                      {
+                          "stopOrder":  1,
+                          "boardingPoint":  "BOWENPALLY ASHOK GARDEN",
+                          "pickupTime":  "7.25 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      },
+                      {
+                          "stopOrder":  2,
+                          "boardingPoint":  "BOWENPALLY MARKET",
+                          "pickupTime":  "7.25 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      },
+                      {
+                          "stopOrder":  3,
+                          "boardingPoint":  "TRIMULGHEERY LIC OFFICE",
+                          "pickupTime":  "7.30 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      },
+                      {
+                          "stopOrder":  4,
+                          "boardingPoint":  "NEREDMET X ROAD",
+                          "pickupTime":  "7.45 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      },
+                      {
+                          "stopOrder":  5,
+                          "boardingPoint":  "VAYUPURI",
+                          "pickupTime":  "7.45 am",
+                          "latitude":  17.4852432,
+                          "longitude":  78.5436649
+                      },
+                      {
+                          "stopOrder":  6,
+                          "boardingPoint":  "ECIL ETDC",
+                          "pickupTime":  "7.55 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      },
+                      {
+                          "stopOrder":  7,
+                          "boardingPoint":  "Rampally X Road",
+                          "pickupTime":  "8.15 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      }
+                  ]
+    },
+    {
+        "routeNo":  4,
+        "routeManager":  "Mr. R Kalli Srinivasa Rao",
+        "phone":  "8008557558",
+        "destination":  "TARNAKA RTC PUSHPAK",
+        "stops":  [
+                      {
+                          "stopOrder":  1,
+                          "boardingPoint":  "JUBILEE HILLS CHECKPOST",
+                          "pickupTime":  "7.15 am",
+                          "latitude":  17.4281969,
+                          "longitude":  78.4137145
+                      },
+                      {
+                          "stopOrder":  2,
+                          "boardingPoint":  "KRISHNA NAGAR",
+                          "pickupTime":  "7.15 am",
+                          "latitude":  17.4330523,
+                          "longitude":  78.4246746
+                      },
+                      {
+                          "stopOrder":  3,
+                          "boardingPoint":  "SRINAGAR COLONY",
+                          "pickupTime":  "7.20 am",
+                          "latitude":  17.431231,
+                          "longitude":  78.4337951
+                      },
+                      {
+                          "stopOrder":  4,
+                          "boardingPoint":  "PULLA REDDY SWEET HOUSE",
+                          "pickupTime":  "7.20 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      },
+                      {
+                          "stopOrder":  5,
+                          "boardingPoint":  "BEGUMPET HPS",
+                          "pickupTime":  "7.25 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      },
+                      {
+                          "stopOrder":  6,
+                          "boardingPoint":  "BEGUMPET PRAKASH NAGAR",
+                          "pickupTime":  "7.25 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      },
+                      {
+                          "stopOrder":  7,
+                          "boardingPoint":  "BEGUMPET RASOOLPURA",
+                          "pickupTime":  "7.30 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      },
+                      {
+                          "stopOrder":  8,
+                          "boardingPoint":  "PATNY",
+                          "pickupTime":  "7.30 am",
+                          "latitude":  17.4397016,
+                          "longitude":  78.4947847
+                      },
+                      {
+                          "stopOrder":  9,
+                          "boardingPoint":  "TARNAKA RTC PUSHPAK",
+                          "pickupTime":  "7.45 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      }
+                  ]
+    },
+    {
+        "routeNo":  5,
+        "routeManager":  "Mr Sangameshwar",
+        "phone":  "9441462795",
+        "destination":  "TARNAKA WATER TANK",
+        "stops":  [
+                      {
+                          "stopOrder":  1,
+                          "boardingPoint":  "MOTI NAGAR",
+                          "pickupTime":  "7.05 am",
+                          "latitude":  17.4508069,
+                          "longitude":  78.422242
+                      },
+                      {
+                          "stopOrder":  2,
+                          "boardingPoint":  "AMEERPET",
+                          "pickupTime":  "7.20 am",
+                          "latitude":  17.4375012,
+                          "longitude":  78.4482505
+                      },
+                      {
+                          "stopOrder":  3,
+                          "boardingPoint":  "GREENLANDS AMEERPET",
+                          "pickupTime":  "7.20 am",
+                          "latitude":  17.4333179,
+                          "longitude":  78.4559618
+                      },
+                      {
+                          "stopOrder":  4,
+                          "boardingPoint":  "BEGUMPET LIFESTYLE",
+                          "pickupTime":  "7.20 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      },
+                      {
+                          "stopOrder":  5,
+                          "boardingPoint":  "ST ANN\u0027S HIGH SCHOOL",
+                          "pickupTime":  "7.35 am",
+                          "latitude":  17.3618314,
+                          "longitude":  78.5297172
+                      },
+                      {
+                          "stopOrder":  6,
+                          "boardingPoint":  "SANGEETH",
+                          "pickupTime":  "7.35 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      },
+                      {
+                          "stopOrder":  7,
+                          "boardingPoint":  "ALUGADDA BAVI",
+                          "pickupTime":  "7.35 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      },
+                      {
+                          "stopOrder":  8,
+                          "boardingPoint":  "METTUGUDA",
+                          "pickupTime":  "7.35 am",
+                          "latitude":  17.4355036,
+                          "longitude":  78.5195573
+                      },
+                      {
+                          "stopOrder":  9,
+                          "boardingPoint":  "TARNAKA WATER TANK",
+                          "pickupTime":  "7.40 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      }
+                  ]
+    },
+    {
+        "routeNo":  6,
+        "routeManager":  "Mr. MD Muneer",
+        "phone":  "9985044431",
+        "destination":  "NACHARAM ESI HOSPITAL",
+        "stops":  [
+                      {
+                          "stopOrder":  1,
+                          "boardingPoint":  "ERRAGADDA",
+                          "pickupTime":  "7.15 am",
+                          "latitude":  17.4487999,
+                          "longitude":  78.4356074
+                      },
+                      {
+                          "stopOrder":  2,
+                          "boardingPoint":  "ESI - ERRAGADDA",
+                          "pickupTime":  "7.15 am",
+                          "latitude":  17.447636,
+                          "longitude":  78.4399693
+                      },
+                      {
+                          "stopOrder":  3,
+                          "boardingPoint":  "SR NAGAR",
+                          "pickupTime":  "7.20 am",
+                          "latitude":  17.4452312,
+                          "longitude":  78.4449117
+                      },
+                      {
+                          "stopOrder":  4,
+                          "boardingPoint":  "NACHARAM VAIJAYANTHI",
+                          "pickupTime":  "7.50 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      },
+                      {
+                          "stopOrder":  5,
+                          "boardingPoint":  "NACHARAM ESI HOSPITAL",
+                          "pickupTime":  "7.50 am",
+                          "latitude":  17.4316484,
+                          "longitude":  78.5495854
+                      }
+                  ]
+    },
+    {
+        "routeNo":  7,
+        "routeManager":  "Mr. A Raghu",
+        "phone":  "9440125371",
+        "destination":  "AS RAO NAGAR",
+        "stops":  [
+                      {
+                          "stopOrder":  1,
+                          "boardingPoint":  "KARKHANA",
+                          "pickupTime":  "7.30 am",
+                          "latitude":  17.4732138,
+                          "longitude":  78.5115017
+                      },
+                      {
+                          "stopOrder":  2,
+                          "boardingPoint":  "LOTHKUNTA",
+                          "pickupTime":  "7.35 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      },
+                      {
+                          "stopOrder":  3,
+                          "boardingPoint":  "AS RAO NAGAR SARADA",
+                          "pickupTime":  "7.50 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      },
+                      {
+                          "stopOrder":  4,
+                          "boardingPoint":  "AS RAO NAGAR",
+                          "pickupTime":  "7.50 am",
+                          "latitude":  17.4798689,
+                          "longitude":  78.5509653
+                      }
+                  ]
+    },
+    {
+        "routeNo":  8,
+        "routeManager":  "Mr. Banda Venkatesh",
+        "phone":  "9966254355",
+        "destination":  "Lalbaazar",
+        "stops":  [
+                      {
+                          "stopOrder":  1,
+                          "boardingPoint":  "KOMPALLY",
+                          "pickupTime":  "7.05 am",
+                          "latitude":  17.5398444,
+                          "longitude":  78.5000154
+                      },
+                      {
+                          "stopOrder":  2,
+                          "boardingPoint":  "KOMPALLY VIJETHA",
+                          "pickupTime":  "7.05 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      },
+                      {
+                          "stopOrder":  3,
+                          "boardingPoint":  "KOMPALLY JEEDIMETLA X ROAD",
+                          "pickupTime":  "7.10 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      },
+                      {
+                          "stopOrder":  4,
+                          "boardingPoint":  "DAIRY FARM ROAD",
+                          "pickupTime":  "7.25 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      },
+                      {
+                          "stopOrder":  5,
+                          "boardingPoint":  "Lalbaazar",
+                          "pickupTime":  "7.25 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      }
+                  ]
+    },
+    {
+        "routeNo":  9,
+        "routeManager":  "Mr. Lova Raju",
+        "phone":  "8096183508",
+        "destination":  "ALWAL MORE SUPERMARKET",
+        "stops":  [
+                      {
+                          "stopOrder":  1,
+                          "boardingPoint":  "SUCHITRA X ROAD",
+                          "pickupTime":  "7.10 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      },
+                      {
+                          "stopOrder":  2,
+                          "boardingPoint":  "ALWAL LOYOLA COLLEGE",
+                          "pickupTime":  "7.15 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      },
+                      {
+                          "stopOrder":  3,
+                          "boardingPoint":  "ALWAL NARAYANA COLLEGE",
+                          "pickupTime":  "7.15 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      },
+                      {
+                          "stopOrder":  4,
+                          "boardingPoint":  "ALWAL MORE SUPERMARKET",
+                          "pickupTime":  "7.16 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      }
+                  ]
+    },
+    {
+        "routeNo":  10,
+        "routeManager":  "Mr. Chandra Sekar Reddy",
+        "phone":  "9848023227",
+        "destination":  "RAMAKRISHNAPURAM",
+        "stops":  [
+                      {
+                          "stopOrder":  1,
+                          "boardingPoint":  "ALWAL IG STATUE",
+                          "pickupTime":  "7.20 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      },
+                      {
+                          "stopOrder":  2,
+                          "boardingPoint":  "ALWAL",
+                          "pickupTime":  "7.25 am",
+                          "latitude":  17.5022292,
+                          "longitude":  78.5088584
+                      },
+                      {
+                          "stopOrder":  3,
+                          "boardingPoint":  "RK PURAM (HANUMAN TEMPLE)",
+                          "pickupTime":  "7.40 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      },
+                      {
+                          "stopOrder":  4,
+                          "boardingPoint":  "RAMAKRISHNAPURAM",
+                          "pickupTime":  "7.40 am",
+                          "latitude":  17.4749782,
+                          "longitude":  78.5376874
+                      }
+                  ]
+    },
+    {
+        "routeNo":  11,
+        "routeManager":  "Mr. ___areem (name partly cut off)",
+        "phone":  "9866861824",
+        "destination":  "HIMAYATHNAGAR",
+        "stops":  [
+                      {
+                          "stopOrder":  1,
+                          "boardingPoint":  "NANAL NAGAR",
+                          "pickupTime":  "7.10 am",
+                          "latitude":  17.3970708,
+                          "longitude":  78.4428239
+                      },
+                      {
+                          "stopOrder":  2,
+                          "boardingPoint":  "MEHDIPATNAM",
+                          "pickupTime":  "7.10 am",
+                          "latitude":  17.3942627,
+                          "longitude":  78.4342514
+                      },
+                      {
+                          "stopOrder":  3,
+                          "boardingPoint":  "SAROJINIDEVI HOSPITAL",
+                          "pickupTime":  "7.15 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      },
+                      {
+                          "stopOrder":  4,
+                          "boardingPoint":  "NMDC",
+                          "pickupTime":  "7.15 am",
+                          "latitude":  17.3987603,
+                          "longitude":  78.4494264
+                      },
+                      {
+                          "stopOrder":  5,
+                          "boardingPoint":  "MAHAVEER HOSPITAL",
+                          "pickupTime":  "7.15 am",
+                          "latitude":  17.4486471,
+                          "longitude":  78.4849052
+                      },
+                      {
+                          "stopOrder":  6,
+                          "boardingPoint":  "LAKDIKAPUL",
+                          "pickupTime":  "7.20 am",
+                          "latitude":  17.4031045,
+                          "longitude":  78.4658813
+                      },
+                      {
+                          "stopOrder":  7,
+                          "boardingPoint":  "LIBERTY",
+                          "pickupTime":  "7.20 am",
+                          "latitude":  17.4071019,
+                          "longitude":  78.4762585
+                      },
+                      {
+                          "stopOrder":  8,
+                          "boardingPoint":  "HIMAYATHNAGAR",
+                          "pickupTime":  "7.20 am",
+                          "latitude":  17.4022136,
+                          "longitude":  78.4836242
+                      }
+                  ]
+    },
+    {
+        "routeNo":  12,
+        "routeManager":  "Mr. M Ashok",
+        "phone":  "9346962531",
+        "destination":  "VIDYANAGAR",
+        "stops":  [
+                      {
+                          "stopOrder":  1,
+                          "boardingPoint":  "CHADERGHAT TRPS",
+                          "pickupTime":  "7.15 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      },
+                      {
+                          "stopOrder":  2,
+                          "boardingPoint":  "TOURIST HOTEL",
+                          "pickupTime":  "7.15 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      },
+                      {
+                          "stopOrder":  3,
+                          "boardingPoint":  "BARKATHPURA CHAMMAN",
+                          "pickupTime":  "7.20 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      },
+                      {
+                          "stopOrder":  4,
+                          "boardingPoint":  "BARKATPURA X ROAD",
+                          "pickupTime":  "7.20 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      },
+                      {
+                          "stopOrder":  5,
+                          "boardingPoint":  "FEVER HOSPITAL",
+                          "pickupTime":  "7.20 am",
+                          "latitude":  17.3954325,
+                          "longitude":  78.5024824
+                      },
+                      {
+                          "stopOrder":  6,
+                          "boardingPoint":  "NALLAKUNTA",
+                          "pickupTime":  "7.20 am",
+                          "latitude":  17.3975005,
+                          "longitude":  78.50557
+                      },
+                      {
+                          "stopOrder":  7,
+                          "boardingPoint":  "SHANKARMUTT",
+                          "pickupTime":  "7.20 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      },
+                      {
+                          "stopOrder":  8,
+                          "boardingPoint":  "VIDYANAGAR",
+                          "pickupTime":  "7.25 am",
+                          "latitude":  17.4019354,
+                          "longitude":  78.5095814
+                      }
+                  ]
+    },
+    {
+        "routeNo":  13,
+        "routeManager":  "Mr. Jeevan Kumar",
+        "phone":  "9856117737",
+        "destination":  "CHILKALGUDA X ROAD",
+        "stops":  [
+                      {
+                          "stopOrder":  1,
+                          "boardingPoint":  "INDIRA PARK",
+                          "pickupTime":  "7.15 am",
+                          "latitude":  17.4147123,
+                          "longitude":  78.4831118
+                      },
+                      {
+                          "stopOrder":  2,
+                          "boardingPoint":  "ASHOK NAGAR X ROAD",
+                          "pickupTime":  "7.15 am",
+                          "latitude":  17.4089749,
+                          "longitude":  78.4898639
+                      },
+                      {
+                          "stopOrder":  3,
+                          "boardingPoint":  "RTC X ROAD",
+                          "pickupTime":  "7.15 am",
+                          "latitude":  17.4069869,
+                          "longitude":  78.4965166
+                      },
+                      {
+                          "stopOrder":  4,
+                          "boardingPoint":  "GOLKONDA X ROAD",
+                          "pickupTime":  "7.20 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      },
+                      {
+                          "stopOrder":  5,
+                          "boardingPoint":  "MUSHEERABAD RAJA DELUX",
+                          "pickupTime":  "7.20 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      },
+                      {
+                          "stopOrder":  6,
+                          "boardingPoint":  "GANDHI HOSPITAL",
+                          "pickupTime":  "7.25 am",
+                          "latitude":  17.4231228,
+                          "longitude":  78.5034539
+                      },
+                      {
+                          "stopOrder":  7,
+                          "boardingPoint":  "MUSHEERABAD X ROAD",
+                          "pickupTime":  "7.25 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      },
+                      {
+                          "stopOrder":  8,
+                          "boardingPoint":  "CHILKALGUDA X ROAD",
+                          "pickupTime":  "7.30 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      }
+                  ]
+    },
+    {
+        "routeNo":  14,
+        "routeManager":  "Mr. Jampanna",
+        "phone":  "9573633383",
+        "destination":  "COMMERCIAL TAX COLONY(NAGOLE)",
+        "stops":  [
+                      {
+                          "stopOrder":  1,
+                          "boardingPoint":  "MOOSARAMBAGH TV TOWER",
+                          "pickupTime":  "7.20 am",
+                          "latitude":  17.3696562,
+                          "longitude":  78.516472
+                      },
+                      {
+                          "stopOrder":  2,
+                          "boardingPoint":  "DILSUKHNAGAR",
+                          "pickupTime":  "7.20 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      },
+                      {
+                          "stopOrder":  3,
+                          "boardingPoint":  "CHAITANYAPURI",
+                          "pickupTime":  "7.25 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      },
+                      {
+                          "stopOrder":  4,
+                          "boardingPoint":  "HP PETROL(NAGOLE)",
+                          "pickupTime":  "7.30 am",
+                          "latitude":  17.3721697,
+                          "longitude":  78.5430879
+                      },
+                      {
+                          "stopOrder":  5,
+                          "boardingPoint":  "COMMERCIAL TAX COLONY(NAGOLE)",
+                          "pickupTime":  "7.35 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      }
+                  ]
+    },
+    {
+        "routeNo":  15,
+        "routeManager":  "Mr. N Srinivas",
+        "phone":  "9951142435",
+        "destination":  "LB NAGAR X ROAD",
+        "stops":  [
+                      {
+                          "stopOrder":  1,
+                          "boardingPoint":  "DILSUKHNAGAR",
+                          "pickupTime":  "7.20 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      },
+                      {
+                          "stopOrder":  2,
+                          "boardingPoint":  "KOTHAPET",
+                          "pickupTime":  "7.30 am",
+                          "latitude":  17.3732599,
+                          "longitude":  78.5414597
+                      },
+                      {
+                          "stopOrder":  3,
+                          "boardingPoint":  "ASHTALAKSHMI ARCH",
+                          "pickupTime":  "7.30 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      },
+                      {
+                          "stopOrder":  4,
+                          "boardingPoint":  "RR COURT",
+                          "pickupTime":  "7.35 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      },
+                      {
+                          "stopOrder":  5,
+                          "boardingPoint":  "LB NAGAR X ROAD",
+                          "pickupTime":  "7.40 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      }
+                  ]
+    },
+    {
+        "routeNo":  16,
+        "routeManager":  "Mr. M Venkanna",
+        "phone":  "9440764371",
+        "destination":  "PEERZADIGUDA KAMMAN",
+        "stops":  [
+                      {
+                          "stopOrder":  1,
+                          "boardingPoint":  "KAMINENI HOSPITAL",
+                          "pickupTime":  "7.40 am",
+                          "latitude":  17.3516371,
+                          "longitude":  78.5561652
+                      },
+                      {
+                          "stopOrder":  2,
+                          "boardingPoint":  "ALKAPURI ROCK TOWN",
+                          "pickupTime":  "7.40 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      },
+                      {
+                          "stopOrder":  3,
+                          "boardingPoint":  "ALKAPURI",
+                          "pickupTime":  "7.40 am",
+                          "latitude":  17.3662342,
+                          "longitude":  78.5549781
+                      },
+                      {
+                          "stopOrder":  4,
+                          "boardingPoint":  "NAGOLE X ROAD",
+                          "pickupTime":  "7.45 am",
+                          "latitude":  17.3774867,
+                          "longitude":  78.5577208
+                      },
+                      {
+                          "stopOrder":  5,
+                          "boardingPoint":  "PEERZADIGUDA KAMMAN",
+                          "pickupTime":  "8.00 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      }
+                  ]
+    },
+    {
+        "routeNo":  17,
+        "routeManager":  "Mr. Purnachander",
+        "phone":  "8331912526",
+        "destination":  "NAGOLE BANDLAGUDA",
+        "stops":  [
+                      {
+                          "stopOrder":  1,
+                          "boardingPoint":  "NAGOLE BANDLAGUDA",
+                          "pickupTime":  "7.50 am",
+                          "latitude":  17.3721923,
+                          "longitude":  78.5656193
+                      }
+                  ]
+    },
+    {
+        "routeNo":  18,
+        "routeManager":  "Mr. M Ramesh",
+        "phone":  "9391367071",
+        "destination":  "SAGAR X ROAD",
+        "stops":  [
+                      {
+                          "stopOrder":  1,
+                          "boardingPoint":  "IS SADAN",
+                          "pickupTime":  "7.15 am",
+                          "latitude":  17.3516605,
+                          "longitude":  78.5160755
+                      },
+                      {
+                          "stopOrder":  2,
+                          "boardingPoint":  "CHAMPAPET",
+                          "pickupTime":  "7.20 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      },
+                      {
+                          "stopOrder":  3,
+                          "boardingPoint":  "KARMANGHAT",
+                          "pickupTime":  "7.20 am",
+                          "latitude":  17.3410061,
+                          "longitude":  78.5329747
+                      },
+                      {
+                          "stopOrder":  4,
+                          "boardingPoint":  "KARMANGHAT BAIRAMALGUDA",
+                          "pickupTime":  "7.25 am",
+                          "latitude":  17.3439132,
+                          "longitude":  78.5366913
+                      },
+                      {
+                          "stopOrder":  5,
+                          "boardingPoint":  "SAGAR X ROAD",
+                          "pickupTime":  "7.25 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      }
+                  ]
+    },
+    {
+        "routeNo":  19,
+        "routeManager":  "Mr. K Ravi",
+        "phone":  "9889185094",
+        "destination":  "MANDA MALLAMA FUNCTION HALL",
+        "stops":  [
+                      {
+                          "stopOrder":  1,
+                          "boardingPoint":  "BALAPUR X ROAD",
+                          "pickupTime":  "7.10 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      },
+                      {
+                          "stopOrder":  2,
+                          "boardingPoint":  "MIDHANI X ROAD",
+                          "pickupTime":  "7.10 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      },
+                      {
+                          "stopOrder":  3,
+                          "boardingPoint":  "OWAISI HOSPITAL",
+                          "pickupTime":  "7.15 am",
+                          "latitude":  17.340848,
+                          "longitude":  78.5067444
+                      },
+                      {
+                          "stopOrder":  4,
+                          "boardingPoint":  "MANDA MALLAMA FUNCTION HALL",
+                          "pickupTime":  "7.20 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      }
+                  ]
+    },
+    {
+        "routeNo":  20,
+        "routeManager":  "Mr. Kola Yakanna",
+        "phone":  "9963683830",
+        "destination":  "HAYATHNAGAR BUS STAND TURNING",
+        "stops":  [
+                      {
+                          "stopOrder":  1,
+                          "boardingPoint":  "HASTINAPURAM OMKAR NAGAR",
+                          "pickupTime":  "7.30 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      },
+                      {
+                          "stopOrder":  2,
+                          "boardingPoint":  "HASTINAPURAM",
+                          "pickupTime":  "7.30 am",
+                          "latitude":  17.3291354,
+                          "longitude":  78.5542145
+                      },
+                      {
+                          "stopOrder":  3,
+                          "boardingPoint":  "B N REDDY NAGAR",
+                          "pickupTime":  "7.35 am",
+                          "latitude":  17.321914,
+                          "longitude":  78.5597937
+                      },
+                      {
+                          "stopOrder":  4,
+                          "boardingPoint":  "BHAGYALATHA",
+                          "pickupTime":  "7.40 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      },
+                      {
+                          "stopOrder":  5,
+                          "boardingPoint":  "HAYATHNAGAR BUS STAND TURNING",
+                          "pickupTime":  "7.50 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      }
+                  ]
+    },
+    {
+        "routeNo":  21,
+        "routeManager":  "Mr. Kranti Kumar",
+        "phone":  "9908298701",
+        "destination":  "AUTONAGAR RAJADHANI",
+        "stops":  [
+                      {
+                          "stopOrder":  1,
+                          "boardingPoint":  "NGO\u0027S COLONY",
+                          "pickupTime":  "7.20 am",
+                          "latitude":  17.3234535,
+                          "longitude":  78.5653346
+                      },
+                      {
+                          "stopOrder":  2,
+                          "boardingPoint":  "VANASTHALIPURAM",
+                          "pickupTime":  "7.25 am",
+                          "latitude":  17.3303179,
+                          "longitude":  78.568278
+                      },
+                      {
+                          "stopOrder":  3,
+                          "boardingPoint":  "PANAMA GODOWN",
+                          "pickupTime":  "7.35 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      },
+                      {
+                          "stopOrder":  4,
+                          "boardingPoint":  "AUTONAGAR SUSHMA",
+                          "pickupTime":  "7.40 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      },
+                      {
+                          "stopOrder":  5,
+                          "boardingPoint":  "AUTONAGAR RAJADHANI",
+                          "pickupTime":  "7.40 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      }
+                  ]
+    },
+    {
+        "routeNo":  22,
+        "routeManager":  "Mr. T Venkatesh",
+        "phone":  "9000665111",
+        "destination":  "PEDDA AMBERPET",
+        "stops":  [
+                      {
+                          "stopOrder":  1,
+                          "boardingPoint":  "HAYATHNAGAR BUS DEPOT",
+                          "pickupTime":  "7.45 am",
+                          "latitude":  17.3301662,
+                          "longitude":  78.5941849
+                      },
+                      {
+                          "stopOrder":  2,
+                          "boardingPoint":  "HAYATHNAGAR BUS STAND",
+                          "pickupTime":  "7.45 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      },
+                      {
+                          "stopOrder":  3,
+                          "boardingPoint":  "PEDDA AMBERPET",
+                          "pickupTime":  "7.50 am",
+                          "latitude":  17.3172848,
+                          "longitude":  78.6384505
+                      }
+                  ]
+    },
+    {
+        "routeNo":  23,
+        "routeManager":  "Mr. K Mallesh",
+        "phone":  "9502621492",
+        "destination":  "TARAMATHIPET",
+        "stops":  [
+                      {
+                          "stopOrder":  1,
+                          "boardingPoint":  "GAYATHRI NAGAR",
+                          "pickupTime":  "7.20 am",
+                          "latitude":  17.3187213,
+                          "longitude":  78.59589
+                      },
+                      {
+                          "stopOrder":  2,
+                          "boardingPoint":  "TKR KAMAN",
+                          "pickupTime":  "7.25 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      },
+                      {
+                          "stopOrder":  3,
+                          "boardingPoint":  "CHINTALKUNTA CHECK POST",
+                          "pickupTime":  "7.35 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      },
+                      {
+                          "stopOrder":  4,
+                          "boardingPoint":  "HAYATHNAGAR MOTHER DAIRY",
+                          "pickupTime":  "7.50 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      },
+                      {
+                          "stopOrder":  5,
+                          "boardingPoint":  "HAYATHNAGAR KUNTLOOR",
+                          "pickupTime":  "7.55 am",
+                          "latitude":  17.3288112,
+                          "longitude":  78.6053328
+                      },
+                      {
+                          "stopOrder":  6,
+                          "boardingPoint":  "KUNTLOOR HP PETROL BUNK",
+                          "pickupTime":  "8.00 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      },
+                      {
+                          "stopOrder":  7,
+                          "boardingPoint":  "PASUMAMULA",
+                          "pickupTime":  "8.00 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      },
+                      {
+                          "stopOrder":  8,
+                          "boardingPoint":  "TARAMATHIPET",
+                          "pickupTime":  "8.00 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      }
+                  ]
+    },
+    {
+        "routeNo":  24,
+        "routeManager":  "Mr. K Srinivas Reddy",
+        "phone":  "7382662192",
+        "destination":  "SAINIKPURI X ROAD",
+        "stops":  [
+                      {
+                          "stopOrder":  1,
+                          "boardingPoint":  "YAPRAL WATER TANK",
+                          "pickupTime":  "7.40 am",
+                          "latitude":  17.502109,
+                          "longitude":  78.5384837
+                      },
+                      {
+                          "stopOrder":  2,
+                          "boardingPoint":  "5TH AVENUE CHURCH",
+                          "pickupTime":  "7.45 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      },
+                      {
+                          "stopOrder":  3,
+                          "boardingPoint":  "5TH AVENUE SAINIKPURI",
+                          "pickupTime":  "7.45 am",
+                          "latitude":  17.4891521,
+                          "longitude":  78.5425221
+                      },
+                      {
+                          "stopOrder":  4,
+                          "boardingPoint":  "SAINIKPURI X ROAD",
+                          "pickupTime":  "7.45 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      }
+                  ]
+    },
+    {
+        "routeNo":  25,
+        "routeManager":  "Mr. Kambampati Praveen",
+        "phone":  "9948767847",
+        "destination":  "NEREDMET OLD PS",
+        "stops":  [
+                      {
+                          "stopOrder":  1,
+                          "boardingPoint":  "METTUGUDA RAILWAY HOSPITAL",
+                          "pickupTime":  "7.30 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      },
+                      {
+                          "stopOrder":  2,
+                          "boardingPoint":  "LALAGUDA UNDERPASS",
+                          "pickupTime":  "7.30 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      },
+                      {
+                          "stopOrder":  3,
+                          "boardingPoint":  "MIRJALGUDA",
+                          "pickupTime":  "7.30 am",
+                          "latitude":  17.443983,
+                          "longitude":  78.5312283
+                      },
+                      {
+                          "stopOrder":  4,
+                          "boardingPoint":  "MALKAJGIRI",
+                          "pickupTime":  "7.30 am",
+                          "latitude":  17.4511764,
+                          "longitude":  78.5368997
+                      },
+                      {
+                          "stopOrder":  5,
+                          "boardingPoint":  "MALKAJGIRI ANUTEX",
+                          "pickupTime":  "7.35 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      },
+                      {
+                          "stopOrder":  6,
+                          "boardingPoint":  "MALKAJGIRI RK NAGAR",
+                          "pickupTime":  "7.35 am",
+                          "latitude":  17.4568586,
+                          "longitude":  78.5364006
+                      },
+                      {
+                          "stopOrder":  7,
+                          "boardingPoint":  "NEREDMET OLD PS",
+                          "pickupTime":  "7.45 am",
+                          "latitude":  17.4747526,
+                          "longitude":  78.5380458
+                      }
+                  ]
+    },
+    {
+        "routeNo":  26,
+        "routeManager":  "Mr. Swamy",
+        "phone":  "8885593234",
+        "destination":  "DAMMAIGUDA",
+        "stops":  [
+                      {
+                          "stopOrder":  1,
+                          "boardingPoint":  "NEREDMET OLD PS",
+                          "pickupTime":  "7.45 am",
+                          "latitude":  17.4747526,
+                          "longitude":  78.5380458
+                      },
+                      {
+                          "stopOrder":  2,
+                          "boardingPoint":  "ECIL RADHIKA",
+                          "pickupTime":  "7.55 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      },
+                      {
+                          "stopOrder":  3,
+                          "boardingPoint":  "SAKET ROAD",
+                          "pickupTime":  "8.00 am",
+                          "latitude":  17.4923297,
+                          "longitude":  78.5755454
+                      },
+                      {
+                          "stopOrder":  4,
+                          "boardingPoint":  "DAMMAIGUDA",
+                          "pickupTime":  "8.05 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      }
+                  ]
+    },
+    {
+        "routeNo":  27,
+        "routeManager":  "Mr. NB Raju",
+        "phone":  "9666900420",
+        "destination":  "SAINATHPURAM",
+        "stops":  [
+                      {
+                          "stopOrder":  1,
+                          "boardingPoint":  "ANANDBAGH",
+                          "pickupTime":  "7.40 am",
+                          "latitude":  17.4561025,
+                          "longitude":  78.5508347
+                      },
+                      {
+                          "stopOrder":  2,
+                          "boardingPoint":  "KRUPA COMPLEX",
+                          "pickupTime":  "7.40 am",
+                          "latitude":  17.46521,
+                          "longitude":  78.5385377
+                      },
+                      {
+                          "stopOrder":  3,
+                          "boardingPoint":  "KRUPA COMPLEX SANTHOSHI MA",
+                          "pickupTime":  "7.45 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      },
+                      {
+                          "stopOrder":  4,
+                          "boardingPoint":  "SAINATHPURAM",
+                          "pickupTime":  "7.45 am",
+                          "latitude":  17.475693,
+                          "longitude":  78.5515621
+                      }
+                  ]
+    },
+    {
+        "routeNo":  28,
+        "routeManager":  "Mr. Chandra Mouli",
+        "phone":  "9966794779",
+        "destination":  "ECIL X ROAD",
+        "stops":  [
+                      {
+                          "stopOrder":  1,
+                          "boardingPoint":  "TARNAKA WHITE HOUSE",
+                          "pickupTime":  "7.40 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      },
+                      {
+                          "stopOrder":  2,
+                          "boardingPoint":  "LALAPET",
+                          "pickupTime":  "7.45 am",
+                          "latitude":  17.4388301,
+                          "longitude":  78.54187
+                      },
+                      {
+                          "stopOrder":  3,
+                          "boardingPoint":  "ZTC BUS STOP",
+                          "pickupTime":  "7.45 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      },
+                      {
+                          "stopOrder":  4,
+                          "boardingPoint":  "MOULALI NTR STATUE",
+                          "pickupTime":  "7.50 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      },
+                      {
+                          "stopOrder":  5,
+                          "boardingPoint":  "MOULALI HB COLONY",
+                          "pickupTime":  "7.50 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      },
+                      {
+                          "stopOrder":  6,
+                          "boardingPoint":  "MOULALI SP NAGAR",
+                          "pickupTime":  "7.55 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      },
+                      {
+                          "stopOrder":  7,
+                          "boardingPoint":  "ECIL X ROAD",
+                          "pickupTime":  "8.00 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      }
+                  ]
+    },
+    {
+        "routeNo":  29,
+        "routeManager":  "Mr. V Srinuvasulu",
+        "phone":  "9849399149",
+        "destination":  "AMBERPET IRANI HOTEL",
+        "stops":  [
+                      {
+                          "stopOrder":  1,
+                          "boardingPoint":  "NARAYANAGUDA BEFORE FLYOVER",
+                          "pickupTime":  "7.20 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      },
+                      {
+                          "stopOrder":  2,
+                          "boardingPoint":  "SHIVAM SUBWAY",
+                          "pickupTime":  "7.25 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      },
+                      {
+                          "stopOrder":  3,
+                          "boardingPoint":  "SHIVAM BAKERS Q",
+                          "pickupTime":  "7.25 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      },
+                      {
+                          "stopOrder":  4,
+                          "boardingPoint":  "6 NO X ROAD",
+                          "pickupTime":  "7.30 am",
+                          "latitude":  17.4069869,
+                          "longitude":  78.4965166
+                      },
+                      {
+                          "stopOrder":  5,
+                          "boardingPoint":  "AMBERPET",
+                          "pickupTime":  "7.35 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      },
+                      {
+                          "stopOrder":  6,
+                          "boardingPoint":  "AMBERPET GANDHI STATUE",
+                          "pickupTime":  "7.35 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      },
+                      {
+                          "stopOrder":  7,
+                          "boardingPoint":  "AMBERPET IRANI HOTEL",
+                          "pickupTime":  "7.35 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      }
+                  ]
+    },
+    {
+        "routeNo":  30,
+        "routeManager":  "Mr. J Mallesh",
+        "phone":  "9704865780",
+        "destination":  "NACHARAM",
+        "stops":  [
+                      {
+                          "stopOrder":  1,
+                          "boardingPoint":  "HABSIGUDA ST NO 8",
+                          "pickupTime":  "7.45 am",
+                          "latitude":  17.4174113,
+                          "longitude":  78.5433444
+                      },
+                      {
+                          "stopOrder":  2,
+                          "boardingPoint":  "HABSIGUDA",
+                          "pickupTime":  "7.45 am",
+                          "latitude":  17.4154761,
+                          "longitude":  78.5426918
+                      },
+                      {
+                          "stopOrder":  3,
+                          "boardingPoint":  "NACHARAM HMT NAGAR",
+                          "pickupTime":  "7.50 am",
+                          "latitude":  17.423021,
+                          "longitude":  78.5458425
+                      },
+                      {
+                          "stopOrder":  4,
+                          "boardingPoint":  "NACHARAM",
+                          "pickupTime":  "7.50 am",
+                          "latitude":  17.4284936,
+                          "longitude":  78.5528098
+                      }
+                  ]
+    },
+    {
+        "routeNo":  31,
+        "routeManager":  "Mr. M Suresh",
+        "phone":  "9000335391",
+        "destination":  "CHERLAPALLY",
+        "stops":  [
+                      {
+                          "stopOrder":  1,
+                          "boardingPoint":  "SEETHAFALMANDI",
+                          "pickupTime":  "7.35 am",
+                          "latitude":  17.427778,
+                          "longitude":  78.517661
+                      },
+                      {
+                          "stopOrder":  2,
+                          "boardingPoint":  "MALLAPUR JANAPRIYA",
+                          "pickupTime":  "7.55 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      },
+                      {
+                          "stopOrder":  3,
+                          "boardingPoint":  "MALLAPUR SHIVA HOTEL",
+                          "pickupTime":  "7.55 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      },
+                      {
+                          "stopOrder":  4,
+                          "boardingPoint":  "MALLAPOR NOMA FUNCTION HALL",
+                          "pickupTime":  "7.55 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      },
+                      {
+                          "stopOrder":  5,
+                          "boardingPoint":  "MALLAPUR NFC CIRCLE",
+                          "pickupTime":  "8.00 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      },
+                      {
+                          "stopOrder":  6,
+                          "boardingPoint":  "CHERLAPALLY",
+                          "pickupTime":  "8.10 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      }
+                  ]
+    },
+    {
+        "routeNo":  32,
+        "routeManager":  "Mr. Tirumal Reddy",
+        "phone":  "9966115911",
+        "destination":  "RAMANTHAPUR MODERN BAKERY",
+        "stops":  [
+                      {
+                          "stopOrder":  1,
+                          "boardingPoint":  "RAMANTHAPUR TV STUDIO",
+                          "pickupTime":  "7.40 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      },
+                      {
+                          "stopOrder":  2,
+                          "boardingPoint":  "RAMANTHAPUR HPS",
+                          "pickupTime":  "7.40 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      },
+                      {
+                          "stopOrder":  3,
+                          "boardingPoint":  "RAMANTHAPUR CHURCH",
+                          "pickupTime":  "7.40 am",
+                          "latitude":  17.3876492,
+                          "longitude":  78.541815
+                      },
+                      {
+                          "stopOrder":  4,
+                          "boardingPoint":  "RAMANTHAPUR MODERN BAKERY",
+                          "pickupTime":  "7.40 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      }
+                  ]
+    },
+    {
+        "routeNo":  33,
+        "routeManager":  "Mr. Pasula Raju",
+        "phone":  "6300347253",
+        "destination":  "Peerzadiguda Kamman",
+        "stops":  [
+                      {
+                          "stopOrder":  1,
+                          "boardingPoint":  "SURVEY OF INDIA",
+                          "pickupTime":  "7.50 am",
+                          "latitude":  17.4048317,
+                          "longitude":  78.5537665
+                      },
+                      {
+                          "stopOrder":  2,
+                          "boardingPoint":  "UPPAL SUBSTATION",
+                          "pickupTime":  "7.50 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      },
+                      {
+                          "stopOrder":  3,
+                          "boardingPoint":  "UPPAL ASIAN CINEMA",
+                          "pickupTime":  "7.55 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      },
+                      {
+                          "stopOrder":  4,
+                          "boardingPoint":  "Peerzadiguda Kamman",
+                          "pickupTime":  "8.00 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      }
+                  ]
+    },
+    {
+        "routeNo":  34,
+        "routeManager":  "Mr. Panthangi Venkanna",
+        "phone":  "9640749526",
+        "destination":  "CHENGICHERLA X ROAD",
+        "stops":  [
+                      {
+                          "stopOrder":  1,
+                          "boardingPoint":  "UPPAL DEPOT",
+                          "pickupTime":  "8.05 am",
+                          "latitude":  17.4053501,
+                          "longitude":  78.588911
+                      },
+                      {
+                          "stopOrder":  2,
+                          "boardingPoint":  "UPPAL DEPOT VISHAL",
+                          "pickupTime":  "8.05 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      },
+                      {
+                          "stopOrder":  3,
+                          "boardingPoint":  "CANARA NAGAR",
+                          "pickupTime":  "8.05 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      },
+                      {
+                          "stopOrder":  4,
+                          "boardingPoint":  "CHENGICHERLA X ROAD",
+                          "pickupTime":  "8.10 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      }
+                  ]
+    },
+    {
+        "routeNo":  35,
+        "routeManager":  "Mr Shankar",
+        "phone":  "9666194875",
+        "destination":  "BODUPPAL CS BROTHERS",
+        "stops":  [
+                      {
+                          "stopOrder":  1,
+                          "boardingPoint":  "BODUPPAL HP PETROL PUMP",
+                          "pickupTime":  "7.55 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      },
+                      {
+                          "stopOrder":  2,
+                          "boardingPoint":  "BODUPPAL MODEL DIARY",
+                          "pickupTime":  "7.55 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      },
+                      {
+                          "stopOrder":  3,
+                          "boardingPoint":  "BODUPPAL WATER TANK",
+                          "pickupTime":  "7.55 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      },
+                      {
+                          "stopOrder":  4,
+                          "boardingPoint":  "BODUPPAL YOUR UNIVERSE BAKERY",
+                          "pickupTime":  "8.00 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      },
+                      {
+                          "stopOrder":  5,
+                          "boardingPoint":  "BODUPPAL SUNNY BAKERY",
+                          "pickupTime":  "8.00 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      },
+                      {
+                          "stopOrder":  6,
+                          "boardingPoint":  "BODUPPAL NTR STATUE",
+                          "pickupTime":  "8.00 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      },
+                      {
+                          "stopOrder":  7,
+                          "boardingPoint":  "BODUPPAL CS BROTHERS",
+                          "pickupTime":  "8.00 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      }
+                  ]
+    },
+    {
+        "routeNo":  36,
+        "routeManager":  "Mr. Sudhakar Reddy",
+        "phone":  "7702362994",
+        "destination":  "Shiva Reddy X Road",
+        "stops":  [
+                      {
+                          "stopOrder":  1,
+                          "boardingPoint":  "MEDIPALLY",
+                          "pickupTime":  "8.10 am",
+                          "latitude":  17.4158985,
+                          "longitude":  78.6018454
+                      },
+                      {
+                          "stopOrder":  2,
+                          "boardingPoint":  "NARAPALLY",
+                          "pickupTime":  "8.15 am",
+                          "latitude":  17.4249113,
+                          "longitude":  78.6202968
+                      },
+                      {
+                          "stopOrder":  3,
+                          "boardingPoint":  "JODIMETLA",
+                          "pickupTime":  "8.15 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      },
+                      {
+                          "stopOrder":  4,
+                          "boardingPoint":  "Sanskruthi Township",
+                          "pickupTime":  "8.20 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      },
+                      {
+                          "stopOrder":  5,
+                          "boardingPoint":  "Annojiguda",
+                          "pickupTime":  "8.20 am",
+                          "latitude":  17.4326194,
+                          "longitude":  78.6563936
+                      },
+                      {
+                          "stopOrder":  6,
+                          "boardingPoint":  "Shiva Reddy X Road",
+                          "pickupTime":  "8.25 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      }
+                  ]
+    },
+    {
+        "routeNo":  37,
+        "routeManager":  "Mr. Riyaz Pasha",
+        "phone":  "9182884411",
+        "destination":  "Rampally",
+        "stops":  [
+                      {
+                          "stopOrder":  1,
+                          "boardingPoint":  "KUSHAIGUDA",
+                          "pickupTime":  "8.05 am",
+                          "latitude":  17.4825451,
+                          "longitude":  78.5726444
+                      },
+                      {
+                          "stopOrder":  2,
+                          "boardingPoint":  "CHAKRIPURAM",
+                          "pickupTime":  "8.05 am",
+                          "latitude":  null,
+                          "longitude":  null
+                      },
+                      {
+                          "stopOrder":  3,
+                          "boardingPoint":  "NAGARAM",
+                          "pickupTime":  "8.10 am",
+                          "latitude":  17.4910113,
+                          "longitude":  78.613677
+                      },
+                      {
+                          "stopOrder":  4,
+                          "boardingPoint":  "Sathyanarayana Colony",
+                          "pickupTime":  "8.15 am",
+                          "latitude":  17.3948041,
+                          "longitude":  78.5377235
+                      },
+                      {
+                          "stopOrder":  5,
+                          "boardingPoint":  "RTC COLONY",
+                          "pickupTime":  "8.20 am",
+                          "latitude":  17.3913418,
+                          "longitude":  78.5340138
+                      },
+                      {
+                          "stopOrder":  6,
+                          "boardingPoint":  "RL Nagar",
+                          "pickupTime":  "8.25 am",
+                          "latitude":  17.4789745,
+                          "longitude":  78.6249653
+                      },
+                      {
+                          "stopOrder":  7,
+                          "boardingPoint":  "Rampally",
+                          "pickupTime":  null,
+                          "latitude":  17.4644896,
+                          "longitude":  78.6489825
+                      }
+                  ]
+    }
+]
