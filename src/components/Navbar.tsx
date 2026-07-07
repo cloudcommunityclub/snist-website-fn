@@ -14,6 +14,7 @@ import {
     MdOutlineEmojiEvents,
     MdOutlineWorkOutline,
     MdGroupAdd,
+    MdOutlineDirectionsBus,
 } from 'react-icons/md'
 import { motion } from 'framer-motion'
 
@@ -155,6 +156,13 @@ export default function Navbar(): React.ReactNode {
                     </li>
 
                     <li className='text-white font-semibold flex active:scale-90 hover:scale-105 transition duration-300 ease-out'>
+                        <Link href='/bus-routes' className='flex items-center'>
+                            <MdOutlineDirectionsBus className='my-auto mr-2 text-xl' />
+                            Bus Routes
+                        </Link>
+                    </li>
+
+                    <li className='text-white font-semibold flex active:scale-90 hover:scale-105 transition duration-300 ease-out'>
                         <Link href='/join' className='flex items-center'>
                             <GoCodeOfConduct className='my-auto mr-2 text-xl' />
                             Join Us
@@ -224,6 +232,13 @@ export default function Navbar(): React.ReactNode {
                             <MdOutlineEmojiEvents className='my-auto mr-2 text-2xl' />
                             <Link href='/events' onClick={handleClick}>
                                 Events
+                            </Link>
+                        </div>
+
+                        <div className='text-2xl text-white font-semibold flex items-center min-h-[44px] active:scale-90 hover:scale-105 transition duration-300 ease-out'>
+                            <MdOutlineDirectionsBus className='my-auto mr-2 text-2xl' />
+                            <Link href='/bus-routes' onClick={handleClick}>
+                                Bus Routes
                             </Link>
                         </div>
 
