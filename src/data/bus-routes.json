@@ -1,7 +1,7 @@
 [
     {
         "routeNo":  1,
-        "routeManager":  "Mr. Someshwar (name partly cut off)",
+        "routeManager":  "Mr. Someshwar",
         "phone":  "8096600692",
         "destination":  "JNTU",
         "stops":  [
@@ -466,7 +466,7 @@
     },
     {
         "routeNo":  11,
-        "routeManager":  "Mr. ___areem (name partly cut off)",
+        "routeManager":  "Mr. Kareem",
         "phone":  "9866861824",
         "destination":  "HIMAYATHNAGAR",
         "stops":  [
